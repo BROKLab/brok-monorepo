@@ -2,6 +2,73 @@
   "name": "brokProd",
   "chainId": "421611",
   "contracts": {
+    "CapTableFactory": {
+      "address": "0x2652B226f1B17Fcc75fb91a0422162226912FCE9",
+      "abi": [
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "capTableRegistryAddress",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "defaultOwner",
+              "type": "address"
+            },
+            {
+              "internalType": "bytes32",
+              "name": "defaultPartition",
+              "type": "bytes32"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "constructor"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "string",
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "orgnr",
+              "type": "string"
+            },
+            {
+              "internalType": "address[]",
+              "name": "to",
+              "type": "address[]"
+            },
+            {
+              "internalType": "uint256[]",
+              "name": "value",
+              "type": "uint256[]"
+            }
+          ],
+          "name": "createCapTable",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "getCapTableRegistryAddress",
+          "outputs": [
+            {
+              "internalType": "address",
+              "name": "capTableRegistryAddress",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        }
+      ]
+    },
     "CapTableRegistry": {
       "address": "0x8E1713A6be8050D21e85E7798ba2722137366D35",
       "abi": [
@@ -536,73 +603,6 @@
           "name": "whitelistFagsystem",
           "outputs": [],
           "stateMutability": "nonpayable",
-          "type": "function"
-        }
-      ]
-    },
-    "CapTableFactory": {
-      "address": "0x2652B226f1B17Fcc75fb91a0422162226912FCE9",
-      "abi": [
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "capTableRegistryAddress",
-              "type": "address"
-            },
-            {
-              "internalType": "address",
-              "name": "defaultOwner",
-              "type": "address"
-            },
-            {
-              "internalType": "bytes32",
-              "name": "defaultPartition",
-              "type": "bytes32"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "constructor"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "string",
-              "name": "name",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "orgnr",
-              "type": "string"
-            },
-            {
-              "internalType": "address[]",
-              "name": "to",
-              "type": "address[]"
-            },
-            {
-              "internalType": "uint256[]",
-              "name": "value",
-              "type": "uint256[]"
-            }
-          ],
-          "name": "createCapTable",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "inputs": [],
-          "name": "getCapTableRegistryAddress",
-          "outputs": [
-            {
-              "internalType": "address",
-              "name": "capTableRegistryAddress",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "view",
           "type": "function"
         }
       ]
