@@ -17,6 +17,7 @@
   "scripts": {
     "prepublishOnly": "pnpm run build",
     "build": "pnpm run typechain && pnpm run deploy:brokDev && pnpm run deploy:brokStage && pnpm run deploy:brokLocal && pnpm run deploy:brokProd && pnpm run compile",
+    "build:local": "pnpm run typechain && pnpm run deploy:brokLocal && pnpm run compile",
     "clean": "rm -rf lib",
     "compile": "pnpm run clean && pnpx tsc -p tsconfig.release.json ",
     "test": "pnpx hardhat test",

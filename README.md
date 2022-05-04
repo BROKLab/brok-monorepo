@@ -78,7 +78,11 @@ The main enviorment variables that you need to familirize with:
 - The Graph API indexing captable contracts [thegraph.com](https://thegraph.com/en/)
 
 ### Enviroment setup
+1. Copy .env.example to .env in packages/captable, packages/demo-frontend and packages/demo-server.
 1. Get yourself an Ethereum RPC and Ethereum secret and put these into /.env and ./packages/captable/.env
+1. Then you should be able to generate the SDK for any chain.
+
+Other env variables are mostly used for deployment to remote servers.
 
 
 

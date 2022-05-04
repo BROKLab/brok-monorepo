@@ -7,9 +7,6 @@ dist
 
 #hardhat files
 artifacts
-deployments
-deployments/
-deployments*
 lib
 typechain
 
@@ -51,4 +48,3 @@ Thumbs.db
 .env
 .env.test
 ops/docker/data
-packages/demo-frontend/.env
