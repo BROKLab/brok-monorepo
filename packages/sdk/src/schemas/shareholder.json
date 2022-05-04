@@ -1,0 +1,67 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "Shareholder",
+	"description": "Either a empty object or a full shareholder object",
+	"properties": {
+		"shareholder": {
+			"oneOf": [
+				{
+					"type": "object",
+					"additionalProperties": false
+				},
+				{
+					"$ref": "#/definitions/shareholder"
+				}
+			]
+		}
+	},
+	"definitions": {
+		"shareholder": {
+			"properties": {
+				"name": {
+					"type": "string",
+					"maxLength": 150
+				},
+				"birthDate": {
+					"type": "string",
+					"format": "date",
+					"description": "We expect yyyy-MM-dd"
+				},
+				"postalcode": {
+					"type": "number",
+					"maxLength": 4,
+					"minLength": 4
+				},
+				"countryCode": {
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 4
+				},
+				"ethAddress": {
+					"type": "string",
+					"pattern": "^(0x[a-fA-F0-9]{40})$"
+				},
+				"organizationIdentifier": {
+					"type": "string"
+				},
+				"organizationIdentifierType": {
+					"type": "string",
+					"enum": [
+						"OrganizationNumber",
+						"EUID",
+						"LEI"
+					]
+				}
+			},
+			"required": [
+				"name",
+				"postalcode",
+				"countryCode",
+				"ethAddress"
+			]
+		}
+	},
+	"required": [
+		"shareholder"
+	]
+}

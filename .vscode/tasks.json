@@ -1,0 +1,158 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "dev",
+            "runOptions": {
+                "runOn": "folderOpen"
+            },
+            "dependsOrder": "parallel",
+            "dependsOn": [
+                "frontend",
+                "graph"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "captable contracts",
+            "type": "shell",
+            "isBackground": true,
+            "command": "pnpm --filter @brok/captable start:contracts",
+            "presentation": {
+                "panel": "dedicated",
+                "group": "contracts"
+            },
+            
+            "problemMatcher": {
+                "pattern": {
+                    "regexp": "^([^\\s].*)\\((\\d+|\\d+,\\d+|\\d+,\\d+,\\d+,\\d+)\\):\\s+(error|warning|info)\\s+(TS\\d+)\\s*:\\s*(.*)$",
+                    "file": 1,
+                    "location": 2,
+                    "severity": 3,
+                    "code": 4,
+                    "message": 5
+                  },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "Compiled",
+                    "endsPattern" : "Initial scan complete. Ready for changes"
+                }
+            }
+        },
+        {
+            "label": "captable lib",
+            "type": "shell",
+            "isBackground": true,
+            "command": "pnpm --filter @brok/captable start:lib",
+            "presentation": {
+                "panel": "dedicated",
+                "group": "contracts"
+            },
+            "dependsOn": [
+                "captable contracts"
+            ],
+            "problemMatcher": ["$tsc-watch"],
+        },
+        {
+            "label": "sdk",
+            "type": "shell",
+            "isBackground": true,
+            "command": "pnpm --filter @brok/sdk start",
+            "presentation": {
+                "panel": "dedicated",
+                "group": "sdk"
+            },
+            "dependsOn": [
+                "captable lib"
+            ],
+            "problemMatcher": ["$tsc-watch"],
+        },
+        {
+            "label": "server",
+            "type": "shell",
+            "isBackground": true,
+            "command": "pnpm --filter @brok/demo-server start:dev",
+            "presentation": {
+                "panel": "dedicated",
+                "group": "server"
+            },
+            "dependsOn": [
+                "sdk"
+            ],
+            "problemMatcher": ["$tsc-watch"],
+        },
+        {
+            "label": "frontend",
+            "type": "shell",
+            "isBackground": true,
+            "command": "pnpm --filter @brok/demo-frontend start",
+            "presentation": {
+                "panel": "dedicated",
+                "clear": true
+            },
+            "dependsOn": [
+                "server",
+            ],
+            "problemMatcher": {
+                "owner": "typescript",
+                "pattern": [
+                  {
+                    "regexp": "^([^F\\(\\s].*)$",
+                    "file": 1
+                  },
+                  {
+                    "regexp": "^\\((\\d+),(\\d+)\\): (error|warning|info) (TS\\d+): (.*)$",
+                    "line": 1,
+                    "column": 2,
+                    "severity": 3,
+                    "message": 5,
+                    "code": 4,
+                    "loop": true
+                  }
+                ],
+                "background": {
+                  "activeOnStart": true,
+                  "beginsPattern": "Compiling",
+                  "endsPattern": "Compiled"
+                }
+              }
+        
+        },
+        {
+            "label": "graph",
+            "type": "shell",
+            "isBackground": true,
+            "command": "make graph-stop && make graph-start",
+            "presentation": {
+                "panel": "dedicated",
+                "group": "graph",
+                "focus": true
+            },
+            "problemMatcher": {
+                "pattern": [
+                    {
+                      "regexp": "^([^F\\(\\s].*)$",
+                      "file": 1
+                    },
+                    {
+                      "regexp": "^\\((\\d+),(\\d+)\\): (error|warning|info) (TS\\d+): (.*)$",
+                      "line": 1,
+                      "column": 2,
+                      "severity": 3,
+                      "message": 5,
+                      "code": 4,
+                      "loop": true
+                    }
+                  ],
+                  "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "Apply migrations",
+                    "endsPattern": "Deployed to"
+                  }          
+            },
+        },
+
+    ]
+}

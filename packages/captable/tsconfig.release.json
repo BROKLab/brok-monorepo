@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "removeComments": true,
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": "lib/src"
+
+  },
+  "include": ["src/**/*"],
+  "exclude": ["./scripts", "./test", "./deploy"],
+  "files": [],
+
+}

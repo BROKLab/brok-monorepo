@@ -1,0 +1,30 @@
+version: '3.9'
+services:
+  ipfs:
+    environment:
+      - CERAMIC_NETWORK=testnet-clay
+    image: ceramicnetwork/ipfs-daemon:latest
+    ports: 
+      - 4011:4011
+      - 5011:5011
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:5011"]
+        interval: 30s
+        timeout: 10s
+        retries: 5 
+  ceramic:
+    image: ceramicnetwork/js-ceramic:latest
+    ports:
+      - 7007:7007
+    command: --ipfs-api http://ipfs:5011
+    depends_on:
+      - ipfs
+    volumes:
+      - ./daemon.config-fs-ropsten.json:/root/.ceramic/daemon.config.json
+      - ceramic:/root/.ceramic/logs
+      - ipfs:/root/.ceramic/statestore
+    restart: on-failure
+
+volumes:
+  ipfs:
+  ceramic:

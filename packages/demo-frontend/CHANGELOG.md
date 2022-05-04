@@ -1,0 +1,36 @@
+# @brok/demo-frontend
+
+## 0.4.0
+
+### Minor Changes
+
+- Update readme
+
+### Patch Changes
+
+- Updated dependencies
+  - @brok/sdk@0.3.0
+
+## 0.3.0
+
+### Minor Changes
+
+- Taskfile ready
+
+### Patch Changes
+
+- Updated dependencies
+  - @brok/sdk@0.2.0
+
+## 0.2.0
+
+### Minor Changes
+
+- First changelog version
+- 31b85fe: Starte changelog
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies [31b85fe]
+  - @brok/sdk@0.1.0

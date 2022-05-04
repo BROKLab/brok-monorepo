@@ -1,0 +1,10 @@
+{
+  "eslint.workingDirectories": ["packages/captable", "packages/demo-frontend", "packages/demo-server", "packages/sdk", "packages/graph"],
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  },
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "SimonSiefke.prettier-vscode"
+  }
+}

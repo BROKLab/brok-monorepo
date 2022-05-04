@@ -1,0 +1,45 @@
+{
+  "name": "brok-monorepo",
+  "version": "0.0.1",
+  "description": "BRØK monorepo",
+  "main": "index.js",
+  "pnpm": {
+    "peerDependencyRules": {
+      "ignoreMissing": [
+        "@testing-library/react",
+        "grommet",
+        "react-router-dom"
+      ],
+      "allowedVersions": {
+        "react": "18",
+        "react-dom": "18"
+      }
+    }
+  },
+  "scripts": {
+    "logs:test:demo-server": "pnpm heroku logs -a brok-demo-server-test -t",
+    "logs:test:demo-frontend": "pnpm heroku logs -a brok-demo-frontend-test -t",
+    "task": "ts-node ./ops/task/tasksfile.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BROKLab/brok-monorepo.git"
+  },
+  "author": "Symfoni AS",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BROKLab/brok-monorepo/issues"
+  },
+  "homepage": "https://github.com/BROKLab/brok-monorepo#readme",
+  "devDependencies": {
+    "@changesets/cli": "^2.22.0",
+    "@types/dedent": "^0.7.0",
+    "@types/node": "^17.0.29",
+    "dedent": "^0.7.0",
+    "dotenv": "^10.0.0",
+    "heroku": "^7.60.1",
+    "tasksfile": "^5.1.1",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.3"
+  }
+}

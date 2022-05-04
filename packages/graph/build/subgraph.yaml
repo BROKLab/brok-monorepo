@@ -1,0 +1,58 @@
+specVersion: 0.0.2
+description: Captable for The Norwegian Business Registry.
+repository: https://github.com/BROKLab/captable-graph
+schema:
+  file: schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: CapTableRegistry
+    network: mainnet
+    source:
+      address: "0xAC7f4cffBDb7Ef956068f701177CBFFE6dD83D58"
+      abi: CapTableRegistry
+      startBlock: 1
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: CapTableRegistry/CapTableRegistry.wasm
+      entities:
+        - CapTableRegistry
+      abis:
+        - name: CapTableRegistry
+          file: CapTableRegistry/abis/CapTableRegistry.json
+      eventHandlers:
+        - event: capTableQued(indexed address,string)
+          handler: handleCapTableQued
+        - event: capTableApproved(indexed address)
+          handler: handleCapTableApproved
+        - event: capTableRemoved(indexed address)
+          handler: handleCapTableRemoved
+        - event: capTableDeclined(indexed address,bytes32)
+          handler: handleCapTableDeclined
+templates:
+  - name: CapTable
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: CapTable
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: templates/CapTable/CapTable.wasm
+      entities:
+        - CapTable
+        - TokenBalance
+      abis:
+        - name: CapTable
+          file: CapTable/abis/CapTable.json
+      eventHandlers:
+        - event: TransferByPartition(indexed bytes32,address,indexed address,indexed
+            address,uint256,bytes,bytes)
+          handler: handleTransferByPartition
+        - event: IssuedByPartition(indexed bytes32,indexed address,indexed
+            address,uint256,bytes,bytes)
+          handler: handleIssuedByPartition
+        - event: RedeemedByPartition(indexed bytes32,indexed address,indexed address,uint256,bytes)
+          handler: handleRedeemByPartition

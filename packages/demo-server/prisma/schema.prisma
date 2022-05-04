@@ -1,0 +1,33 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Ownership {
+  USERNAME
+  ERC1400
+}
+
+model User {
+  id         String    @id
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  address    String
+  publicKey  String
+  privateKey String
+  ownership  Ownership
+}
+
+model CapTable {
+  address              String   @id
+  boardDirectorAddress String
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
