@@ -8946,7 +8946,7 @@ packages:
     engines: {node: '>=14.0.0'}
     hasBin: true
     peerDependencies:
-      react: '>= 16 || 18'
+      react: '>= 16'
       typescript: ^3.2.1 || ^4
     peerDependenciesMeta:
       typescript:
