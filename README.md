@@ -90,6 +90,8 @@ SDK will look for environment variable BROK_ENVIRONMENT to determine which contr
 - prod brokProd - Will use Arbitrum mainnet
 
 Fagsystem that one to create approved captable must first be authorized by BRREG. Contact us.
+
+
 ## Ugly hacks
 - If the blockchain node (running inside the captable contracts terminal) is killed, the graph node will stop indexing. To fire it up again run `make graph-stop` then `make graph-start`.
 - Tasks that errors will continue to run. Should swap out task system for something that can handle errors in shell.
