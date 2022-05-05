@@ -33,8 +33,8 @@ To see avaiable commands run `make`
 - SDK [NPM](https://www.npmjs.com/package/@brok/sdk)
 - Captable [NPM](https://www.npmjs.com/package/@brok/captable)
 - Graph [HostedService](https://thegraph.com/hosted-service/dashboard) (connected to robertosnap account)
-- demo-server [Heroku](https://brok-demo-server-dev.herokuapp.com/) 
-- demo-frontend [Heroku](https://brok-demo-frontend-dev.herokuapp.com/)
+- demo-server [Heroku DEV](https://brok-demo-server-dev.herokuapp.com) [Heroku STAGE](https://brok-demo-server-stage.herokuapp.com) 
+- demo-frontend [Heroku DEV](https://brok-demo-frontend-dev.herokuapp.com/) [Heroku STAGE](https://brok-demo-frontend-stage.herokuapp.com/)
 
 So SDK and Captable are NPM packages that needs to be published for changes to propegate. 
 Graph, demo-server and demo-frontend needs to be deployed to their enviroments to progegate changes.
