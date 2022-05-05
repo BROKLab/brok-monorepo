@@ -1,5 +1,3 @@
-
-
 ## Development requirements
 
 - [docker](https://docs.docker.com/get-docker/)
@@ -69,7 +67,7 @@ publish                         - publish packages with changes
 
 To be able to deploy to Heroku, NPN og The Ghrap hosted service you must have access. Request from admin.
 
-## Enviroment variables
+## Environment variables
 
 The main enviorment variables that you need to familirize with:
 - An Etehreum RPC (We recommend [alchemyapi.io](https://dashboard.alchemyapi.io/) or [Infura](https://infura.io/))
@@ -77,7 +75,7 @@ The main enviorment variables that you need to familirize with:
 - An Ethereum secret (seed phrase). You can generate one with [Ethers](https://docs.ethers.io/v5/)
 - The Graph API indexing captable contracts [thegraph.com](https://thegraph.com/en/)
 
-### Enviroment setup
+### Environment setup
 1. Copy .env.example to .env in packages/captable, packages/demo-frontend and packages/demo-server.
 1. Get yourself an Ethereum RPC and Ethereum secret and put these into /.env and ./packages/captable/.env
 1. Then you should be able to generate the SDK for any chain.
