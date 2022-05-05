@@ -7,6 +7,10 @@
       "ignoreMissing": [
         "node-fetch"
       ]
+    },
+    "allowedVersions": {
+      "react": "18",
+      "react-dom": "18"
     }
   },
   "dependencies": {
