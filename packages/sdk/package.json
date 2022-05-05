@@ -8,13 +8,6 @@
 	"publishConfig": {
 		"access": "public"
 	},
-	"pnpm": {
-		"peerDependencyRules": {
-			"ignoreMissing": [
-				"node-fetch"
-			]
-		}
-	},
 	"scripts": {
 		"test": "pnpx jest --runInBand --forceExit",
 		"build": "pnpx tsc -p tsconfig.lib.json",

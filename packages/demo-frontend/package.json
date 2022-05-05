@@ -2,6 +2,13 @@
   "name": "@brok/demo-frontend",
   "version": "0.4.0",
   "private": true,
+  "pnpm": {
+    "peerDependencyRules": {
+      "ignoreMissing": [
+        "node-fetch"
+      ]
+    }
+  },
   "dependencies": {
     "@babel/core": "^7.0.0-0",
     "@babel/plugin-syntax-flow": "^7.16.7",
