@@ -83,7 +83,13 @@ The main enviorment variables that you need to familirize with:
 Other env variables are mostly used for deployment to remote servers.
 
 
+SDK will look for environment variable BROK_ENVIRONMENT to determine which contracts to choose. Set this envrioment in your runtime.
+- local brokLocal - Will use local blockchain
+- dev brokDev - Will use Arbitrum Rinkeby
+- stage brokStage - Will use Arbitrum Rinkeby
+- prod brokProd - Will use Arbitrum mainnet
 
+Fagsystem that one to create approved captable must first be authorized by BRREG. Contact us.
 ## Ugly hacks
 - If the blockchain node (running inside the captable contracts terminal) is killed, the graph node will stop indexing. To fire it up again run `make graph-stop` then `make graph-start`.
 - Tasks that errors will continue to run. Should swap out task system for something that can handle errors in shell.
