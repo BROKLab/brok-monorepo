@@ -6,7 +6,7 @@
         {
             "label": "dev",
             "runOptions": {
-                "runOn": "folderOpen"
+                // "runOn": "folderOpen"
             },
             "dependsOrder": "parallel",
             "dependsOn": [

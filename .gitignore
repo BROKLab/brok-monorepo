@@ -48,3 +48,4 @@ Thumbs.db
 .env
 .env.test
 ops/docker/data
+.pnpm-debug.log
