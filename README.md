@@ -1,5 +1,3 @@
-
-
 ## Development requirements
 
 - [docker](https://docs.docker.com/get-docker/)
@@ -35,8 +33,8 @@ To see avaiable commands run `make`
 - SDK [NPM](https://www.npmjs.com/package/@brok/sdk)
 - Captable [NPM](https://www.npmjs.com/package/@brok/captable)
 - Graph [HostedService](https://thegraph.com/hosted-service/dashboard) (connected to robertosnap account)
-- demo-server [Heroku](https://brok-demo-server-dev.herokuapp.com/) 
-- demo-frontend [Heroku](https://brok-demo-frontend-dev.herokuapp.com/)
+- demo-server [Heroku DEV](https://brok-demo-server-dev.herokuapp.com) [Heroku STAGE](https://brok-demo-server-stage.herokuapp.com) 
+- demo-frontend [Heroku DEV](https://brok-demo-frontend-dev.herokuapp.com/) [Heroku STAGE](https://brok-demo-frontend-stage.herokuapp.com/)
 
 So SDK and Captable are NPM packages that needs to be published for changes to propegate. 
 Graph, demo-server and demo-frontend needs to be deployed to their enviroments to progegate changes.
@@ -69,7 +67,7 @@ publish                         - publish packages with changes
 
 To be able to deploy to Heroku, NPN og The Ghrap hosted service you must have access. Request from admin.
 
-## Enviroment variables
+## Environment variables
 
 The main enviorment variables that you need to familirize with:
 - An Etehreum RPC (We recommend [alchemyapi.io](https://dashboard.alchemyapi.io/) or [Infura](https://infura.io/))
@@ -77,13 +75,21 @@ The main enviorment variables that you need to familirize with:
 - An Ethereum secret (seed phrase). You can generate one with [Ethers](https://docs.ethers.io/v5/)
 - The Graph API indexing captable contracts [thegraph.com](https://thegraph.com/en/)
 
-### Enviroment setup
+### Environment setup
 1. Copy .env.example to .env in packages/captable, packages/demo-frontend and packages/demo-server.
 1. Get yourself an Ethereum RPC and Ethereum secret and put these into /.env and ./packages/captable/.env
 1. Then you should be able to generate the SDK for any chain.
 
 Other env variables are mostly used for deployment to remote servers.
 
+
+SDK will look for environment variable BROK_ENVIRONMENT to determine which contracts to choose. Set this envrioment in your runtime.
+- local brokLocal - Will use local blockchain
+- dev brokDev - Will use Arbitrum Rinkeby
+- stage brokStage - Will use Arbitrum Rinkeby
+- prod brokProd - Will use Arbitrum mainnet
+
+Fagsystem that one to create approved captable must first be authorized by BRREG. Contact us.
 
 
 ## Ugly hacks

@@ -36,6 +36,7 @@ help(frontend, 'Deploys frontend to Heroku', {
   },
 });
 function frontend(options: { t?: boolean }, env: string) {
+  const graphURL = 'https://api.thegraph.com/subgraphs/name/broklab/captable_ENV_10'.replace('ENV', env);
   const demoServerURL = 'https://brok-demo-server-ENV.herokuapp.com'.replace('ENV', env);
   sh(`# pnpm publish --filter @brok/sdk --access public --dry`);
   sh(`pnpm heroku apps:create ${frontendApp(env)} -t brok --region eu`);
@@ -47,6 +48,7 @@ function frontend(options: { t?: boolean }, env: string) {
   sh(`pnpm heroku config:set NODE_ENV=production -a ${frontendApp(env)}`);
   sh(`pnpm heroku config:set REACT_APP_USE_LOCAL_ENVIROMENT=false -a ${frontendApp(env)}`);
   sh(`pnpm heroku config:set REACT_APP_BROK_SERVER=${demoServerURL} -a ${frontendApp(env)}`);
+  sh(`pnpm heroku config:set REACT_APP_BROK_CAPTABLE_GRAPHQL=${graphURL} -a ${frontendApp(env)}`);
   if (env === 'dev') {
     sh(`pnpm heroku pipelines:create ${process.env.DEMO_FRONTEND_PIPELINE} -t brok -s ${herokuStage(env)} -a ${frontendApp(env)}`);
   } else {
