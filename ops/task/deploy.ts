@@ -68,6 +68,34 @@ function frontend(options: { t?: boolean }, env: string) {
   }
 }
 
+function updateFrontend(options: { t?: boolean }, env: string) {
+  if(!env) throw new Error('env is required');
+  sh(`git push ${frontendApp(env)} ${env}:main`, {
+    nopipe: true,
+    async: false,
+  });
+  if (options.t) {
+    sh(`pnpm heroku logs -a ${frontendApp(env)} -t`, {
+      nopipe: true,
+      async: false,
+    });
+  }
+}
+
+function updateServer(options: { t?: boolean }, env: string) {
+  if(!env) throw new Error('env is required');
+  sh(`git push ${serverApp(env)} ${env}:main`, {
+    nopipe: true,
+    async: false,
+  });
+  if (options.t) {
+    sh(`pnpm heroku logs -a ${serverApp(env)} -t`, {
+      nopipe: true,
+      async: false,
+    });
+  }
+}
+
 help(server, 'Deploys server to Heroku', {
   params: ['env'],
   options: {
@@ -186,4 +214,8 @@ export default {
     frontend: destroyFrontend,
     server: destroyServer,
   },
+  update: {
+    server: updateServer,
+    frontend: updateFrontend,
+  }
 };
