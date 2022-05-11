@@ -68,6 +68,16 @@ function frontend(options: { t?: boolean }, env: string) {
   }
 }
 
+function remoteFrontend(options: { t?: boolean }, env: string) {
+  if(!env) throw new Error('env is required');
+  sh(`pnpm heroku git:remote --remote ${frontendApp(env)} -a ${frontendApp(env)}`);
+}
+
+function remoteServer(options: { t?: boolean }, env: string) {
+  if(!env) throw new Error('env is required');
+  sh(`pnpm heroku git:remote --remote ${serverApp(env)} -a ${serverApp(env)}`);
+}
+
 function updateFrontend(options: { t?: boolean }, env: string) {
   if(!env) throw new Error('env is required');
   sh(`git push ${frontendApp(env)} ${env}:main`, {
@@ -217,5 +227,9 @@ export default {
   update: {
     server: updateServer,
     frontend: updateFrontend,
+  },
+  remote: {
+    server: remoteServer,
+    frontend: remoteFrontend,
   }
 };
