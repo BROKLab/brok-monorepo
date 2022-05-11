@@ -84,7 +84,7 @@ function updateFrontend(options: { t?: boolean }, env: string) {
 
 function updateServer(options: { t?: boolean }, env: string) {
   if(!env) throw new Error('env is required');
-  sh(`git push ${serverApp(env)} ${env}:main`, {
+  sh(`git push ${serverApp(env)} ${env}:main -f`, {
     nopipe: true,
     async: false,
   });
