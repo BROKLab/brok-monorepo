@@ -1,7 +1,7 @@
 {
   "name": "@brok/captable",
   "description": "Contract artifacts for brok captables",
-  "version": "0.4.1",
+  "version": "0.4.3",
   "main": "./lib/src/index.js",
   "typings": "./lib/src/index.d.ts",
   "publishConfig": {
