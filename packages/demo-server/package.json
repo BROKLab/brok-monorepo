@@ -23,7 +23,7 @@
     "test:debug": "pnpm run redis & node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand"
   },
   "dependencies": {
-    "@brok/sdk": "^0.3.0",
+    "@brok/sdk": "^0.3.3",
     "@nestjs/bull": "^0.5.3",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^1.2.0",
