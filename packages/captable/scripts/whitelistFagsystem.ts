@@ -3,7 +3,7 @@ import { run, ethers, deployments, network } from "hardhat";
 import { CapTableRegistry } from "../src/typechain";
 
 async function main() {
-  const fagsystemer: string[] = [];
+  const fagsystemer: string[] = ["0xBc78672B86F7d022408bd91A9700a3ddB2ed555A"];
   await run("compile");
   console.log("Deploying capTable on ", network.name);
   if (network.name === "hardhat") {
@@ -17,7 +17,7 @@ async function main() {
     throw new Error("CapTableRegistry not deployed");
   }
   const capTableRegistry = (await ethers.getContractAt(
-    "CapTableFactory",
+    "CapTableRegistry",
     deploymentCapTableRegistry.address
   )) as CapTableRegistry;
 
@@ -36,6 +36,7 @@ async function main() {
     }
   }
   console.log("Whitelisted fagsystems: ", fagsystemer);
+  console.log("In registry", capTableRegistry.address);
 }
 
 main()
