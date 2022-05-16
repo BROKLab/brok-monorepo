@@ -4,11 +4,8 @@
     "removeComments": true,
     "declaration": true,
     "declarationMap": true,
-    "outDir": "lib/src"
-
+    "outDir": "lib"
   },
   "include": ["src/**/*"],
   "exclude": ["./scripts", "./test", "./deploy"],
-  "files": [],
-
 }
