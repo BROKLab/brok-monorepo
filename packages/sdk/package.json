@@ -9,7 +9,7 @@
 		"access": "public"
 	},
 	"scripts": {
-		"test": "pnpx jest --runInBand --forceExit",
+		"test": "mocha",
 		"build": "pnpx tsc -p tsconfig.lib.json",
 		"prepublishOnly": "npm run build",
 		"prebuild": "npm run clean",
@@ -60,6 +60,8 @@
 		"@types/mocha": "^9.1.0",
 		"@types/node": "16.11.7",
 		"@types/supertest": "2.0.11",
+		"@typescript-eslint/eslint-plugin": "^5.23.0",
+		"@typescript-eslint/parser": "^5.23.0",
 		"blockcodec-to-ipld-format": "^1.0.0",
 		"did-resolver": "^3.2.0",
 		"dotenv": "^10.0.0",

@@ -74,7 +74,7 @@ export class CeramicSDK extends CeramicClient {
       const doc = await TileDocument.load<T>(this, streamId);
       return ok(doc);
     } catch (error: any) {
-      let errorMessage = `Ceramic stream with id ${streamId} failed with error: ${error.message}`;
+      const errorMessage = `Ceramic stream with id ${streamId} failed with error: ${error.message}`;
       logger('ceramic.ts', 'getContent', errorMessage);
       return err(errorMessage);
     }
