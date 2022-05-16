@@ -98,7 +98,7 @@ export class Blockchain {
     if (address.length > 0) {
       return ok(address[0]);
     } else {
-      return err('Could not find capTable address for deployed capTable from logs');
+      return err('Could not find capTable address for deployed capTable from logs. Could be empty contract');
     }
   }
 
