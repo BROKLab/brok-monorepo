@@ -15,7 +15,7 @@ describe('sdk', () => {
     expect(process.env.BROK_ENVIRONMENT).toBeA(String)
   })
 
-  it('should fetch capTable',async  () => {
+  it('should deploy capTable',async  () => {
     const sdk = await SDK.init({
       ceramicUrl: process.env.CERAMIC_URL,
       ethereumRpc: process.env.ETHEREUM_RPC,
