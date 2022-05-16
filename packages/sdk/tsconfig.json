@@ -12,7 +12,6 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "sourceMap": true,
-    "rootDir": "src",
-    "outDir": "lib"
-  }
+  },
+  "include": ["src", "test"]
 }
