@@ -1,9 +1,5 @@
 import { CeramicClient } from '@ceramicnetwork/http-client';
 import { TileDocument, TileMetadataArgs } from '@ceramicnetwork/stream-tile';
-import { DID } from 'dids';
-import { Wallet } from 'ethers';
-import { Ed25519Provider } from 'key-did-provider-ed25519';
-import { getResolver } from 'key-did-resolver';
 import { err, ok, Result, ResultAsync } from 'neverthrow';
 import { CapTableCeramic, ShareholderCeramic } from '../types';
 import { logger } from '../utils';
@@ -34,15 +30,11 @@ export class CeramicSDK extends CeramicClient {
     const capTableTile = await this.getPublicCapTableByCapTableAddress(capTableAddress);
     if (capTableTile.isErr()) return err(capTableTile.error);
     else {
-      console.log('capTable tile content', capTableTile._unsafeUnwrap().content);
       return await this.capTableTileToShareholders(capTableTile.value);
     }
   }
 
   async findUserForCapTable(capTableAddress: string, userEthAddress: string) {
-    console.log('userEthAddress', userEthAddress);
-    console.log('capTableAdrre', capTableAddress);
-
     const capTableTileForCapTableAddress = await this.getPublicCapTableByCapTableAddress(capTableAddress);
     if (capTableTileForCapTableAddress.isErr()) {
       return err(capTableTileForCapTableAddress.error);
@@ -65,7 +57,6 @@ export class CeramicSDK extends CeramicClient {
       tags: [capTableAddress],
     });
 
-    console.log(detTileDoc);
     return detTileDoc;
   }
 
@@ -122,20 +113,20 @@ export class CeramicSDK extends CeramicClient {
       await deterministic.update(content, { schema: schemaId });
       return ok(deterministic);
     } catch (error: any) {
-      console.log('error in create det', error);
       return err(error.message);
     }
   }
 
   loadDeterministicDocument<T>(metadata: TileMetadataArgs): ResultAsync<TileDocument<T>, string> {
     return ResultAsync.fromPromise(
-      new Promise(async (resolve, reject) => {
-        const tile = await TileDocument.deterministic<T>(this, {
+      new Promise( (resolve, reject) => {
+        TileDocument.deterministic<T>(this, {
           ...metadata,
-        });
-        if (Object.keys(tile.content).length === 0)
+        }).then(tile => {
+          if (Object.keys(tile.content).length === 0)
           reject('No data is set in tileDocument. Probably because document has not been created for metadata');
-        resolve(tile);
+          resolve(tile);
+        })
       }),
       (e) => `Could not load deterministic document because of ${e}`,
     );
@@ -145,7 +136,7 @@ export class CeramicSDK extends CeramicClient {
   async setEmptyContentAndUnpin(streamId: string) {
     try {
       const tile = await TileDocument.load(this, streamId);
-      const updateRes = await this.updateContent(streamId.toString(), {
+      /* const updateRes =  */await this.updateContent(streamId.toString(), {
         shareholder: null,
       });
       await this.pin.rm(tile.id);
@@ -167,13 +158,11 @@ export class CeramicSDK extends CeramicClient {
       const shareholderTileDocument = await this.getPublicUserData(ceramicUri);
       if (shareholderTileDocument.isErr()) {
         errors.push(shareholderTileDocument.error);
-        console.error('could not get shareholder document for ceramic uri:', ceramicUri);
       } else {
         shareHolders.push({
           ethAddress: ethAddress,
           ...shareholderTileDocument.value.shareholder,
         });
-        console.log('shareholder from shareholder tiledocument', shareholderTileDocument.value);
       }
     }
     // TODO how to handle invidual errors? Are they really "error able"?
@@ -186,9 +175,7 @@ export class CeramicSDK extends CeramicClient {
 
   async getPublicUserData(streamId: string) {
     const res = await this.getContent<{ shareholder: ShareholderCeramic }>(streamId)
-    console.log("res getPublicUserData", res)
      const content = res.map((sh) => sh.content);
-     console.log("content getPublicUserData", content)
      return content
   }
 }

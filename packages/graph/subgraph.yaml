@@ -8,7 +8,7 @@ dataSources:
     name: CapTableRegistry
     network: mainnet
     source:
-      address: '0xAC7f4cffBDb7Ef956068f701177CBFFE6dD83D58'
+      address: '0xE19B0a5D322aAfe1FfDABF437f60391B83BFE592'
       abi: CapTableRegistry
       startBlock: 1
     mapping:
