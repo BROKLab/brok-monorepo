@@ -4,6 +4,6 @@ module.exports = {
   ],
   extension: ['ts'],
   watchExtensions: ['ts'],
-  spec: ['test/**/*.test.ts'],
+  spec: ['src/test/**/*.test.ts'],
   setTimeout: 5000
 }

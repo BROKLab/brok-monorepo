@@ -7,5 +7,5 @@
     "outDir": "lib"
   },
   "include": ["src/**/*"],
-  "exclude": ["./scripts", "./test", "./deploy"],
+  "exclude": ["./scripts", "./test", "./deploy", "hardhat.config.ts"],
 }

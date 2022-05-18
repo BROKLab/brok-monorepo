@@ -50,7 +50,6 @@ export class Blockchain {
       if (capTableStatus.toNumber() !== 2) return err(`CapTable must be active in order to be removed. Status is now: ${capTableStatus.toNumber()}`);
       const deleteCapTable = await this.capTableRegistryContract().remove(capTableAddress);
       const tx = await deleteCapTable.wait();
-      console.log('deleteCapTable tx', tx);
       return ok({
         transactionHash: tx.transactionHash,
       });
@@ -63,8 +62,6 @@ export class Blockchain {
   async operatorTransfer(from: string, to: string, amount: string, capTableAddress: string, partition: string) {
     try {
       const balance = await this.captableContract(capTableAddress).balanceOfByPartition(ethers.utils.formatBytes32String(partition), from);
-      console.log('amount bn', BigNumber.from(amount));
-      console.log('balance', balance);
       if (BigNumber.from(amount).gt(balance)) throw Error(`Balance is insufficient for transfer of ${amount}`);
 
       const operatorTransferTX = await this.captableContract(capTableAddress).operatorTransferByPartition(
@@ -76,12 +73,10 @@ export class Blockchain {
         ethers.utils.formatBytes32String('OperatorTransfer'),
       );
       const reciept = await operatorTransferTX.wait();
-      console.log('operatorTransfer', reciept);
       return ok({
         transactionHash: reciept.transactionHash,
       });
     } catch (e) {
-      console.log('operator transfer Error:', e);
       return err(`Could not do operatorTransfer: Error: ${e}`);
     }
   }
@@ -117,21 +112,18 @@ export class Blockchain {
   }
 
   async getAllCapTables() {
-    console.info(process.env.BROK_ENVIRONMENT);
     const BROK_ENVIRONMENT = process.env.BROK_ENVIRONMENT;
     if (!BROK_ENVIRONMENT) throw Error('Please set BROK_ENVIRONMENT');
     return new CapTableRegistry__factory(this.signer).attach(Deployments[BROK_ENVIRONMENT].contracts.CapTableRegistry.address).getList();
   }
 
   capTableFactory() {
-    console.info(process.env.BROK_ENVIRONMENT);
     const BROK_ENVIRONMENT = process.env.BROK_ENVIRONMENT;
     if (!BROK_ENVIRONMENT) throw Error('Please set BROK_ENVIRONMENT');
     return new CapTableFactory__factory(this.signer).attach(Deployments[BROK_ENVIRONMENT].contracts.CapTableFactory.address);
   }
 
   capTableRegistryContract() {
-    console.info(process.env.BROK_ENVIRONMENT);
     const BROK_ENVIRONMENT = process.env.BROK_ENVIRONMENT;
     if (!BROK_ENVIRONMENT) throw Error('Please set BROK_ENVIRONMENT');
     return new CapTableRegistry__factory(this.signer).attach(Deployments[BROK_ENVIRONMENT].contracts.CapTableRegistry.address);

@@ -60,10 +60,21 @@ export class SDK {
   }
 
   async confirmCreateCapTable(capTableRequestData: CreateCapTableRequestInput): Promise<Result<CreateCapTableResult, string>> {
+    
     const capTableData = {
       ...capTableRequestData,
       shareholders: this.parseShareholders(capTableRequestData.shareholders),
     };
+    // Check for existing capTable in registry
+    try {
+      const existingCapTableAddress = await this.blockchain.capTableRegistryContract().getAddress(capTableData.orgnr);
+      if(existingCapTableAddress !== ethers.constants.AddressZero){
+        return err(`CapTable with orgnr ${capTableData.orgnr} allready exist`);
+      }
+    } catch (error) {
+      return err("Could not check if captable exist in registry");
+    }
+
     // TODO implement error handling and be meet ACID and this validityCheck function
     const isValid = this.validityCheck(capTableData);
 
@@ -82,13 +93,20 @@ export class SDK {
       const deployedCapTableResult = await this.blockchain.deployCapTable(capTableData.name, capTableData.orgnr, addresses, amounts);
 
       if (deployedCapTableResult.isErr()) {
-        console.log('capTable deployed failed. Reason', deployedCapTableResult.error);
         return err(`CapTable deploy failed. Reason: ${deployedCapTableResult.error}`);
       }
       try {
+        // eslint-disable-next-line max-len
+        const isFagsystem = await this.blockchain.capTableRegistryContract().hasRole(ethers.utils.solidityKeccak256(["string"], ["FAGSYSTEM"]), this.blockchain.signer.address);
+        if(!isFagsystem){
+          return err("Must be fagsystem to deploy cap table");
+        }
         const approveRes = await this.blockchain.capTableRegistryContract().approve(deployedCapTableResult.value.capTableAddress);
         await approveRes.wait()
       } catch (error) {
+          if(error instanceof Error){
+            return err(error.message)
+          }
           return err("Could not approve captable")
       }
       
@@ -98,7 +116,6 @@ export class SDK {
       const errors: string[] = [];
 
       for await (const shareholder of capTableData.shareholders) {
-        console.log('shareholder', shareholder);
         const ceramicUri = await this.ceramic.insertPublicUserData(shareholder.ceramic);
         if (ceramicUri.isErr()) {
           errors.push(ceramicUri.error);
@@ -120,7 +137,6 @@ export class SDK {
 
       if (saveCeramicCapTableRes.isErr()) {
         const errorMessage = `Save capTableData on ceramic failed. Reason, ${saveCeramicCapTableRes.error}`;
-        console.error(errorMessage);
         return ok({
           capTableCeramicRes: {
             success: false,
@@ -314,7 +330,7 @@ export class SDK {
 
     const shareholders: ShareholderUnion[] = [];
 
-    for (let [address, theGraphSh] of theGraphShareholders.entries()) {
+    for (const [address, theGraphSh] of theGraphShareholders.entries()) {
       const ceramicShareholder = ceramicShareholders.get(address);
 
       if (!ceramicShareholder) {

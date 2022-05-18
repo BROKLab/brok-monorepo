@@ -8,7 +8,7 @@ specifiers:
   '@babel/plugin-transform-modules-commonjs': ^7.16.8
   '@babel/preset-env': ^7.16.8
   '@babel/preset-typescript': ^7.16.7
-  '@brok/captable': 0.4.3
+  '@brok/captable': workspace:0.4.3
   '@ceramicnetwork/3id-did-resolver': ^1.4.17-rc.0
   '@ceramicnetwork/blockchain-utils-linking': ^1.5.5
   '@ceramicnetwork/cli': ^1.11.1
@@ -25,7 +25,7 @@ specifiers:
   '@glazed/devtools': ^0.1.6
   '@stablelib/random': ^1.0.1
   '@stablelib/sha256': ^1.0.1
-  '@types/mocha': ^9.1.0
+  '@types/mocha': ^9.1.1
   '@types/node': 16.11.7
   '@types/supertest': 2.0.11
   '@typescript-eslint/eslint-plugin': ^5.23.0

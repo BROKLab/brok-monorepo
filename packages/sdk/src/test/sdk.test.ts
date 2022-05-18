@@ -1,8 +1,9 @@
 import { expect } from 'earljs';
 import { config } from 'dotenv';
-import { SDK } from '../src/sdk';
+import { SDK } from '../sdk';
 
-describe('sdk', () => {
+describe('sdk', function() {
+  this.timeout(5000); 
   before(() => {
     config();
   });
@@ -22,9 +23,10 @@ describe('sdk', () => {
       theGraphUrl: process.env.THE_GRAPH_URL,
       seed: process.env.SEED,
     });
+    const randomOrgNr = (Math.floor(Math.random()*90000) + 10000).toString();
     const res = await sdk.confirmCreateCapTable({
-      name: "Test company AS",
-      orgnr: "987654321",
+      name: `Test ${randomOrgNr} AS`,
+      orgnr: randomOrgNr,
       shareholders: [
         {
           blockchain: {
@@ -40,7 +42,6 @@ describe('sdk', () => {
         }
       ]
     });
-    console.log(res)
     expect(res.isOk()).toBeTruthy()
   });
 });
