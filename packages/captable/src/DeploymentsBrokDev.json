@@ -3,7 +3,7 @@
   "chainId": "421611",
   "contracts": {
     "CapTableFactory": {
-      "address": "0x1a31dE98306E6bb18Ef88a1A335d26092b76De21",
+      "address": "0xcDf79e60baf17685f57565010FcFa18874D1ae0d",
       "abi": [
         {
           "inputs": [
@@ -70,14 +70,19 @@
       ]
     },
     "CapTableRegistry": {
-      "address": "0x30105ab26e3e272cc35bC6cebb9563350c462abe",
+      "address": "0xcb8C7D934891D691Fee9Ff30c5b0D0A980852736",
       "abi": [
         {
           "inputs": [
             {
-              "internalType": "address[]",
+              "internalType": "address",
               "name": "fagsystemAdr",
-              "type": "address[]"
+              "type": "address"
+            },
+            {
+              "internalType": "string",
+              "name": "fagsystemDid",
+              "type": "string"
             }
           ],
           "stateMutability": "nonpayable",
@@ -330,6 +335,44 @@
             {
               "internalType": "address",
               "name": "capTableAddress",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "adr",
+              "type": "address"
+            }
+          ],
+          "name": "getDidForFagsystem",
+          "outputs": [
+            {
+              "internalType": "string",
+              "name": "",
+              "type": "string"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "adr",
+              "type": "address"
+            }
+          ],
+          "name": "getFagsystemForCapTable",
+          "outputs": [
+            {
+              "internalType": "address",
+              "name": "",
               "type": "address"
             }
           ],
@@ -598,6 +641,11 @@
               "internalType": "address",
               "name": "adr",
               "type": "address"
+            },
+            {
+              "internalType": "string",
+              "name": "did",
+              "type": "string"
             }
           ],
           "name": "whitelistFagsystem",
