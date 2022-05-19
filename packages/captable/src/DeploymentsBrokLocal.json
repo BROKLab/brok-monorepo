@@ -8,9 +8,14 @@
         {
           "inputs": [
             {
-              "internalType": "address[]",
+              "internalType": "address",
               "name": "fagsystemAdr",
-              "type": "address[]"
+              "type": "address"
+            },
+            {
+              "internalType": "string",
+              "name": "fagsystemDid",
+              "type": "string"
             }
           ],
           "stateMutability": "nonpayable",
@@ -235,6 +240,25 @@
           "name": "decline",
           "outputs": [],
           "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "adr",
+              "type": "address"
+            }
+          ],
+          "name": "did",
+          "outputs": [
+            {
+              "internalType": "string",
+              "name": "",
+              "type": "string"
+            }
+          ],
+          "stateMutability": "view",
           "type": "function"
         },
         {
@@ -531,6 +555,11 @@
               "internalType": "address",
               "name": "adr",
               "type": "address"
+            },
+            {
+              "internalType": "string",
+              "name": "did",
+              "type": "string"
             }
           ],
           "name": "whitelistFagsystem",

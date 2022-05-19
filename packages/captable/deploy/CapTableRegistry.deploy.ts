@@ -11,10 +11,12 @@ const RAW_ERC1820_TX =
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deploy } = hre.deployments;
   const { deployer } = await hre.getNamedAccounts();
+  console.log(hre.network.config.accounts);
 
   const signer = await getSigner(hre);
-  const CONTROLLERS = [signer.address];
-  console.log("CapTableRegistry Controllers => ", CONTROLLERS);
+  const did = getDID(hre);
+  console.log("ETH controller", signer.address);
+  console.log("DID controller", did);
 
   async function erc1820() {
     const code = await hre.ethers.provider.getCode(ERC820_ADDRESS);
@@ -41,7 +43,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   // capTableRegistry
   const capTableRegistryDeploy = await deploy("CapTableRegistry", {
     from: deployer,
-    args: [CONTROLLERS],
+    args: [signer.address, did],
   });
 
   const capTableRegistry = (await hre.ethers.getContractAt(
@@ -55,7 +57,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     from: deployer,
     args: [
       capTableRegistry.address,
-      CONTROLLERS[0],
+      signer.address,
       ethers.utils.formatBytes32String("ordinære"),
     ],
   });
@@ -71,4 +73,21 @@ export default func;
 
 async function getSigner(hre: HardhatRuntimeEnvironment) {
   return (await hre.ethers.getSigners())[0];
+}
+
+function getDID(hre: HardhatRuntimeEnvironment) {
+  if (
+    typeof hre.network.config.accounts !== "string" &&
+    "mnemonic" in hre.network.config.accounts
+  ) {
+    const wallet = ethers.Wallet.fromMnemonic(
+      hre.network.config.accounts.mnemonic
+    );
+    const compressedPublicKey = wallet._signingKey().compressedPublicKey;
+    const didNamespace = "did:key";
+    return `${didNamespace}:${compressedPublicKey}`;
+  }
+  throw new Error(
+    "No mnemonic found in network config, could not calculate DID which is needed to deploy CapTableRegistry"
+  );
 }
