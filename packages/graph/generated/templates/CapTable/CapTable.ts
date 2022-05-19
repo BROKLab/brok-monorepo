@@ -1006,6 +1006,29 @@ export class CapTable extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
+  getFagsystemDid(): string {
+    let result = super.call(
+      "getFagsystemDid",
+      "getFagsystemDid():(string)",
+      []
+    );
+
+    return result[0].toString();
+  }
+
+  try_getFagsystemDid(): ethereum.CallResult<string> {
+    let result = super.tryCall(
+      "getFagsystemDid",
+      "getFagsystemDid():(string)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toString());
+  }
+
   getOrgnr(): string {
     let result = super.call("getOrgnr", "getOrgnr():(string)", []);
 
@@ -1471,6 +1494,10 @@ export class ConstructorCall__Inputs {
 
   get defaultPartitions(): Array<Bytes> {
     return this._call.inputValues[4].value.toBytesArray();
+  }
+
+  get capTableRegistry(): Address {
+    return this._call.inputValues[5].value.toAddress();
   }
 }
 
@@ -2234,6 +2261,36 @@ export class RevokeOperatorByPartitionCall__Outputs {
   }
 }
 
+export class SetCapTableRegistryCall extends ethereum.Call {
+  get inputs(): SetCapTableRegistryCall__Inputs {
+    return new SetCapTableRegistryCall__Inputs(this);
+  }
+
+  get outputs(): SetCapTableRegistryCall__Outputs {
+    return new SetCapTableRegistryCall__Outputs(this);
+  }
+}
+
+export class SetCapTableRegistryCall__Inputs {
+  _call: SetCapTableRegistryCall;
+
+  constructor(call: SetCapTableRegistryCall) {
+    this._call = call;
+  }
+
+  get capTableRegistryAddress(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class SetCapTableRegistryCall__Outputs {
+  _call: SetCapTableRegistryCall;
+
+  constructor(call: SetCapTableRegistryCall) {
+    this._call = call;
+  }
+}
+
 export class SetControllersCall extends ethereum.Call {
   get inputs(): SetControllersCall__Inputs {
     return new SetControllersCall__Inputs(this);
@@ -2328,36 +2385,6 @@ export class SetDocumentCall__Outputs {
   _call: SetDocumentCall;
 
   constructor(call: SetDocumentCall) {
-    this._call = call;
-  }
-}
-
-export class SetFagsystemCall extends ethereum.Call {
-  get inputs(): SetFagsystemCall__Inputs {
-    return new SetFagsystemCall__Inputs(this);
-  }
-
-  get outputs(): SetFagsystemCall__Outputs {
-    return new SetFagsystemCall__Outputs(this);
-  }
-}
-
-export class SetFagsystemCall__Inputs {
-  _call: SetFagsystemCall;
-
-  constructor(call: SetFagsystemCall) {
-    this._call = call;
-  }
-
-  get newFagsystem(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-}
-
-export class SetFagsystemCall__Outputs {
-  _call: SetFagsystemCall;
-
-  constructor(call: SetFagsystemCall) {
     this._call = call;
   }
 }
@@ -2674,6 +2701,32 @@ export class TransferWithDataCall__Outputs {
   _call: TransferWithDataCall;
 
   constructor(call: TransferWithDataCall) {
+    this._call = call;
+  }
+}
+
+export class UpdateFagsystemCall extends ethereum.Call {
+  get inputs(): UpdateFagsystemCall__Inputs {
+    return new UpdateFagsystemCall__Inputs(this);
+  }
+
+  get outputs(): UpdateFagsystemCall__Outputs {
+    return new UpdateFagsystemCall__Outputs(this);
+  }
+}
+
+export class UpdateFagsystemCall__Inputs {
+  _call: UpdateFagsystemCall;
+
+  constructor(call: UpdateFagsystemCall) {
+    this._call = call;
+  }
+}
+
+export class UpdateFagsystemCall__Outputs {
+  _call: UpdateFagsystemCall;
+
+  constructor(call: UpdateFagsystemCall) {
     this._call = call;
   }
 }

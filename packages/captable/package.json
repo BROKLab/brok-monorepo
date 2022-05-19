@@ -27,7 +27,7 @@
     "deploy:brokStage": "pnpx hardhat deploy --network brokStage --export src/DeploymentsBrokStage.json",
     "deploy:brokProd": "pnpx hardhat deploy --network brokProd --export src/DeploymentsBrokProd.json",
     "start": "pnpx run-p start:contracts start:lib ",
-    "start:contracts": "pnpm run deploy:brokLocal && pnpx hardhat node --watch",
+    "start:contracts": "pnpm run deploy:brokLocal && pnpx hardhat node --watch --export src/DeploymentsBrokLocal.json",
     "start:lib": "pnpx tsc -w -p tsconfig.lib.json",
     "demo": "pnpx hardhat run scripts/createCapTable.ts --network localhost"
   },

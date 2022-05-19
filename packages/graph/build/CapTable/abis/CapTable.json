@@ -25,6 +25,11 @@
         "internalType": "bytes32[]",
         "name": "defaultPartitions",
         "type": "bytes32[]"
+      },
+      {
+        "internalType": "address",
+        "name": "capTableRegistry",
+        "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
@@ -938,6 +943,19 @@
   },
   {
     "inputs": [],
+    "name": "getFagsystemDid",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "getOrgnr",
     "outputs": [
       {
@@ -1398,6 +1416,19 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "capTableRegistryAddress",
+        "type": "address"
+      }
+    ],
+    "name": "setCapTableRegistry",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address[]",
         "name": "operators",
         "type": "address[]"
@@ -1440,19 +1471,6 @@
       }
     ],
     "name": "setDocument",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "newFagsystem",
-        "type": "address"
-      }
-    ],
-    "name": "setFagsystem",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1713,6 +1731,13 @@
       }
     ],
     "name": "transferWithData",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "updateFagsystem",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

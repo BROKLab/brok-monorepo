@@ -30,6 +30,7 @@ export class SDK {
     const blockchain = new Blockchain(signer.value, config.theGraphUrl);
 
     await ceramic.setDID(await makeDID(ceramic, signer.value.privateKey));
+    console.log("DID", ceramic.did);
     return new SDK(blockchain, ceramic);
   }
 

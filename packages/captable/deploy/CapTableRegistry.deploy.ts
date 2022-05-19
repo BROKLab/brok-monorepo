@@ -1,7 +1,8 @@
+/* eslint-disable node/no-missing-import */
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 import { ethers } from "ethers";
-import { CapTableFactory, CapTableRegistry } from "../src/typechain/index";
+import { CapTableFactory, CapTableRegistry } from "./../src/typechain/index";
 
 const ERC820_ADDRESS = "0x1820a4B7618BdE71Dce8cdc73aAB6C95905faD24";
 const TARGET_ADDRESS = "0xa990077c3205cbDf861e17Fa532eeB069cE9fF96";

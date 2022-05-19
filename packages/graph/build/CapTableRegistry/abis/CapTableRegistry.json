@@ -2,9 +2,14 @@
   {
     "inputs": [
       {
-        "internalType": "address[]",
+        "internalType": "address",
         "name": "fagsystemAdr",
-        "type": "address[]"
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "fagsystemDid",
+        "type": "string"
       }
     ],
     "stateMutability": "nonpayable",
@@ -257,6 +262,44 @@
       {
         "internalType": "address",
         "name": "capTableAddress",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "adr",
+        "type": "address"
+      }
+    ],
+    "name": "getDidForFagsystem",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "adr",
+        "type": "address"
+      }
+    ],
+    "name": "getFagsystemForCapTable",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
         "type": "address"
       }
     ],
@@ -525,6 +568,11 @@
         "internalType": "address",
         "name": "adr",
         "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "did",
+        "type": "string"
       }
     ],
     "name": "whitelistFagsystem",

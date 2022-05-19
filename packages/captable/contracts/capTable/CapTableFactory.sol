@@ -48,7 +48,8 @@ contract CapTableFactory {
             orgnr,
             _defaultGranularity,
             controller,
-            defaultPartitions
+            defaultPartitions,
+            address(_capTableRegistry)
         );
 
         _capTableRegistry.que(address(capTable), orgnr);
@@ -63,7 +64,6 @@ contract CapTableFactory {
 
             unchecked { ++i; } // Avoids safemath to save gas
         }
-
         capTable.addMinter(msg.sender); // Fagsystem is minter
         capTable.transferOwnership(_defaultOwner); // BR is owner
     }

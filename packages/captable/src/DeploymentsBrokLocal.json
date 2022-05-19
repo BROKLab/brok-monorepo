@@ -1,5 +1,5 @@
 {
-  "name": "hardhat",
+  "name": "localhost",
   "chainId": "31337",
   "contracts": {
     "CapTableRegistry": {
@@ -243,25 +243,6 @@
           "type": "function"
         },
         {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "adr",
-              "type": "address"
-            }
-          ],
-          "name": "did",
-          "outputs": [
-            {
-              "internalType": "string",
-              "name": "",
-              "type": "string"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
           "inputs": [],
           "name": "getActiveCount",
           "outputs": [
@@ -287,6 +268,44 @@
             {
               "internalType": "address",
               "name": "capTableAddress",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "adr",
+              "type": "address"
+            }
+          ],
+          "name": "getDidForFagsystem",
+          "outputs": [
+            {
+              "internalType": "string",
+              "name": "",
+              "type": "string"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "adr",
+              "type": "address"
+            }
+          ],
+          "name": "getFagsystemForCapTable",
+          "outputs": [
+            {
+              "internalType": "address",
+              "name": "",
               "type": "address"
             }
           ],

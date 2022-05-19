@@ -275,6 +275,52 @@ export class CapTableRegistry extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
+  getDidForFagsystem(adr: Address): string {
+    let result = super.call(
+      "getDidForFagsystem",
+      "getDidForFagsystem(address):(string)",
+      [ethereum.Value.fromAddress(adr)]
+    );
+
+    return result[0].toString();
+  }
+
+  try_getDidForFagsystem(adr: Address): ethereum.CallResult<string> {
+    let result = super.tryCall(
+      "getDidForFagsystem",
+      "getDidForFagsystem(address):(string)",
+      [ethereum.Value.fromAddress(adr)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toString());
+  }
+
+  getFagsystemForCapTable(adr: Address): Address {
+    let result = super.call(
+      "getFagsystemForCapTable",
+      "getFagsystemForCapTable(address):(address)",
+      [ethereum.Value.fromAddress(adr)]
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_getFagsystemForCapTable(adr: Address): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "getFagsystemForCapTable",
+      "getFagsystemForCapTable(address):(address)",
+      [ethereum.Value.fromAddress(adr)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
   getList(): Array<Address> {
     let result = super.call("getList", "getList():(address[])", []);
 
@@ -449,8 +495,12 @@ export class ConstructorCall__Inputs {
     this._call = call;
   }
 
-  get fagsystemAdr(): Array<Address> {
-    return this._call.inputValues[0].value.toAddressArray();
+  get fagsystemAdr(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get fagsystemDid(): string {
+    return this._call.inputValues[1].value.toString();
   }
 }
 
@@ -771,6 +821,10 @@ export class WhitelistFagsystemCall__Inputs {
 
   get adr(): Address {
     return this._call.inputValues[0].value.toAddress();
+  }
+
+  get did(): string {
+    return this._call.inputValues[1].value.toString();
   }
 }
 

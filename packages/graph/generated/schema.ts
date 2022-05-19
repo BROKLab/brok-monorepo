@@ -87,6 +87,7 @@ export class CapTable extends Entity {
     this.set("totalSupply", Value.fromBigInt(BigInt.zero()));
     this.set("owner", Value.fromBytes(Bytes.empty()));
     this.set("fagsystem", Value.fromBytes(Bytes.empty()));
+    this.set("fagsystemDid", Value.fromString(""));
     this.set("minter", Value.fromBytes(Bytes.empty()));
     this.set("controllers", Value.fromBytesArray(new Array(0)));
     this.set("orgnr", Value.fromString(""));
@@ -204,6 +205,15 @@ export class CapTable extends Entity {
 
   set fagsystem(value: Bytes) {
     this.set("fagsystem", Value.fromBytes(value));
+  }
+
+  get fagsystemDid(): string {
+    let value = this.get("fagsystemDid");
+    return value!.toString();
+  }
+
+  set fagsystemDid(value: string) {
+    this.set("fagsystemDid", Value.fromString(value));
   }
 
   get minter(): Bytes {

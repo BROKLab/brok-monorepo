@@ -77,6 +77,21 @@ async function main() {
   console.log("Total suply is", totalSupply.toString());
   const balance = await capTable.balanceOf(fxcSigner.address);
   console.log("Balance of " + fxcSigner.address + " is " + balance.toString());
+
+  const deploymentCapTableRegistry = await deployments.getOrNull(
+    "CapTableRegistry"
+  ); // Token is available because the fixture was executed
+  if (!deploymentCapTableRegistry) {
+    throw new Error("CapTableRegistry not deployed");
+  }
+  const capTableRegistry = (await ethers.getContractAt(
+    "CapTableRegistry",
+    deploymentCapTableRegistry.address
+  )) as CapTableRegistry;
+
+  const approveTx = await capTableRegistry.approve(capTableAddress);
+  await approveTx.wait();
+  console.log("Approved captable in registry", capTableRegistry.address);
 }
 
 main()
