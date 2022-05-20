@@ -26,8 +26,8 @@ export class CeramicSDK extends CeramicClient {
     return await this.setEmptyContentAndUnpin(streamId);
   }
 
-  async findUsersForCapTable(capTableAddress: string, fagsystem: string): Promise<Result<ShareholderCeramic[], string>> {
-    const capTableTile = await this.getPublicCapTableByCapTableAddress(capTableAddress, fagsystem);
+  async findUsersForCapTable(capTableAddress: string, fagsystemDid: string): Promise<Result<ShareholderCeramic[], string>> {
+    const capTableTile = await this.getPublicCapTableByCapTableAddress(capTableAddress, fagsystemDid);
     if (capTableTile.isErr()) return err(capTableTile.error);
     else {
       return await this.capTableTileToShareholders(capTableTile.value);
@@ -51,12 +51,12 @@ export class CeramicSDK extends CeramicClient {
     }
   }
 
-  async getPublicCapTableByCapTableAddress(capTableAddress: string, fagsystem: string) {
+  async getPublicCapTableByCapTableAddress(capTableAddress: string, fagsystemDid: string) {
     const detTileDoc = await this.loadDeterministicDocument<CapTableCeramic>({
       family: 'capTable',
       tags: [capTableAddress],
       deterministic: true,
-    //  controllers: [fagsystem]
+     controllers: [fagsystemDid]
     });
 
     return detTileDoc;

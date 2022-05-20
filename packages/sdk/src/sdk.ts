@@ -20,6 +20,7 @@ import {
   ShareholderUnion,
 } from './types';
 
+
 export class SDK {
   private constructor(private blockchain: Blockchain, private ceramic: CeramicSDK) {}
 
@@ -30,7 +31,10 @@ export class SDK {
     const blockchain = new Blockchain(signer.value, config.theGraphUrl);
 
     await ceramic.setDID(await makeDID(ceramic, signer.value.privateKey));
-    console.log("DID", ceramic.did);
+
+    console.log("pk", signer.value.privateKey)
+    console.log("seed", config.seed)
+    console.log("DID", ceramic.did.id);
     return new SDK(blockchain, ceramic);
   }
 
@@ -271,9 +275,9 @@ export class SDK {
   async getCapTableDetails(capTableAddress: string) {
     const capTableGraphData = await this.blockchain.getCapTableTheGraph(capTableAddress);
     if (capTableGraphData.isErr()) throw new Error(capTableGraphData.error);
-    const capTableFagsystem = capTableGraphData.value.fagsystem;
-    console.log("capTableFagsystem<", capTableFagsystem)
-    const capTableCeramicData = await this.ceramic.findUsersForCapTable(capTableAddress, capTableFagsystem);
+    const capTableFagsystemDid = capTableGraphData.value.fagsystemDid;
+    console.log("capTableFagsystemDid", capTableFagsystemDid)
+    const capTableCeramicData = await this.ceramic.findUsersForCapTable(capTableAddress, capTableFagsystemDid);
     if (capTableCeramicData.isErr()) throw new Error(capTableCeramicData.error);
     const merged = this.mergeTheGraphWithCeramic(capTableGraphData.value, capTableCeramicData.value);
     return merged;
