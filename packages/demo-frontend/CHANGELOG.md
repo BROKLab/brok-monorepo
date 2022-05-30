@@ -1,5 +1,16 @@
 # @brok/demo-frontend
 
+## 0.5.0
+
+### Minor Changes
+
+- New deployment and added properly did resolver
+
+### Patch Changes
+
+- Updated dependencies
+  - @brok/sdk@0.4.0
+
 ## 0.4.0
 
 ### Minor Changes

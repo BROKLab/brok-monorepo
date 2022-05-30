@@ -4,6 +4,17 @@
 
 ### Minor Changes
 
+- New deployment and added properly did resolver
+
+### Patch Changes
+
+- Updated dependencies
+  - @brok/captable@0.5.0
+
+## null
+
+### Minor Changes
+
 - Update readme
 
 ### Patch Changes

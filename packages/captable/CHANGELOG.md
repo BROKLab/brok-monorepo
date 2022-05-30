@@ -1,5 +1,11 @@
 # @brok/captable
 
+## 0.5.0
+
+### Minor Changes
+
+- New deployment and added properly did resolver
+
 ## 0.4.3
 
 ### Patch Changes
