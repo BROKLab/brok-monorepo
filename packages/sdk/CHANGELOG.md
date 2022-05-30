@@ -1,5 +1,11 @@
 # @brok/sdk
 
+## 0.5.0
+
+### Minor Changes
+
+- Added debug
+
 ## 0.4.0
 
 ### Minor Changes
