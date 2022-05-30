@@ -72,6 +72,7 @@ export class CapTableGraphQL {
           minter
           controllers
           totalSupply
+          fagsystemDid
           tokenHolders {
             id
             address

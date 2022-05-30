@@ -3,7 +3,7 @@
   "chainId": "421611",
   "contracts": {
     "CapTableFactory": {
-      "address": "0x8A3C3D2Cd0AB34A8e519971d7d054FD76D0Be5e4",
+      "address": "0xc58CB8C1FB698caD14081473Eb3CC45c083a2284",
       "abi": [
         {
           "inputs": [
@@ -70,7 +70,7 @@
       ]
     },
     "CapTableRegistry": {
-      "address": "0xd6cECFdB7E8aE979686834BeD6553e11979DDf3f",
+      "address": "0x3FA4c9E3318e80285b795C6079B42B65Da591D11",
       "abi": [
         {
           "inputs": [

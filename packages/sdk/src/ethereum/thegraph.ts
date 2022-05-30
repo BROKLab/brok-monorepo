@@ -38,7 +38,7 @@ export function getCapTable(url: string, capTableAddress: string) {
   });
 }
 
-export function listCapTables(url: string, orgnr: string = '', name: string = '') {
+export function listCapTables(url: string, orgnr = '', name = '') {
   const query = CAP_TABLES_QUERY;
   return fetchResultAsync<CapTableQueryResponse>(
     url,
