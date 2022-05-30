@@ -5,6 +5,7 @@ import { err, ok, Result } from 'neverthrow';
 import { TokenHoldersGraphQLTypes } from '../ethereum/utils/TokenHoldersGraphQL.utils';
 import { getCapTable, getTokenHolder, listCapTables } from './thegraph';
 import { CapTableGraphQLTypes, CapTableQueryResponse } from './utils/CapTableGraphQL.utils';
+const debug = require('debug')('brok:sdk:blockchain');
 
 export interface DeployCapTableResult {
   capTableAddress: string;
@@ -39,7 +40,8 @@ export class Blockchain {
         return err(capTableAddress.error);
       }
     } catch (error) {
-      console.log(error.message);
+      
+      debug("deployCapTable failed", error.message);
       return err(`Could not deploy capTable`);
     }
   }
@@ -54,7 +56,7 @@ export class Blockchain {
         transactionHash: tx.transactionHash,
       });
     } catch (error) {
-      console.error('capTable removal failed with error:', error);
+      debug('capTable removal failed with error:', error);
       return err(`Could not delete capTable. Error: ${error}`);
     }
   }
@@ -77,6 +79,7 @@ export class Blockchain {
         transactionHash: reciept.transactionHash,
       });
     } catch (e) {
+      debug('operatorTransfer failed with error:', e);
       return err(`Could not do operatorTransfer: Error: ${e}`);
     }
   }
