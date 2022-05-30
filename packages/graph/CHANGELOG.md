@@ -2,6 +2,13 @@
 
 ## null
 
+### Patch Changes
+
+- Updated dependencies
+  - @brok/captable@0.6.0
+
+## null
+
 ### Minor Changes
 
 - New deployment and added properly did resolver

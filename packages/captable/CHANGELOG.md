@@ -1,5 +1,11 @@
 # @brok/captable
 
+## 0.6.0
+
+### Minor Changes
+
+- Update deployment
+
 ## 0.5.0
 
 ### Minor Changes
