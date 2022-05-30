@@ -275,8 +275,8 @@ export class SDK {
   async getCapTableDetails(capTableAddress: string) {
     const capTableGraphData = await this.blockchain.getCapTableTheGraph(capTableAddress);
     if (capTableGraphData.isErr()) throw new Error(capTableGraphData.error);
+    console.log("getCapTableDetails", capTableGraphData)
     const capTableFagsystemDid = capTableGraphData.value.fagsystemDid;
-    console.log("capTableFagsystemDid", capTableGraphData)
     const capTableCeramicData = await this.ceramic.findUsersForCapTable(capTableAddress, capTableFagsystemDid);
     if (capTableCeramicData.isErr()) throw new Error(capTableCeramicData.error);
     const merged = this.mergeTheGraphWithCeramic(capTableGraphData.value, capTableCeramicData.value);
