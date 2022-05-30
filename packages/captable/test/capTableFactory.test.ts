@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-expressions */
 import { expect } from "chai";
-import { assert } from "console";
 import { BigNumber } from "ethers";
 import { deployments, ethers } from "hardhat";
+// eslint-disable-next-line node/no-missing-import
 import { CapTableFactory, CapTableRegistry, CapTable } from "../src/typechain";
 
 describe("CapTableFactory", function () {
@@ -123,7 +123,7 @@ describe("CapTableFactory", function () {
     );
     let capTableAddress = "";
     receipt.logs.forEach((log) => {
-      if (log.topics[0] == eventFingerprint) capTableAddress = log.address;
+      if (log.topics[0] === eventFingerprint) capTableAddress = log.address;
     });
 
     const capTables = await capTableRegistry.getList();

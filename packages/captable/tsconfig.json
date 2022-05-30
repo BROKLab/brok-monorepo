@@ -7,7 +7,7 @@
     "outDir": "lib",
     "declaration": true,
     "skipLibCheck": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
   },
   "include": ["./scripts", "./test", "./deploy"],
   "files": ["./hardhat.config.ts"],

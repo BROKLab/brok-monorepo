@@ -6,5 +6,6 @@
   "editor.defaultFormatter": "dbaeumer.vscode-eslint",
   "[typescriptreact]": {
     "editor.defaultFormatter": "SimonSiefke.prettier-vscode"
-  }
+  },
+  "eslint.format.enable": true,
 }

@@ -5,6 +5,7 @@ import { err, ok, Result } from 'neverthrow';
 import { TokenHoldersGraphQLTypes } from '../ethereum/utils/TokenHoldersGraphQL.utils';
 import { getCapTable, getTokenHolder, listCapTables } from './thegraph';
 import { CapTableGraphQLTypes, CapTableQueryResponse } from './utils/CapTableGraphQL.utils';
+const debug = require('debug')('brok:sdk:blockchain');
 
 export interface DeployCapTableResult {
   capTableAddress: string;
@@ -39,7 +40,8 @@ export class Blockchain {
         return err(capTableAddress.error);
       }
     } catch (error) {
-      console.log(error.message);
+      
+      debug("deployCapTable failed", error.message);
       return err(`Could not deploy capTable`);
     }
   }
@@ -50,12 +52,11 @@ export class Blockchain {
       if (capTableStatus.toNumber() !== 2) return err(`CapTable must be active in order to be removed. Status is now: ${capTableStatus.toNumber()}`);
       const deleteCapTable = await this.capTableRegistryContract().remove(capTableAddress);
       const tx = await deleteCapTable.wait();
-      console.log('deleteCapTable tx', tx);
       return ok({
         transactionHash: tx.transactionHash,
       });
     } catch (error) {
-      console.error('capTable removal failed with error:', error);
+      debug('capTable removal failed with error:', error);
       return err(`Could not delete capTable. Error: ${error}`);
     }
   }
@@ -63,8 +64,6 @@ export class Blockchain {
   async operatorTransfer(from: string, to: string, amount: string, capTableAddress: string, partition: string) {
     try {
       const balance = await this.captableContract(capTableAddress).balanceOfByPartition(ethers.utils.formatBytes32String(partition), from);
-      console.log('amount bn', BigNumber.from(amount));
-      console.log('balance', balance);
       if (BigNumber.from(amount).gt(balance)) throw Error(`Balance is insufficient for transfer of ${amount}`);
 
       const operatorTransferTX = await this.captableContract(capTableAddress).operatorTransferByPartition(
@@ -76,12 +75,11 @@ export class Blockchain {
         ethers.utils.formatBytes32String('OperatorTransfer'),
       );
       const reciept = await operatorTransferTX.wait();
-      console.log('operatorTransfer', reciept);
       return ok({
         transactionHash: reciept.transactionHash,
       });
     } catch (e) {
-      console.log('operator transfer Error:', e);
+      debug('operatorTransfer failed with error:', e);
       return err(`Could not do operatorTransfer: Error: ${e}`);
     }
   }
@@ -98,7 +96,7 @@ export class Blockchain {
     if (address.length > 0) {
       return ok(address[0]);
     } else {
-      return err('Could not find capTable address for deployed capTable from logs');
+      return err('Could not find capTable address for deployed capTable from logs. Could be empty contract');
     }
   }
 
@@ -117,21 +115,18 @@ export class Blockchain {
   }
 
   async getAllCapTables() {
-    console.info(process.env.BROK_ENVIRONMENT);
     const BROK_ENVIRONMENT = process.env.BROK_ENVIRONMENT;
     if (!BROK_ENVIRONMENT) throw Error('Please set BROK_ENVIRONMENT');
     return new CapTableRegistry__factory(this.signer).attach(Deployments[BROK_ENVIRONMENT].contracts.CapTableRegistry.address).getList();
   }
 
   capTableFactory() {
-    console.info(process.env.BROK_ENVIRONMENT);
     const BROK_ENVIRONMENT = process.env.BROK_ENVIRONMENT;
     if (!BROK_ENVIRONMENT) throw Error('Please set BROK_ENVIRONMENT');
     return new CapTableFactory__factory(this.signer).attach(Deployments[BROK_ENVIRONMENT].contracts.CapTableFactory.address);
   }
 
   capTableRegistryContract() {
-    console.info(process.env.BROK_ENVIRONMENT);
     const BROK_ENVIRONMENT = process.env.BROK_ENVIRONMENT;
     if (!BROK_ENVIRONMENT) throw Error('Please set BROK_ENVIRONMENT');
     return new CapTableRegistry__factory(this.signer).attach(Deployments[BROK_ENVIRONMENT].contracts.CapTableRegistry.address);

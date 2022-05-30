@@ -36,8 +36,8 @@
                   },
                 "background": {
                     "activeOnStart": true,
-                    "beginsPattern": "Compiled",
-                    "endsPattern" : "Initial scan complete. Ready for changes"
+                    "beginsPattern": "change detected",
+                    "endsPattern" : "EthereumDIDRegistry deployed"
                 }
             }
         },
@@ -56,6 +56,34 @@
             "problemMatcher": ["$tsc-watch"],
         },
         {
+            "label": "ceramic",
+            "type": "shell",
+            "isBackground": true,
+            "command": "pnpm ceramic daemon --debug --network inmemory",
+            "presentation": {
+                "panel": "dedicated",
+                "group": "sdk"
+            },
+            "dependsOn": [
+                "captable lib"
+            ],
+            "problemMatcher": {
+                "pattern": {
+                    "regexp": "^([^\\s].*)\\((\\d+|\\d+,\\d+|\\d+,\\d+,\\d+,\\d+)\\):\\s+(error|warning|info)\\s+(TS\\d+)\\s*:\\s*(.*)$",
+                    "file": 1,
+                    "location": 2,
+                    "severity": 3,
+                    "code": 4,
+                    "message": 5
+                  },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "Swarm listening",
+                    "endsPattern" : "Ceramic API running on"
+                }
+            }
+        },
+        {
             "label": "sdk",
             "type": "shell",
             "isBackground": true,
@@ -65,7 +93,8 @@
                 "group": "sdk"
             },
             "dependsOn": [
-                "captable lib"
+                "captable lib",
+                "ceramic"
             ],
             "problemMatcher": ["$tsc-watch"],
         },
@@ -118,7 +147,6 @@
                   "endsPattern": "Compiled"
                 }
               }
-        
         },
         {
             "label": "graph",

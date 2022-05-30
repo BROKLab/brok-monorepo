@@ -2,6 +2,9 @@ import { BigInt, DataSourceContext, log } from '@graphprotocol/graph-ts';
 import { capTableQued, capTableRemoved, capTableDeclined, capTableApproved } from '../generated/CapTableRegistry/CapTableRegistry';
 import { CapTableRegistry as CapTableRegistrySchema, CapTable as CapTableSchema } from '../generated/schema';
 import { CapTable } from '../generated/templates';
+import {
+  CapTable as CapTable2,
+} from '../generated/templates/CapTable/CapTable';
 
 export function handleCapTableQued(event: capTableQued): void {
   // Entities can be loaded from the store using a string ID; this ID
@@ -38,9 +41,14 @@ export function handleCapTableApproved(event: capTableApproved): void {
     log.critical('LOGICAL SMART CONTRACT ERROR {}', ['capTable in handleCapTableApproved should always exist.']);
     return;
   }
+  let contract = CapTable2.bind(event.params.capTableAddress);
+  let fagsystem = contract.getFagsystem();
+  let did = contract.getFagsystemDid();
   let seperatorIndex = capTable.orgnr.indexOf('_') + 1;
   if (seperatorIndex) capTable.orgnr = capTable.orgnr.slice(seperatorIndex);
   capTable.status = 'APPROVED';
+  capTable.fagsystem = fagsystem;
+  capTable.fagsystemDid = did;
   capTable.save();
 }
 export function handleCapTableRemoved(event: capTableRemoved): void {

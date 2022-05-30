@@ -6,11 +6,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: CapTableRegistry
-    network: mainnet
+    network: arbitrum-rinkeby
     source:
-      address: "0xAC7f4cffBDb7Ef956068f701177CBFFE6dD83D58"
+      address: "0x88B693Dda28976424bf71A1FDf2767d6d64418e8"
       abi: CapTableRegistry
-      startBlock: 1
+      startBlock: 10778701
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -21,6 +21,8 @@ dataSources:
       abis:
         - name: CapTableRegistry
           file: CapTableRegistry/abis/CapTableRegistry.json
+        - name: CapTable
+          file: CapTableRegistry/abis/CapTable.json
       eventHandlers:
         - event: capTableQued(indexed address,string)
           handler: handleCapTableQued
@@ -33,7 +35,7 @@ dataSources:
 templates:
   - name: CapTable
     kind: ethereum/contract
-    network: mainnet
+    network: arbitrum-rinkeby
     source:
       abi: CapTable
     mapping:

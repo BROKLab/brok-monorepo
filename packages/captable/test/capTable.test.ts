@@ -1,3 +1,4 @@
+/* eslint-disable node/no-missing-import */
 import { expect } from "chai";
 import { ContractReceipt } from "ethers";
 import { deployments, ethers } from "hardhat";
@@ -11,7 +12,7 @@ describe("CapTable", function () {
   /* @dev Only tests CapTable.sol. Note that controller is set by Factory
    */
   it("should deploy capTable", async function () {
-    const randomWallet = ethers.Wallet.createRandom();
+    // const randomWallet = ethers.Wallet.createRandom();
     const deployerSigner = (await ethers.getSigners())[0];
 
     const capTable = await new CapTable__factory(deployerSigner).deploy(
@@ -19,7 +20,8 @@ describe("CapTable", function () {
       "915772137",
       ethers.utils.parseEther("1"),
       [],
-      [ethers.utils.formatBytes32String("ordinære")]
+      [ethers.utils.formatBytes32String("ordinære")],
+      ethers.constants.AddressZero
     );
     await capTable.deployed();
     const totalSupply = await capTable.totalSupply();
@@ -32,7 +34,7 @@ describe("CapTable", function () {
     );
     let newCapTableAddress = "";
     receipt.logs.forEach((log) => {
-      if (log.topics[0] == eventFingerprint) newCapTableAddress = log.address;
+      if (log.topics[0] === eventFingerprint) newCapTableAddress = log.address;
     });
 
     expect(newCapTableAddress).properAddress;
@@ -51,7 +53,8 @@ describe("CapTable", function () {
       "915772137",
       ethers.utils.parseEther("1"),
       [deployerAddress],
-      [PARTITION]
+      [PARTITION],
+      ethers.constants.AddressZero
     );
     await capTable.deployed();
     console.log("capTable deployed", capTable.address);

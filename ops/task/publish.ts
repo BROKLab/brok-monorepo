@@ -23,7 +23,7 @@ function prepare() {
         async: false,
         nopipe: true
     })
-    sh(`echo "You should commit & push changes to git. Then run pnpx task publish:commit"`)
+    sh(`echo "You should commit & push changes to git. Then run pnpm task publish:commit"`)
 }
 
 function commit() {
@@ -31,7 +31,7 @@ function commit() {
         async: false,
         nopipe: true
     })
-    sh(`echo "You should commit & push changes to git. Then run make pnpx task deploy:all [ENV]"`)
+    sh(`echo "You should commit & push changes to git. Then run make pnpm task deploy:all [ENV]"`)
 }
 
 function sdk() {

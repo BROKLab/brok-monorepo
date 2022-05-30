@@ -1,12 +1,9 @@
 import { CeramicClient } from '@ceramicnetwork/http-client';
 import { TileDocument, TileMetadataArgs } from '@ceramicnetwork/stream-tile';
-import { DID } from 'dids';
-import { Wallet } from 'ethers';
-import { Ed25519Provider } from 'key-did-provider-ed25519';
-import { getResolver } from 'key-did-resolver';
 import { err, ok, Result, ResultAsync } from 'neverthrow';
 import { CapTableCeramic, ShareholderCeramic } from '../types';
-import { logger } from '../utils';
+const debug = require('debug')('brok:sdk:ceramic');
+
 
 export class CeramicSDK extends CeramicClient {
   constructor(public readonly ceramicUrl: string) {
@@ -30,20 +27,16 @@ export class CeramicSDK extends CeramicClient {
     return await this.setEmptyContentAndUnpin(streamId);
   }
 
-  async findUsersForCapTable(capTableAddress: string): Promise<Result<ShareholderCeramic[], string>> {
-    const capTableTile = await this.getPublicCapTableByCapTableAddress(capTableAddress);
+  async findUsersForCapTable(capTableAddress: string, fagsystemDid: string): Promise<Result<ShareholderCeramic[], string>> {
+    const capTableTile = await this.getPublicCapTableByCapTableAddress(capTableAddress, fagsystemDid);
     if (capTableTile.isErr()) return err(capTableTile.error);
     else {
-      console.log('capTable tile content', capTableTile._unsafeUnwrap().content);
       return await this.capTableTileToShareholders(capTableTile.value);
     }
   }
 
   async findUserForCapTable(capTableAddress: string, userEthAddress: string) {
-    console.log('userEthAddress', userEthAddress);
-    console.log('capTableAdrre', capTableAddress);
-
-    const capTableTileForCapTableAddress = await this.getPublicCapTableByCapTableAddress(capTableAddress);
+    const capTableTileForCapTableAddress = await this.getPublicCapTableByCapTableAddress(capTableAddress, "TODO");
     if (capTableTileForCapTableAddress.isErr()) {
       return err(capTableTileForCapTableAddress.error);
     } else {
@@ -59,13 +52,18 @@ export class CeramicSDK extends CeramicClient {
     }
   }
 
-  async getPublicCapTableByCapTableAddress(capTableAddress: string) {
+  async getPublicCapTableByCapTableAddress(capTableAddress: string, fagsystemDid: string) {
+    debug("Start getPublicCapTableByCapTableAddress")
+    debug("capTableAddress", capTableAddress)
+    debug("fagsystemDid", fagsystemDid)
+
     const detTileDoc = await this.loadDeterministicDocument<CapTableCeramic>({
       family: 'capTable',
       tags: [capTableAddress],
+      deterministic: true,
+      controllers: [fagsystemDid]
     });
-
-    console.log(detTileDoc);
+    debug("End getPublicCapTableByCapTableAddress")
     return detTileDoc;
   }
 
@@ -74,8 +72,7 @@ export class CeramicSDK extends CeramicClient {
       const doc = await TileDocument.load<T>(this, streamId);
       return ok(doc);
     } catch (error: any) {
-      let errorMessage = `Ceramic stream with id ${streamId} failed with error: ${error.message}`;
-      logger('ceramic.ts', 'getContent', errorMessage);
+      const errorMessage = `Ceramic stream with id ${streamId} failed with error: ${error.message}`;
       return err(errorMessage);
     }
   }
@@ -113,6 +110,10 @@ export class CeramicSDK extends CeramicClient {
 
   async creatDeterministic<T>(content: T | undefined | null, metadata: TileMetadataArgs): Promise<Result<TileDocument, string>> {
     try {
+      debug("Start creatDeterministic")
+      debug("content", content)
+      debug("metadatacontent", metadata)
+      debug("controller", this.did.id)
       const schemaId = metadata.schema;
       delete metadata.schema;
       const deterministic = await TileDocument.deterministic(this, {
@@ -120,22 +121,24 @@ export class CeramicSDK extends CeramicClient {
         controllers: [this.did.id],
       });
       await deterministic.update(content, { schema: schemaId });
+      debug("End creatDeterministic")
       return ok(deterministic);
     } catch (error: any) {
-      console.log('error in create det', error);
+      debug("Error in creatDeterministic", error)
       return err(error.message);
     }
   }
 
   loadDeterministicDocument<T>(metadata: TileMetadataArgs): ResultAsync<TileDocument<T>, string> {
     return ResultAsync.fromPromise(
-      new Promise(async (resolve, reject) => {
-        const tile = await TileDocument.deterministic<T>(this, {
+      new Promise( (resolve, reject) => {
+        TileDocument.deterministic<T>(this, {
           ...metadata,
-        });
-        if (Object.keys(tile.content).length === 0)
+        }).then(tile => {
+          if (Object.keys(tile.content).length === 0)
           reject('No data is set in tileDocument. Probably because document has not been created for metadata');
-        resolve(tile);
+          resolve(tile);
+        })
       }),
       (e) => `Could not load deterministic document because of ${e}`,
     );
@@ -145,7 +148,7 @@ export class CeramicSDK extends CeramicClient {
   async setEmptyContentAndUnpin(streamId: string) {
     try {
       const tile = await TileDocument.load(this, streamId);
-      const updateRes = await this.updateContent(streamId.toString(), {
+      /* const updateRes =  */await this.updateContent(streamId.toString(), {
         shareholder: null,
       });
       await this.pin.rm(tile.id);
@@ -164,31 +167,29 @@ export class CeramicSDK extends CeramicClient {
     const errors: string[] = [];
 
     for await (const [ethAddress, ceramicUri] of Object.entries(tile.content.shareholdersEthAddressToCeramicUri)) {
-      const shareholderTileDocument = await this.getPublicUserData(ceramicUri);
-      if (shareholderTileDocument.isErr()) {
-        errors.push(shareholderTileDocument.error);
-        console.error('could not get shareholder document for ceramic uri:', ceramicUri);
+      const shareholder = await this.getPublicUserData(ceramicUri);
+      if (shareholder.isErr()) {
+        errors.push(shareholder.error);
       } else {
         shareHolders.push({
           ethAddress: ethAddress,
-          ...shareholderTileDocument.value.shareholder,
+          ...shareholder.value,
         });
-        console.log('shareholder from shareholder tiledocument', shareholderTileDocument.value);
       }
     }
     // TODO how to handle invidual errors? Are they really "error able"?
-    console.log('errors in getPublicShareholdersFromCapTableTile:', errors);
+    debug('errors in getPublicShareholdersFromCapTableTile:', errors);
     if (errors.length > 0) {
       return err(`Some errors when getting ceramic data: ${errors}`);
     }
     return ok(shareHolders);
   }
 
-  async getPublicUserData(streamId: string) {
+  async getPublicUserData(streamId: string) : Promise<Result<ShareholderCeramic, string>> {
+    debug("getPublicUserData START", streamId)
     const res = await this.getContent<{ shareholder: ShareholderCeramic }>(streamId)
-    console.log("res getPublicUserData", res)
-     const content = res.map((sh) => sh.content);
-     console.log("content getPublicUserData", content)
-     return content
+    if(res.isErr()) return err(res.error)
+    debug("getPublicUserData END", res.value.content.shareholder)
+     return ok(res.value.content.shareholder)
   }
 }

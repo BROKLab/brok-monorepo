@@ -22,7 +22,6 @@ function App() {
     url: process.env.REACT_APP_BROK_CAPTABLE_GRAPHQL,
   });
 
-
   debug('App running 🚀');
   return (
     <Grommet theme={Theme} full={true}>

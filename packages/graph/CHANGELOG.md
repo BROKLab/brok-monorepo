@@ -4,6 +4,35 @@
 
 ### Minor Changes
 
+- Update graph and dev deployments
+
+### Patch Changes
+
+- Updated dependencies
+  - @brok/captable@0.7.0
+
+## null
+
+### Patch Changes
+
+- Updated dependencies
+  - @brok/captable@0.6.0
+
+## null
+
+### Minor Changes
+
+- New deployment and added properly did resolver
+
+### Patch Changes
+
+- Updated dependencies
+  - @brok/captable@0.5.0
+
+## null
+
+### Minor Changes
+
 - Update readme
 
 ### Patch Changes

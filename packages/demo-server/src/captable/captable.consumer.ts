@@ -40,13 +40,13 @@ export class CapTableConsumer {
   async createCapTable(job: Job<CreateCapTableWithBoardDirectorAddress>) {
     const res = await this.capTableService.createCapTable(job.data);
     console.log('createCapTable, ', res);
-    job.progress(100);
     if (res.isErr()) {
       return {
         success: false,
         error: res.error,
       };
     } else {
+      job.progress(100);
       return {
         success: true,
         data: res._unsafeUnwrap(),

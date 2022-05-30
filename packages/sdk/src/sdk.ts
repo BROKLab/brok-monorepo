@@ -1,7 +1,7 @@
 import { JsonRpcProvider } from '@ethersproject/providers';
 import { Wallet } from '@ethersproject/wallet';
 import { ethers } from 'ethers';
-import { combine, err, ok, Result } from 'neverthrow';
+import {  err, ok, Result } from 'neverthrow';
 import { CeramicSDK } from './ceramic/ceramic';
 import { makeDID } from './ceramic/make-did';
 import { Blockchain, CreateCapTableResult } from './ethereum/blockchain';
@@ -19,8 +19,9 @@ import {
   ShareholderRequest,
   ShareholderUnion,
 } from './types';
-
+const debug = require('debug')('brok:sdk:main');
 export class SDK {
+  
   private constructor(private blockchain: Blockchain, private ceramic: CeramicSDK) {}
 
   public static async init(config: { ceramicUrl: string; ethereumRpc: string; theGraphUrl: string; seed: string }) {
@@ -30,6 +31,11 @@ export class SDK {
     const blockchain = new Blockchain(signer.value, config.theGraphUrl);
 
     await ceramic.setDID(await makeDID(ceramic, signer.value.privateKey));
+
+    debug("pk", signer.value.privateKey)
+    debug("seed", config.seed)
+    debug("did", ceramic.did.id);
+
     return new SDK(blockchain, ceramic);
   }
 
@@ -37,8 +43,8 @@ export class SDK {
     try {
       const provider = new JsonRpcProvider(rpc);
       return ok(Wallet.fromMnemonic(seed).connect(provider));
-    } catch (e: any) {
-      console.log('Could not init wallet. Error message:', e);
+    } catch (e) {
+      debug('Could not init wallet. Error message:', e);
       return err(`COuld not init wallet. Error: ${e} `);
     }
   }
@@ -64,6 +70,16 @@ export class SDK {
       ...capTableRequestData,
       shareholders: this.parseShareholders(capTableRequestData.shareholders),
     };
+    // Check for existing capTable in registry
+    try {
+      const existingCapTableAddress = await this.blockchain.capTableRegistryContract().getAddress(capTableData.orgnr);
+      if (existingCapTableAddress !== ethers.constants.AddressZero) {
+        return err(`CapTable with orgnr ${capTableData.orgnr} allready exist`);
+      }
+    } catch (error) {
+      return err('Could not check if captable exist in registry');
+    }
+
     // TODO implement error handling and be meet ACID and this validityCheck function
     const isValid = this.validityCheck(capTableData);
 
@@ -79,26 +95,41 @@ export class SDK {
         amounts.push(shareholder.blockchain.amount);
       }
 
+      try {
+            // eslint-disable-next-line max-len
+          const isFagsystem = await this.blockchain
+            .capTableRegistryContract()
+            .hasRole(ethers.utils.solidityKeccak256(['string'], ['FAGSYSTEM']), this.blockchain.signer.address);
+          if (!isFagsystem) {
+            debug("Current signer is not fagsystem");
+            debug("Current signer",this.blockchain.signer.address);
+            return err('Must be fagsystem to deploy cap table');
+          }
+      } catch (error) {
+        return err('Could not check if fagsystem was approved.');
+      }
+
       const deployedCapTableResult = await this.blockchain.deployCapTable(capTableData.name, capTableData.orgnr, addresses, amounts);
 
       if (deployedCapTableResult.isErr()) {
-        console.log('capTable deployed failed. Reason', deployedCapTableResult.error);
         return err(`CapTable deploy failed. Reason: ${deployedCapTableResult.error}`);
       }
       try {
+    
         const approveRes = await this.blockchain.capTableRegistryContract().approve(deployedCapTableResult.value.capTableAddress);
-        await approveRes.wait()
+        await approveRes.wait();
       } catch (error) {
-          return err("Could not approve captable")
+        if (error instanceof Error) {
+          return err(error.message);
+        }
+        return err('Could not approve captable');
       }
-      
 
       // 2. Insert shareholder public data on Ceramic
       const shareholderCeramicUrisWithEthAddress: Record<string, string> = {};
       const errors: string[] = [];
 
       for await (const shareholder of capTableData.shareholders) {
-        console.log('shareholder', shareholder);
         const ceramicUri = await this.ceramic.insertPublicUserData(shareholder.ceramic);
         if (ceramicUri.isErr()) {
           errors.push(ceramicUri.error);
@@ -106,7 +137,6 @@ export class SDK {
           shareholderCeramicUrisWithEthAddress[shareholder.blockchain.ethAddress] = ceramicUri.value;
         }
       }
-
 
       // 3. Insert captable data on Ceramic for referencing eth address -> ceramic uri
       const deployedCapTableAddress = deployedCapTableResult.value.capTableAddress;
@@ -120,7 +150,6 @@ export class SDK {
 
       if (saveCeramicCapTableRes.isErr()) {
         const errorMessage = `Save capTableData on ceramic failed. Reason, ${saveCeramicCapTableRes.error}`;
-        console.error(errorMessage);
         return ok({
           capTableCeramicRes: {
             success: false,
@@ -155,7 +184,7 @@ export class SDK {
     if (!ethers.utils.isAddress(transferInput.capTableAddress)) return err('CapTable address is not valid');
     if (!ethers.utils.isAddress(transferInput.from)) return err('from address is not valid');
     if (!(parseInt(transferInput.amount, 10) > 0)) return err('not a valid amount. Must be greater than 0');
-    const ceramicCapTable = await this.ceramic.getPublicCapTableByCapTableAddress(transferInput.capTableAddress);
+    const ceramicCapTable = await this.ceramic.getPublicCapTableByCapTableAddress(transferInput.capTableAddress, 'TODO');
     if (ceramicCapTable.isErr()) return err(`Could not get ceramic captable for address ${transferInput.capTableAddress}`);
 
     // create wallet for user
@@ -232,7 +261,7 @@ export class SDK {
         transferInput.partition,
       );
 
-      console.log('transfer res', transferRes);
+      debug('transfer res', transferRes);
       if (transferRes.isErr()) {
         return err(transferRes.error);
       } else {
@@ -244,7 +273,7 @@ export class SDK {
   async transfer(
     transferInput: OperatorTransferExistingShareholderInput | OperatorTransferNewShareholderInput,
   ): Promise<Result<BlockchainOperationResponse, string>> {
-    console.log('Transfer input', transferInput);
+    debug('Transfer input', transferInput);
     if ('to' in transferInput) {
       return await this.transferToExistingShareholder(transferInput);
     } else {
@@ -253,14 +282,17 @@ export class SDK {
   }
 
   async getCapTableDetails(capTableAddress: string) {
-    return combine([await this.blockchain.getCapTableTheGraph(capTableAddress), await this.ceramic.findUsersForCapTable(capTableAddress)])
-      .map((res) => res as [CapTableGraphQLTypes.CapTableQuery.CapTable, ShareholderCeramic[]])
-      .match(
-        ([capTableTheGraph, shCeramic]) => this.mergeTheGraphWithCeramic(capTableTheGraph, shCeramic),
-        (e) => {
-          throw Error(e);
-        },
-      );
+    debug('getCapTableDetails START', capTableAddress);
+    const capTableGraphData = await this.blockchain.getCapTableTheGraph(capTableAddress);
+    if (capTableGraphData.isErr()) throw new Error(capTableGraphData.error);
+    debug("graph data", capTableGraphData.value)
+    const capTableFagsystemDid = capTableGraphData.value.fagsystemDid;
+    const capTableCeramicData = await this.ceramic.findUsersForCapTable(capTableAddress, capTableFagsystemDid);
+    if (capTableCeramicData.isErr()) throw new Error(capTableCeramicData.error);
+    debug("ceramic data", capTableCeramicData.value)
+    const merged = this.mergeTheGraphWithCeramic(capTableGraphData.value, capTableCeramicData.value);
+    debug('getCapTableDetails END', merged);
+    return merged;
   }
 
   async findUserForCapTable(capTableAddress: string, userEthAddress: string) {
@@ -314,12 +346,12 @@ export class SDK {
 
     const shareholders: ShareholderUnion[] = [];
 
-    for (let [address, theGraphSh] of theGraphShareholders.entries()) {
+    for (const [address, theGraphSh] of theGraphShareholders.entries()) {
       const ceramicShareholder = ceramicShareholders.get(address);
 
       if (!ceramicShareholder) {
         const error = `Ceramic shareholder with address:${address} could not be found in ceramic`;
-        console.debug(error);
+        debug(error);
         messages.push(error);
       }
 
@@ -330,7 +362,7 @@ export class SDK {
     }
 
     if (messages.length > 0) {
-      console.debug(
+      debug(
         'merging data from thegraph with ceramic caused some messages. Could possible not match between ceramic and thegraph. Messages:',
         JSON.stringify(messages),
       );

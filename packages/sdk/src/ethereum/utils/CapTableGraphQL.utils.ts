@@ -1,5 +1,6 @@
-export declare module CapTableGraphQLTypes {
-  export module CapTableQuery {
+/* eslint-disable @typescript-eslint/no-namespace */
+export declare namespace CapTableGraphQLTypes {
+  export namespace CapTableQuery {
     export interface Balance {
       amount: string;
       id: string;
@@ -18,6 +19,7 @@ export declare module CapTableGraphQLTypes {
       minter: string;
       name: string;
       fagsystem: string;
+      fagsystemDid: string;
       orgnr: string;
       owner: string;
       partitions: string[];
@@ -31,7 +33,7 @@ export declare module CapTableGraphQLTypes {
       capTable: CapTable;
     }
   }
-  export module BalancesQuery {
+  export namespace BalancesQuery {
     export interface CapTable {
       partitions: string[];
       totalSupply: string;
@@ -70,6 +72,7 @@ export class CapTableGraphQL {
           minter
           controllers
           totalSupply
+          fagsystemDid
           tokenHolders {
             id
             address
