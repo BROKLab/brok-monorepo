@@ -1,5 +1,11 @@
 # @brok/sdk
 
+## 0.7.2
+
+### Patch Changes
+
+- Changed debug logs
+
 ## 0.7.0
 
 ### Minor Changes
