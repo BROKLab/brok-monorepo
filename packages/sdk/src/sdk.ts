@@ -19,9 +19,9 @@ import {
   ShareholderRequest,
   ShareholderUnion,
 } from './types';
-
-
+const debug = require('debug')('brok:sdk:main');
 export class SDK {
+  
   private constructor(private blockchain: Blockchain, private ceramic: CeramicSDK) {}
 
   public static async init(config: { ceramicUrl: string; ethereumRpc: string; theGraphUrl: string; seed: string }) {
@@ -32,9 +32,10 @@ export class SDK {
 
     await ceramic.setDID(await makeDID(ceramic, signer.value.privateKey));
 
-    console.log("pk", signer.value.privateKey)
-    console.log("seed", config.seed)
-    console.log("DID", ceramic.did.id);
+    debug("pk", signer.value.privateKey)
+    debug("seed", config.seed)
+    debug("did", ceramic.did.id);
+
     return new SDK(blockchain, ceramic);
   }
 
@@ -43,7 +44,7 @@ export class SDK {
       const provider = new JsonRpcProvider(rpc);
       return ok(Wallet.fromMnemonic(seed).connect(provider));
     } catch (e) {
-      console.log('Could not init wallet. Error message:', e);
+      debug('Could not init wallet. Error message:', e);
       return err(`COuld not init wallet. Error: ${e} `);
     }
   }
@@ -94,19 +95,27 @@ export class SDK {
         amounts.push(shareholder.blockchain.amount);
       }
 
+      try {
+            // eslint-disable-next-line max-len
+          const isFagsystem = await this.blockchain
+            .capTableRegistryContract()
+            .hasRole(ethers.utils.solidityKeccak256(['string'], ['FAGSYSTEM']), this.blockchain.signer.address);
+          if (!isFagsystem) {
+            debug("Current signer is not fagsystem");
+            debug("Current signer",this.blockchain.signer.address);
+            return err('Must be fagsystem to deploy cap table');
+          }
+      } catch (error) {
+        return err('Could not check if fagsystem was approved.');
+      }
+
       const deployedCapTableResult = await this.blockchain.deployCapTable(capTableData.name, capTableData.orgnr, addresses, amounts);
 
       if (deployedCapTableResult.isErr()) {
         return err(`CapTable deploy failed. Reason: ${deployedCapTableResult.error}`);
       }
       try {
-        // eslint-disable-next-line max-len
-        const isFagsystem = await this.blockchain
-          .capTableRegistryContract()
-          .hasRole(ethers.utils.solidityKeccak256(['string'], ['FAGSYSTEM']), this.blockchain.signer.address);
-        if (!isFagsystem) {
-          return err('Must be fagsystem to deploy cap table');
-        }
+    
         const approveRes = await this.blockchain.capTableRegistryContract().approve(deployedCapTableResult.value.capTableAddress);
         await approveRes.wait();
       } catch (error) {
@@ -252,7 +261,7 @@ export class SDK {
         transferInput.partition,
       );
 
-      console.log('transfer res', transferRes);
+      debug('transfer res', transferRes);
       if (transferRes.isErr()) {
         return err(transferRes.error);
       } else {
@@ -264,7 +273,7 @@ export class SDK {
   async transfer(
     transferInput: OperatorTransferExistingShareholderInput | OperatorTransferNewShareholderInput,
   ): Promise<Result<BlockchainOperationResponse, string>> {
-    console.log('Transfer input', transferInput);
+    debug('Transfer input', transferInput);
     if ('to' in transferInput) {
       return await this.transferToExistingShareholder(transferInput);
     } else {
@@ -273,13 +282,16 @@ export class SDK {
   }
 
   async getCapTableDetails(capTableAddress: string) {
+    debug('getCapTableDetails START', capTableAddress);
     const capTableGraphData = await this.blockchain.getCapTableTheGraph(capTableAddress);
     if (capTableGraphData.isErr()) throw new Error(capTableGraphData.error);
-    console.log("getCapTableDetails", capTableGraphData)
+    debug("graph data", capTableGraphData.value)
     const capTableFagsystemDid = capTableGraphData.value.fagsystemDid;
     const capTableCeramicData = await this.ceramic.findUsersForCapTable(capTableAddress, capTableFagsystemDid);
     if (capTableCeramicData.isErr()) throw new Error(capTableCeramicData.error);
+    debug("ceramic data", capTableCeramicData.value)
     const merged = this.mergeTheGraphWithCeramic(capTableGraphData.value, capTableCeramicData.value);
+    debug('getCapTableDetails END', merged);
     return merged;
   }
 
@@ -339,7 +351,7 @@ export class SDK {
 
       if (!ceramicShareholder) {
         const error = `Ceramic shareholder with address:${address} could not be found in ceramic`;
-        console.debug(error);
+        debug(error);
         messages.push(error);
       }
 
@@ -350,7 +362,7 @@ export class SDK {
     }
 
     if (messages.length > 0) {
-      console.debug(
+      debug(
         'merging data from thegraph with ceramic caused some messages. Could possible not match between ceramic and thegraph. Messages:',
         JSON.stringify(messages),
       );
