@@ -19,7 +19,7 @@
     "build": "pnpm run typechain && pnpm run deploy:brokDev && pnpm run deploy:brokStage && pnpm run deploy:brokLocal && pnpm run deploy:brokProd && pnpm run compile",
     "build:local": "pnpm run typechain && pnpm run deploy:brokLocal && pnpm run compile",
     "clean": "rm -rf lib",
-    "compile": "pnpm run clean && pnpx tsc -p tsconfig.release.json ",
+    "compile": "pnpm run clean && pnpx tsc -p tsconfig.lib.json",
     "test": "pnpx hardhat test",
     "typechain": "hardhat typechain",
     "deploy:brokLocal": "pnpx hardhat deploy --export src/DeploymentsBrokLocal.json",
@@ -27,8 +27,8 @@
     "deploy:brokStage": "pnpx hardhat deploy --network brokStage --export src/DeploymentsBrokStage.json",
     "deploy:brokProd": "pnpx hardhat deploy --network brokProd --export src/DeploymentsBrokProd.json",
     "start": "pnpx run-p start:contracts start:lib ",
-    "start:contracts": "pnpx hardhat node --watch",
-    "start:lib": "pnpx tsc -w",
+    "start:contracts": "pnpm run deploy:brokLocal && pnpx hardhat node --watch --export src/DeploymentsBrokLocal.json",
+    "start:lib": "pnpx tsc -w -p tsconfig.lib.json",
     "demo": "pnpx hardhat run scripts/createCapTable.ts --network localhost"
   },
   "devDependencies": {
@@ -75,5 +75,10 @@
     "ts-node": "^10.7.0",
     "typechain": "^7.0.0",
     "typescript": "^4.6.3"
+  },
+  "dependencies": {
+    "dids": "^2.4.3",
+    "key-did-provider-ed25519": "^1.1.0",
+    "key-did-resolver": "^1.4.4"
   }
 }

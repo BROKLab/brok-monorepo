@@ -1,76 +1,9 @@
 {
-  "name": "brokStage",
-  "chainId": "421611",
+  "name": "localhost",
+  "chainId": "31337",
   "contracts": {
-    "CapTableFactory": {
-      "address": "0x3560435F4815f1808D4e678275f68779d901302b",
-      "abi": [
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "capTableRegistryAddress",
-              "type": "address"
-            },
-            {
-              "internalType": "address",
-              "name": "defaultOwner",
-              "type": "address"
-            },
-            {
-              "internalType": "bytes32",
-              "name": "defaultPartition",
-              "type": "bytes32"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "constructor"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "string",
-              "name": "name",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "orgnr",
-              "type": "string"
-            },
-            {
-              "internalType": "address[]",
-              "name": "to",
-              "type": "address[]"
-            },
-            {
-              "internalType": "uint256[]",
-              "name": "value",
-              "type": "uint256[]"
-            }
-          ],
-          "name": "createCapTable",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "inputs": [],
-          "name": "getCapTableRegistryAddress",
-          "outputs": [
-            {
-              "internalType": "address",
-              "name": "capTableRegistryAddress",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        }
-      ]
-    },
     "CapTableRegistry": {
-      "address": "0x9381742105640F9F2dBebd89E9f71672CD6c8edC",
+      "address": "0xE19B0a5D322aAfe1FfDABF437f60391B83BFE592",
       "abi": [
         {
           "inputs": [
@@ -655,8 +588,75 @@
         }
       ]
     },
+    "CapTableFactory": {
+      "address": "0xd8A32038AcDC877B17e5b80Ce4552c2b1CBC9b63",
+      "abi": [
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "capTableRegistryAddress",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "defaultOwner",
+              "type": "address"
+            },
+            {
+              "internalType": "bytes32",
+              "name": "defaultPartition",
+              "type": "bytes32"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "constructor"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "string",
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "orgnr",
+              "type": "string"
+            },
+            {
+              "internalType": "address[]",
+              "name": "to",
+              "type": "address[]"
+            },
+            {
+              "internalType": "uint256[]",
+              "name": "value",
+              "type": "uint256[]"
+            }
+          ],
+          "name": "createCapTable",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "getCapTableRegistryAddress",
+          "outputs": [
+            {
+              "internalType": "address",
+              "name": "capTableRegistryAddress",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        }
+      ]
+    },
     "EthereumDIDRegistry": {
-      "address": "0x5b9Af7e5BC5EB4Df1e71EE1Dd6c2D599139c10e9",
+      "address": "0x43837AA517ab5b414F869F97055F50fe825c4B9e",
       "abi": [
         {
           "anonymous": false,

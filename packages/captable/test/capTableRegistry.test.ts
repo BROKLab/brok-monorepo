@@ -32,7 +32,7 @@ describe("CapTableRegistry", function () {
   });
 
   it("should approve contract", async function () {
-    const [owner, fagsystem, oscar] = await ethers.getSigners();
+    const [owner, fagsystem] = await ethers.getSigners();
 
     const deployment = await deployments.getOrNull("CapTableRegistry"); // Token is available because the fixture was executed
     if (!deployment) {
@@ -51,7 +51,8 @@ describe("CapTableRegistry", function () {
 
     // Whitelist fagsystem
     const whitelistTx = await capTableRegistry.whitelistFagsystem(
-      fagsystem.address
+      fagsystem.address,
+      "did:example:123"
     );
     await whitelistTx.wait();
 
@@ -92,7 +93,6 @@ describe("CapTableRegistry", function () {
     await expect(capTableRegistry.connect(oscar).approve(owner.address)).to.be
       .reverted;
 
-    const capTables = await capTableRegistry.getList();
     const activeCount = await capTableRegistry.getActiveCount();
     const quedCount = await capTableRegistry.getQuedCount();
     expect(activeCount.isZero());
@@ -267,7 +267,7 @@ describe("CapTableRegistry", function () {
     // Get correct event using event signature
     let newCapTableAddress = "";
     receipt2.logs.forEach((log) => {
-      if (log.topics[0] == eventFingerprint) newCapTableAddress = log.address;
+      if (log.topics[0] === eventFingerprint) newCapTableAddress = log.address;
     });
 
     const newCapTable = (await ethers.getContractAt(

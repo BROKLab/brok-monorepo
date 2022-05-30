@@ -22,7 +22,10 @@ async function main() {
   )) as CapTableRegistry;
 
   for (const fagsystem of fagsystemer) {
-    const tx = await capTableRegistry.whitelistFagsystem(fagsystem);
+    const tx = await capTableRegistry.whitelistFagsystem(
+      fagsystem,
+      "did:example:123"
+    );
     await tx.wait();
 
     const hasRole = await capTableRegistry.hasRole(

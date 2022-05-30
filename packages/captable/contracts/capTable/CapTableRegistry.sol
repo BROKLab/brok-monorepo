@@ -28,18 +28,29 @@ contract CapTableRegistry is AccessControl, ERC1820Client {
     );
 
     bytes32 public constant FAGSYSTEM = keccak256("FAGSYSTEM");
+    mapping(address => string) internal _fagsystemToDid;
+    mapping(address => address) internal _capTableAddressToFagsystem;
 
-    constructor(address[] memory fagsystemAdr) {
+    constructor(address fagsystemAdr, string memory fagsystemDid) {
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
-
-        for (uint256 i = 0; i < fagsystemAdr.length;) {
-            grantRole(FAGSYSTEM, fagsystemAdr[i]);
-            unchecked { ++i; } // Avoids safemath to save gas
-        }
+        _whitelistFagsystem(fagsystemAdr, fagsystemDid);
     }
 
-    function whitelistFagsystem(address adr) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function whitelistFagsystem(address adr, string memory did) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        _whitelistFagsystem(adr, did);
+    }
+    function _whitelistFagsystem(address adr, string memory did) internal {
+        _fagsystemToDid[adr] = did;
         grantRole(FAGSYSTEM, adr);
+    }
+
+    function getFagsystemForCapTable(address adr) external view returns ( address) {
+        address fagsystem = _capTableAddressToFagsystem[adr];
+        return hasRole(FAGSYSTEM, fagsystem) ? fagsystem : address(0);
+    }
+
+    function getDidForFagsystem(address adr) external view returns ( string memory) {
+        return hasRole(FAGSYSTEM, adr) ? _fagsystemToDid[adr] : string("");
     }
 
     function removeFagsystem(address adr) external onlyRole(DEFAULT_ADMIN_ROLE) {
@@ -131,6 +142,8 @@ contract CapTableRegistry is AccessControl, ERC1820Client {
             _quedCapTables--; 
             _activeCapTables++;
         }
+        _capTableAddressToFagsystem[adr] = msg.sender;
+        address(adr).call(abi.encodeWithSignature("updateFagsystem()"));
         emit capTableApproved(adr);
     }
 

@@ -20,6 +20,7 @@ import {
   ShareholderUnion,
 } from './types';
 
+
 export class SDK {
   private constructor(private blockchain: Blockchain, private ceramic: CeramicSDK) {}
 
@@ -30,6 +31,10 @@ export class SDK {
     const blockchain = new Blockchain(signer.value, config.theGraphUrl);
 
     await ceramic.setDID(await makeDID(ceramic, signer.value.privateKey));
+
+    console.log("pk", signer.value.privateKey)
+    console.log("seed", config.seed)
+    console.log("DID", ceramic.did.id);
     return new SDK(blockchain, ceramic);
   }
 
@@ -37,7 +42,7 @@ export class SDK {
     try {
       const provider = new JsonRpcProvider(rpc);
       return ok(Wallet.fromMnemonic(seed).connect(provider));
-    } catch (e: any) {
+    } catch (e) {
       console.log('Could not init wallet. Error message:', e);
       return err(`COuld not init wallet. Error: ${e} `);
     }
@@ -64,6 +69,16 @@ export class SDK {
       ...capTableRequestData,
       shareholders: this.parseShareholders(capTableRequestData.shareholders),
     };
+    // Check for existing capTable in registry
+    try {
+      const existingCapTableAddress = await this.blockchain.capTableRegistryContract().getAddress(capTableData.orgnr);
+      if (existingCapTableAddress !== ethers.constants.AddressZero) {
+        return err(`CapTable with orgnr ${capTableData.orgnr} allready exist`);
+      }
+    } catch (error) {
+      return err('Could not check if captable exist in registry');
+    }
+
     // TODO implement error handling and be meet ACID and this validityCheck function
     const isValid = this.validityCheck(capTableData);
 
@@ -82,23 +97,30 @@ export class SDK {
       const deployedCapTableResult = await this.blockchain.deployCapTable(capTableData.name, capTableData.orgnr, addresses, amounts);
 
       if (deployedCapTableResult.isErr()) {
-        console.log('capTable deployed failed. Reason', deployedCapTableResult.error);
         return err(`CapTable deploy failed. Reason: ${deployedCapTableResult.error}`);
       }
       try {
+        // eslint-disable-next-line max-len
+        const isFagsystem = await this.blockchain
+          .capTableRegistryContract()
+          .hasRole(ethers.utils.solidityKeccak256(['string'], ['FAGSYSTEM']), this.blockchain.signer.address);
+        if (!isFagsystem) {
+          return err('Must be fagsystem to deploy cap table');
+        }
         const approveRes = await this.blockchain.capTableRegistryContract().approve(deployedCapTableResult.value.capTableAddress);
-        await approveRes.wait()
+        await approveRes.wait();
       } catch (error) {
-          return err("Could not approve captable")
+        if (error instanceof Error) {
+          return err(error.message);
+        }
+        return err('Could not approve captable');
       }
-      
 
       // 2. Insert shareholder public data on Ceramic
       const shareholderCeramicUrisWithEthAddress: Record<string, string> = {};
       const errors: string[] = [];
 
       for await (const shareholder of capTableData.shareholders) {
-        console.log('shareholder', shareholder);
         const ceramicUri = await this.ceramic.insertPublicUserData(shareholder.ceramic);
         if (ceramicUri.isErr()) {
           errors.push(ceramicUri.error);
@@ -106,7 +128,6 @@ export class SDK {
           shareholderCeramicUrisWithEthAddress[shareholder.blockchain.ethAddress] = ceramicUri.value;
         }
       }
-
 
       // 3. Insert captable data on Ceramic for referencing eth address -> ceramic uri
       const deployedCapTableAddress = deployedCapTableResult.value.capTableAddress;
@@ -120,7 +141,6 @@ export class SDK {
 
       if (saveCeramicCapTableRes.isErr()) {
         const errorMessage = `Save capTableData on ceramic failed. Reason, ${saveCeramicCapTableRes.error}`;
-        console.error(errorMessage);
         return ok({
           capTableCeramicRes: {
             success: false,
@@ -155,7 +175,7 @@ export class SDK {
     if (!ethers.utils.isAddress(transferInput.capTableAddress)) return err('CapTable address is not valid');
     if (!ethers.utils.isAddress(transferInput.from)) return err('from address is not valid');
     if (!(parseInt(transferInput.amount, 10) > 0)) return err('not a valid amount. Must be greater than 0');
-    const ceramicCapTable = await this.ceramic.getPublicCapTableByCapTableAddress(transferInput.capTableAddress);
+    const ceramicCapTable = await this.ceramic.getPublicCapTableByCapTableAddress(transferInput.capTableAddress, 'TODO');
     if (ceramicCapTable.isErr()) return err(`Could not get ceramic captable for address ${transferInput.capTableAddress}`);
 
     // create wallet for user
@@ -253,14 +273,14 @@ export class SDK {
   }
 
   async getCapTableDetails(capTableAddress: string) {
-    return combine([await this.blockchain.getCapTableTheGraph(capTableAddress), await this.ceramic.findUsersForCapTable(capTableAddress)])
-      .map((res) => res as [CapTableGraphQLTypes.CapTableQuery.CapTable, ShareholderCeramic[]])
-      .match(
-        ([capTableTheGraph, shCeramic]) => this.mergeTheGraphWithCeramic(capTableTheGraph, shCeramic),
-        (e) => {
-          throw Error(e);
-        },
-      );
+    const capTableGraphData = await this.blockchain.getCapTableTheGraph(capTableAddress);
+    if (capTableGraphData.isErr()) throw new Error(capTableGraphData.error);
+    console.log("getCapTableDetails", capTableGraphData)
+    const capTableFagsystemDid = capTableGraphData.value.fagsystemDid;
+    const capTableCeramicData = await this.ceramic.findUsersForCapTable(capTableAddress, capTableFagsystemDid);
+    if (capTableCeramicData.isErr()) throw new Error(capTableCeramicData.error);
+    const merged = this.mergeTheGraphWithCeramic(capTableGraphData.value, capTableCeramicData.value);
+    return merged;
   }
 
   async findUserForCapTable(capTableAddress: string, userEthAddress: string) {
@@ -314,7 +334,7 @@ export class SDK {
 
     const shareholders: ShareholderUnion[] = [];
 
-    for (let [address, theGraphSh] of theGraphShareholders.entries()) {
+    for (const [address, theGraphSh] of theGraphShareholders.entries()) {
       const ceramicShareholder = ceramicShareholders.get(address);
 
       if (!ceramicShareholder) {

@@ -1,7 +1,11 @@
+/* eslint-disable node/no-missing-import */
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 import { ethers } from "ethers";
-import { CapTableFactory, CapTableRegistry } from "../src/typechain/index";
+import { CapTableFactory, CapTableRegistry } from "./../src/typechain/index";
+import { DID } from "dids";
+import { Ed25519Provider } from "key-did-provider-ed25519";
+import { getResolver } from "key-did-resolver";
 
 const ERC820_ADDRESS = "0x1820a4B7618BdE71Dce8cdc73aAB6C95905faD24";
 const TARGET_ADDRESS = "0xa990077c3205cbDf861e17Fa532eeB069cE9fF96";
@@ -11,10 +15,12 @@ const RAW_ERC1820_TX =
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deploy } = hre.deployments;
   const { deployer } = await hre.getNamedAccounts();
+  console.log(hre.network.config.accounts);
 
   const signer = await getSigner(hre);
-  const CONTROLLERS = [signer.address];
-  console.log("CapTableRegistry Controllers => ", CONTROLLERS);
+  const did = await getDID(hre);
+  console.log("ETH controller", signer.address);
+  console.log("DID controller", did);
 
   async function erc1820() {
     const code = await hre.ethers.provider.getCode(ERC820_ADDRESS);
@@ -41,7 +47,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   // capTableRegistry
   const capTableRegistryDeploy = await deploy("CapTableRegistry", {
     from: deployer,
-    args: [CONTROLLERS],
+    args: [signer.address, did],
   });
 
   const capTableRegistry = (await hre.ethers.getContractAt(
@@ -55,7 +61,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     from: deployer,
     args: [
       capTableRegistry.address,
-      CONTROLLERS[0],
+      signer.address,
       ethers.utils.formatBytes32String("ordinære"),
     ],
   });
@@ -71,4 +77,25 @@ export default func;
 
 async function getSigner(hre: HardhatRuntimeEnvironment) {
   return (await hre.ethers.getSigners())[0];
+}
+
+async function getDID(hre: HardhatRuntimeEnvironment) {
+  if (
+    typeof hre.network.config.accounts !== "string" &&
+    "mnemonic" in hre.network.config.accounts
+  ) {
+    const wallet = ethers.Wallet.fromMnemonic(
+      hre.network.config.accounts.mnemonic
+    );
+    const seed = Uint8Array.from(
+      Buffer.from(wallet.privateKey.substring(2), "hex")
+    );
+    const provider = new Ed25519Provider(seed);
+    const did = new DID({ provider, resolver: getResolver() });
+    await did.authenticate();
+    return did.id;
+  }
+  throw new Error(
+    "No mnemonic found in network config, could not calculate DID which is needed to deploy CapTableRegistry"
+  );
 }

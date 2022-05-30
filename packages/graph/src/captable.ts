@@ -2,7 +2,6 @@ import { Bytes, dataSource, log } from '@graphprotocol/graph-ts';
 import { CapTable as CapTableSchema, TokenHolder, Balance } from '../generated/schema';
 import {
   CapTable,
-  NewCapTable,
   IssuedByPartition,
   RedeemedByPartition,
   TransferByPartition,
@@ -21,6 +20,7 @@ export function handleIssuedByPartition(event: IssuedByPartition): void {
     let contract = CapTable.bind(event.address);
     let owner = contract.owner();
     let fagsystem = contract.getFagsystem();
+    let did = contract.getFagsystemDid();
     let partitionsBytes = contract.totalPartitions();
     let partitions: Array<String> = [];
     for (let i = 0; i < partitionsBytes.length; i++) {
@@ -35,6 +35,7 @@ export function handleIssuedByPartition(event: IssuedByPartition): void {
     capTable.status = 'QUED';
     capTable.registry = capTableRegistryId;
     capTable.fagsystem = fagsystem;
+    capTable.fagsystemDid = did;
     capTable.owner = owner;
     capTable.totalSupply = contract.totalSupply();
 

@@ -36,8 +36,8 @@
                   },
                 "background": {
                     "activeOnStart": true,
-                    "beginsPattern": "Compiled",
-                    "endsPattern" : "Initial scan complete. Ready for changes"
+                    "beginsPattern": "change detected",
+                    "endsPattern" : "EthereumDIDRegistry deployed"
                 }
             }
         },
@@ -118,7 +118,6 @@
                   "endsPattern": "Compiled"
                 }
               }
-        
         },
         {
             "label": "graph",
