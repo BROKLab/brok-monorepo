@@ -83,7 +83,7 @@ describe('sdk', function() {
     const capTableDetails = capTableDetailsRes.value
     expect(capTableDetails.name).toEqual(`Test ${randomOrgNr} AS`)
     expect(capTableDetails.shareholders).toBeAnArrayOfLength(1)
-  }).timeout(20000);
+  }).timeout(30000);
 
 
   it('should deploy capTable and fetch data as another fagsystem',async  () => {
@@ -130,6 +130,6 @@ describe('sdk', function() {
     const capTableDetails = capTableDetailsRes.value
     expect(capTableDetails.name).toEqual(`Test ${randomOrgNr} AS`)
     expect(capTableDetails.shareholders).toBeAnArrayOfLength(1)
-  }).timeout(20000);
+  }).timeout(30000);
   
 });
