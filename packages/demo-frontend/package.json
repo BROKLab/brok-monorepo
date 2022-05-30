@@ -1,6 +1,6 @@
 {
   "name": "@brok/demo-frontend",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "private": true,
   "pnpm": {
     "peerDependencyRules": {
@@ -17,7 +17,7 @@
     "@babel/core": "^7.0.0-0",
     "@babel/plugin-syntax-flow": "^7.16.7",
     "@babel/plugin-transform-react-jsx": "^7.17.3",
-    "@brok/sdk": "^0.6.0",
+    "@brok/sdk": "^0.7.0",
     "@hookform/resolvers": "^2.8.8",
     "@testing-library/dom": "^8.13.0",
     "@testing-library/jest-dom": "^5.16.4",

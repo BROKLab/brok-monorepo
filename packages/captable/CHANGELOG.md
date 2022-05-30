@@ -1,5 +1,11 @@
 # @brok/captable
 
+## 0.7.0
+
+### Minor Changes
+
+- Update graph and dev deployments
+
 ## 0.6.0
 
 ### Minor Changes

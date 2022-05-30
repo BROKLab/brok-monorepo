@@ -1,5 +1,16 @@
 # @brok/demo-server
 
+## 0.5.0
+
+### Minor Changes
+
+- Update graph and dev deployments
+
+### Patch Changes
+
+- Updated dependencies
+  - @brok/sdk@0.7.0
+
 ## 0.4.2
 
 ### Patch Changes

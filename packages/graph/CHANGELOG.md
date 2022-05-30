@@ -2,6 +2,17 @@
 
 ## null
 
+### Minor Changes
+
+- Update graph and dev deployments
+
+### Patch Changes
+
+- Updated dependencies
+  - @brok/captable@0.7.0
+
+## null
+
 ### Patch Changes
 
 - Updated dependencies
