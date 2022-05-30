@@ -101,6 +101,8 @@ export class SDK {
             .capTableRegistryContract()
             .hasRole(ethers.utils.solidityKeccak256(['string'], ['FAGSYSTEM']), this.blockchain.signer.address);
           if (!isFagsystem) {
+            debug("Current signer is not fagsystem");
+            debug("Current signer",this.blockchain.signer.address);
             return err('Must be fagsystem to deploy cap table');
           }
       } catch (error) {
