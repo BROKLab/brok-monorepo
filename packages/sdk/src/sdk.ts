@@ -1,7 +1,7 @@
 import { JsonRpcProvider } from '@ethersproject/providers';
 import { Wallet } from '@ethersproject/wallet';
 import { ethers } from 'ethers';
-import { combine, err, ok, Result } from 'neverthrow';
+import {  err, ok, Result } from 'neverthrow';
 import { CeramicSDK } from './ceramic/ceramic';
 import { makeDID } from './ceramic/make-did';
 import { Blockchain, CreateCapTableResult } from './ethereum/blockchain';
