@@ -28,7 +28,7 @@ const config: HardhatUserConfig = {
     brokDev: {
       url: process.env.RPC_ARBITRUM_RINKEBY,
       accounts: {
-        mnemonic: process.env.SEED_STAGE,
+        mnemonic: process.env.SEED_DEV,
       },
     },
     brokStage: {
