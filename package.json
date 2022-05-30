@@ -32,6 +32,7 @@
   },
   "homepage": "https://github.com/BROKLab/brok-monorepo#readme",
   "devDependencies": {
+    "@ceramicnetwork/cli": "^1.11.1",
     "@changesets/cli": "^2.22.0",
     "@types/dedent": "^0.7.0",
     "@types/node": "^17.0.29",

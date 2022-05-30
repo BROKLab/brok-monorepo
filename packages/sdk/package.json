@@ -50,7 +50,6 @@
 		"@babel/plugin-transform-modules-commonjs": "^7.16.8",
 		"@babel/preset-env": "^7.16.8",
 		"@babel/preset-typescript": "^7.16.7",
-		"@ceramicnetwork/cli": "^1.11.1",
 		"@ceramicnetwork/ipfs-daemon": "^1.2.11",
 		"@ceramicnetwork/stream-tile-handler": "^1.5.11",
 		"@ethersproject/providers": "^5.0.0",

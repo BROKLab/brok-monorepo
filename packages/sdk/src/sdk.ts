@@ -282,7 +282,7 @@ export class SDK {
   async getCapTableDetails(capTableAddress: string) {
     const capTableGraphData = await this.blockchain.getCapTableTheGraph(capTableAddress);
     if (capTableGraphData.isErr()) throw new Error(capTableGraphData.error);
-    debug("getCapTableDetails", capTableGraphData)
+    debug("getCapTableDetails", capTableGraphData.value)
     const capTableFagsystemDid = capTableGraphData.value.fagsystemDid;
     const capTableCeramicData = await this.ceramic.findUsersForCapTable(capTableAddress, capTableFagsystemDid);
     if (capTableCeramicData.isErr()) throw new Error(capTableCeramicData.error);
