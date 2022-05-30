@@ -32,8 +32,7 @@ export class SDK {
 
     await ceramic.setDID(await makeDID(ceramic, signer.value.privateKey));
 
-    debug("pk", signer.value.privateKey)
-    debug("seed", config.seed)
+    debug("address", signer.value.address)
     debug("did", ceramic.did.id);
 
     return new SDK(blockchain, ceramic);

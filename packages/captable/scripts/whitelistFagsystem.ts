@@ -2,8 +2,14 @@ import { run, ethers, deployments, network } from "hardhat";
 
 import { CapTableRegistry } from "../src/typechain";
 
+const toWhitelist = [
+  {
+    address: "0xBc78672B86F7d022408bd91A9700a3ddB2ed555A",
+    did: "did:example:123",
+  },
+];
+
 async function main() {
-  const fagsystemer: string[] = ["0xBc78672B86F7d022408bd91A9700a3ddB2ed555A"];
   await run("compile");
   console.log("Deploying capTable on ", network.name);
   if (network.name === "hardhat") {
@@ -21,16 +27,16 @@ async function main() {
     deploymentCapTableRegistry.address
   )) as CapTableRegistry;
 
-  for (const fagsystem of fagsystemer) {
+  for (const fagsystem of toWhitelist) {
     const tx = await capTableRegistry.whitelistFagsystem(
-      fagsystem,
-      "did:example:123"
+      fagsystem.address,
+      fagsystem.did
     );
     await tx.wait();
 
     const hasRole = await capTableRegistry.hasRole(
       ethers.utils.solidityKeccak256(["string"], ["FAGSYSTEM"]),
-      fagsystem
+      fagsystem.address
     );
     if (!hasRole) {
       throw new Error(
@@ -38,7 +44,10 @@ async function main() {
       );
     }
   }
-  console.log("Whitelisted fagsystems: ", fagsystemer);
+  console.log(
+    "Whitelisted fagsystems: ",
+    toWhitelist.map((fagsystem) => fagsystem.address).join(", ")
+  );
   console.log("In registry", capTableRegistry.address);
 }
 
