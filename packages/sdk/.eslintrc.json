@@ -21,6 +21,7 @@
             {
                 "code": 160
             }
-        ]
+        ],
+        "@typescript-eslint/no-var-requires": "off"
     }
 }
