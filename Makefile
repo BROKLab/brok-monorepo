@@ -30,7 +30,7 @@ build-contracts: ## build the contracts
 build-sdk: ## build the sdk
 	pnpm --stream --filter @brok/sdk build
 
-clean: redis-stop ceramic-stop postgres-stop graph-stop clean-node-modules## removes everything
+clean: redis-stop postgres-stop graph-stop clean-node-modules## removes everything
 
 clean-node-modules: ## clean node_modules TODO
 	rm -rf packages/**/node_modules && rm -rf node_modules
