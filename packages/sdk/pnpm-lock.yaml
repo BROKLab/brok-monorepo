@@ -8,7 +8,7 @@ specifiers:
   '@babel/plugin-transform-modules-commonjs': ^7.16.8
   '@babel/preset-env': ^7.16.8
   '@babel/preset-typescript': ^7.16.7
-  '@brok/captable': workspace:0.5.0
+  '@brok/captable': workspace:0.7.0
   '@ceramicnetwork/3id-did-resolver': ^1.4.17-rc.0
   '@ceramicnetwork/blockchain-utils-linking': ^1.5.5
   '@ceramicnetwork/common': ^1.11.1-rc.0
