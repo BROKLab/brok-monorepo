@@ -62,7 +62,7 @@
             "command": "pnpm ceramic daemon --debug --network inmemory",
             "presentation": {
                 "panel": "dedicated",
-                "group": "sdk"
+                "group": "ceramic"
             },
             "dependsOn": [
                 "captable lib"
@@ -93,7 +93,6 @@
                 "group": "sdk"
             },
             "dependsOn": [
-                "captable lib",
                 "ceramic"
             ],
             "problemMatcher": ["$tsc-watch"],
