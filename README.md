@@ -38,6 +38,14 @@ make graph-stop && make graph-start
 3. Get yourself wallets for all enviroments (can create a wallet which contains a seed with `pnpm task utils:seed`)
 4. Update .evn varibles in all packages with your endpoints and seeds.
 5. Fund wallets on blockchain you are targeting.
+--- Make code changes
+1. Create new version of @brok/sdk & @brok/captable with `pnpm task publish`
+2. Publish new version of @brok/sdk & @brok/captable with `pnpm task publish:commit`
+3. Deploy new version of theGraph `pnpm deploy:graph [ENV]`
+4. Deploy new version of demo-server `deploy:update:server [ENV]` 
+5. Deploy new version of demo-frontend `deploy:update:frontend [ENV]` 
+
+
 ## Deployment
 - SDK [NPM](https://www.npmjs.com/package/@brok/sdk)
 - Captable [NPM](https://www.npmjs.com/package/@brok/captable)
@@ -65,13 +73,17 @@ publish                         - publish packages with changes
 ```
 
 ### Examples
-`pnpx task help` show available commands.
+`pnpm task help` show available commands.
 
-`pnpx task deploy dev` will deploy graph, demo-server and demo-frontend to their hosting enviroments for enviroment `dev`
+`pnpm task deploy:frontend dev` will create demo-frontend for enviroment dev
 
-`pnpx task deploy:server dev` will deploy graph to its hosting enviroments for enviroment `dev
+`pnpm task deploy:update:server dev` will update demo-server for enviroment dev
 
-`pnpx task publish` will publish packages wich changes (interactive) to NPM.
+`pnpm task deploy:graph dev` will update captable graph for enviroment dev
+
+`pnpm task publish` will create a new version for each package.
+
+`pnpm task publish:commit` will publish all new versions of packages to npm.
 
 
 To be able to deploy to Heroku, NPN og The Ghrap hosted service you must have access. Request from admin.
