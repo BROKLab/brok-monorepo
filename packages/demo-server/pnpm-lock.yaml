@@ -1,7 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@brok/sdk': ^0.7.0
+  '@brok/sdk': ^0.8.0
   '@ceramicnetwork/cli': ^1.11.1
   '@ceramicnetwork/common': ^1.11.1-rc.0
   '@ceramicnetwork/core': ^1.13.2

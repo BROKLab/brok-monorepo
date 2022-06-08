@@ -5,6 +5,7 @@ import deploy from './deploy';
 import publish from './publish';
 import build from './build';
 import log from './log';
+import utils from './utils';
 
 cliHelp(help, "Show this help");
 
@@ -21,5 +22,6 @@ cli({
   deploy,
   publish,
   build,
-  log
+  log,
+  utils
 })
