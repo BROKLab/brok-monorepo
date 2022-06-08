@@ -131,5 +131,17 @@ describe('sdk', function() {
     expect(capTableDetails.name).toEqual(`Test ${randomOrgNr} AS`)
     expect(capTableDetails.shareholders).toBeAnArrayOfLength(1)
   }).timeout(30000);
+
+  it('should close',async  () => {
+    const sdk = await SDK.init({
+      ceramicUrl: process.env.CERAMIC_URL,
+      ethereumRpc: process.env.ETHEREUM_RPC,
+      theGraphUrl: process.env.THE_GRAPH_URL,
+      seed: process.env.SEED,
+    });
+    await sdk.close()
+
+    console.log(sdk)
+  }).timeout(30000);
   
 });

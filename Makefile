@@ -13,7 +13,12 @@ ENV?=dev
 help: ## Show this help
 	@egrep -h '\s##\s' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
-dev: install redis-start postgres-start build ## setup the dev enviroment
+dev: enviroment install redis-start postgres-start ## setup the dev enviroment
+
+enviroment: ## setup enviorment files
+	test -f packages/demo-server/.env || cp packages/demo-server/.env.example packages/demo-server/.env
+	test -f packages/demo-frontend/.env || cp packages/demo-frontend/.env.example packages/demo-frontend/.env
+	test -f packages/captable/.env || cp packages/captable/.env.example packages/captable/.env
 
 start: ## start local dev enviroment
 	pnpm -r --parallel start
@@ -22,7 +27,6 @@ install: ## install monorepo and package dependencies
 	pnpm install
 
 build: build-contracts build-sdk ## build the app
-
 
 build-contracts: ## build the contracts
 	pnpm --stream --filter @brok/captable build
@@ -60,7 +64,6 @@ postgres-stop: ## stops the postgres db
 
 graph-start: ## spins up graph docker and deploys it
 	docker compose -p ${graphName} -f ops/docker/the-graph.yml up -d
-	pnpm --filter @brok/captable --stream demo 
 	echo "Waiting 40s for graph to start"
 	sleep 40
 	pnpm --stream --filter @brok/graph deploy:brokLocal
