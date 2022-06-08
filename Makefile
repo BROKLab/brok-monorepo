@@ -13,7 +13,7 @@ ENV?=dev
 help: ## Show this help
 	@egrep -h '\s##\s' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
-dev: enviroment install redis-start postgres-start build ## setup the dev enviroment
+dev: enviroment install redis-start postgres-start ## setup the dev enviroment
 
 enviroment: ## setup enviorment files
 	test -f packages/demo-server/.env || cp packages/demo-server/.env.example packages/demo-server/.env
@@ -27,7 +27,6 @@ install: ## install monorepo and package dependencies
 	pnpm install
 
 build: build-contracts build-sdk ## build the app
-
 
 build-contracts: ## build the contracts
 	pnpm --stream --filter @brok/captable build
