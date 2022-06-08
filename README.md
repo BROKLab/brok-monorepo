@@ -4,31 +4,40 @@
 - [pnpm](https://pnpm.io/installation) 
 - [make](https://opensource.com/article/18/8/what-how-makefile) (get started with makefile [mac](https://formulae.brew.sh/formula/make), [win](https://stackoverflow.com/questions/32127524/how-to-install-and-use-make-in-windows) )
 - [Docker Compose](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-ubuntu-20-04)
+- [Node](https://nodejs.org/en/blog/release/v16.14.2/)
 
-## Getting started
+## Getting started - Local development
 
 Run `make dev`
 
-To delete and clear all instances and data run `make clean`
-## Development
-Choose either vs **👩‍💻 With tasks in VSCode (preferred)** or **💻 With make**
-### 👩‍💻 With tasks in VSCode (preferred) 
+To clean everything up. Run `make clean`
+
+### EITHER 👩‍💻 Running locally with VSCode tasks (preferred) 
 In VScode, run task `dev`  ( ⇧⌘B workbench.action.tasks.runTask). 
 
 This will fire up all projects in watch mode so you can develop and experience imdiate results (hopefully across pacakges).
 The graph takes some time to start. Once it is started it will keep running in docker as long as your captable contracts terminal is running.
 ![terminal_tabs](screenshot/terminal_tabs.png)
-### 💻 With make
+### OR 💻 Running locally with shells.
 
-Run `make start`, this will fire up all projects in watch mode so you can develop and experience imdiate results (hopefully across pacakges).
+To run all services locally we need multiple services running. Take each commandline below and run it in its own shell. Start at the top and follow the order.
+```bash
+pnpm --filter @brok/captable start:contracts
+pnpm --filter @brok/captable start:lib
+pnpm ceramic daemon --debug --network inmemory
+pnpm --filter @brok/sdk start
+pnpm --filter @brok/demo-server start:dev
+pnpm --filter @brok/demo-frontend start
+make graph-stop && make graph-start
+```
 
-To run The Graph locally, open a new terminal and run `make graph-start`. This will fire up the docker image, which takes some time and deploys your current capTableRegistry. This requires `make start` to be running in the background, spesifically the hardhat node.
+## Getting started - Remote development
 
-
-To see avaiable commands run `make`
-
-![make_commands](screenshot/make_commands.png)
-
+1. Install requirements (docker, docker-compose, pnpm, make, node)
+2. Get yourself an Ethereum RPC endpoint (free: [alchemy](https://www.alchemy.com/) [infura](https://infura.io/) )
+3. Get yourself wallets for all enviroments (can create a wallet which contains a seed with `pnpm task utils:seed`)
+4. Update .evn varibles in all packages with your endpoints and seeds.
+5. Fund wallets on blockchain you are targeting.
 ## Deployment
 - SDK [NPM](https://www.npmjs.com/package/@brok/sdk)
 - Captable [NPM](https://www.npmjs.com/package/@brok/captable)
@@ -82,16 +91,13 @@ The main enviorment variables that you need to familirize with:
 
 Other env variables are mostly used for deployment to remote servers.
 
-
 SDK will look for environment variable BROK_ENVIRONMENT to determine which contracts to choose. Set this envrioment in your runtime.
 - local brokLocal - Will use local blockchain
 - dev brokDev - Will use Arbitrum Rinkeby
 - stage brokStage - Will use Arbitrum Rinkeby
 - prod brokProd - Will use Arbitrum mainnet
 
-Fagsystem that one to create approved captable must first be authorized by BRREG. Contact us.
-
-
+To create an approved CapTable, the wallet for fagsystem must first be authorized by BRREG. Contact us.
 ## Ugly hacks
 - If the blockchain node (running inside the captable contracts terminal) is killed, the graph node will stop indexing. To fire it up again run `make graph-stop` then `make graph-start`.
 - Tasks that errors will continue to run. Should swap out task system for something that can handle errors in shell.
