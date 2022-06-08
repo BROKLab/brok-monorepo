@@ -60,7 +60,6 @@ postgres-stop: ## stops the postgres db
 
 graph-start: ## spins up graph docker and deploys it
 	docker compose -p ${graphName} -f ops/docker/the-graph.yml up -d
-	pnpm --filter @brok/captable --stream demo 
 	echo "Waiting 40s for graph to start"
 	sleep 40
 	pnpm --stream --filter @brok/graph deploy:brokLocal
