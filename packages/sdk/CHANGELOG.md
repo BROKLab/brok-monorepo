@@ -1,5 +1,11 @@
 # @brok/sdk
 
+## 0.8.0
+
+### Minor Changes
+
+- FIX sdk close instance
+
 ## 0.7.2
 
 ### Patch Changes
