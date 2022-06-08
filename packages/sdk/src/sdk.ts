@@ -38,6 +38,10 @@ export class SDK {
     return new SDK(blockchain, ceramic);
   }
 
+  public async close(){
+    await this.ceramic.close();
+  }
+
   private static async initWallet(rpc: string, seed: string) {
     try {
       const provider = new JsonRpcProvider(rpc);
