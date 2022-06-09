@@ -1,0 +1,21 @@
+services:
+  # A Docker web service
+  - type: web
+    name: demo-frontend
+    env: static
+    buildCommand: pnpm build --filter @brok/demo-frontend
+    startCommand: pnpm start --filter @brok/demo-frontend
+    staticPublishPath: ./packages/demo-frontend/build
+    # pullRequestPreviewsEnabled: true # optional
+    repo: https://github.com/BROKLab/brok-monorepo # optional
+    region: frankfurt # optional (defaults to oregon)
+    plan: free # optional (defaults to starter)
+    branch: render # optional (defaults to master)
+    healthCheckPath: /
+    envVars:
+      - key: REACT_APP_USE_LOCAL_ENVIROMENT
+        value: false
+      - key: REACT_APP_BROK_CAPTABLE_GRAPHQL
+        value: http://localhost:8000/subgraphs/name/brok/captable
+      - key: REACT_APP_BROK_SERVER
+        value: http://localhost:3004
