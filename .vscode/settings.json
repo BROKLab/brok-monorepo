@@ -28,4 +28,7 @@
     "titleBar.inactiveForeground": "#15202b99"
   },
   "peacock.color": "#e37b5b",
+  "[solidity]": {
+    "editor.defaultFormatter": "NomicFoundation.hardhat-solidity"
+  },
 }
