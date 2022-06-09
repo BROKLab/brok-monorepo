@@ -10,12 +10,12 @@
 	},
 	"scripts": {
 		"test": "mocha",
-		"build": "pnpx tsc -p tsconfig.lib.json",
+		"build": "pnpm tsc -p tsconfig.lib.json",
 		"prepublishOnly": "npm run build",
 		"prebuild": "npm run clean",
 		"lint": "pnpx eslint ./src --ext .js,.jsx,.ts,.tsx",
 		"clean": "pnpx rimraf ./lib",
-		"start": "pnpx tsc --watch",
+		"start": "pnpm tsc --watch",
 		"schema:create": "ts-node src/ceramic/schema-publisher.ts"
 	},
 	"dependencies": {
