@@ -6,7 +6,7 @@ config()
 
 help(prepare, "publish packages with changes", {
   examples: dedent`
-    pnpx task publish:all
+    pnpm task publish:all
   `
 })
 function prepare() {

@@ -7,8 +7,8 @@
   "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "pnpx prisma generate && pnpx prisma migrate reset -f && nest build",
-    "init:db": "pnpx prisma migrate dev --name init",
+    "build": "pnpm prisma generate && pnpm prisma migrate reset -f && nest build",
+    "init:db": "pnpm prisma migrate dev --name init",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "redis": "redis-server 2>&1",
     "start:old": "nest start",

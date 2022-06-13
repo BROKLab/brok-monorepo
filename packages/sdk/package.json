@@ -13,8 +13,8 @@
 		"build": "pnpm tsc -p tsconfig.lib.json",
 		"prepublishOnly": "npm run build",
 		"prebuild": "npm run clean",
-		"lint": "pnpx eslint ./src --ext .js,.jsx,.ts,.tsx",
-		"clean": "pnpx rimraf ./lib",
+		"lint": "pnpm eslint ./src --ext .js,.jsx,.ts,.tsx",
+		"clean": "pnpm rimraf ./lib",
 		"start": "pnpm tsc --watch",
 		"schema:create": "ts-node src/ceramic/schema-publisher.ts"
 	},
