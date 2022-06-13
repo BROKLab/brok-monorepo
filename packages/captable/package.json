@@ -29,7 +29,8 @@
     "start": "pnpm run-p start:contracts start:lib ",
     "start:contracts": "pnpm run deploy:brokLocal && pnpm hardhat node --watch --export src/DeploymentsBrokLocal.json",
     "start:lib": "pnpm tsc -w -p tsconfig.lib.json",
-    "demo": "pnpm hardhat run scripts/createCapTable.ts --network localhost"
+    "demo": "pnpm hardhat run scripts/createCapTable.ts --network localhost",
+    "postinstall": "pnpm hardhat typechain"
   },
   "devDependencies": {
     "@ethersproject/abi": "^5.0.0",
