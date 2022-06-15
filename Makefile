@@ -53,7 +53,7 @@ ceramic-stop: ## stops the ceramic node
 	docker compose -p ${ceramicName} -f ops/docker/cermaic-claynet-ropsten.yml down -v || true
 
 postgres-start: ## starts postgres docker container for local development
-	docker run --rm --name ${postgresName} -e POSTGRES_PASSWORD=postgres -e POSTGRES_USER=postgres -p 5433:5432 -d postgres
+	docker run --rm --name ${postgresName} -e POSTGRES_PASSWORD=postgres -e POSTGRES_USER=postgres -p 5432:5432 --network host -d postgres
 	sleep 5
 	pnpm -F @brok/demo-server init:db
 	@echo "migrated"
