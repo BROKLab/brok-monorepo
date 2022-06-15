@@ -59,11 +59,10 @@ contract CapTable is ERC1400 {
         return _symbol;
     }
 
-    function kapitalforhoyselse(
+    function kapitalforhoyselse_nye_aksjer(
         address[] memory addresses,
         uint256[] memory amount,
-        bytes32[] memory partition,
-        uint256 newCapitalAmount
+        bytes32[] memory partition
     ) external onlyOwner {
         // only issues
         // new capital amount must be set
@@ -80,11 +79,10 @@ contract CapTable is ERC1400 {
         // The ratio between shareholders should be the same, but non-divisible shares may be pre-shared (no smart contract enforcement).
     }
 
-    function kapitalnedsettelse(
+    function kapitalnedsettelse_reduksjon_aksjer(
         address[] memory addresses,
         uint256[] memory amount,
-        bytes32[] memory partition,
-        uint256 newCapitalAmount
+        bytes32[] memory partition
     ) external onlyOwner {
         // only redeems
         // redeems(addresses, amounts and partitions) could be empty, just set newCapitalAmount
