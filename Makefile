@@ -70,7 +70,7 @@ graph-start: ## spins up graph docker and deploys it
 
 graph-stop: ## stops the ceramic node
 	docker compose -p ${graphName} -f ops/docker/the-graph.yml down -v 
-	rm -rf ops/docker/data
+	-rm -rf ops/docker/data
 
 demo-data: ## spins up graph docker and deploys it
 	pnpm --filter @brok/captable --stream demo 

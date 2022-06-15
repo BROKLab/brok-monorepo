@@ -5,7 +5,7 @@ config()
 
 help(all, "builds everything", {
   examples: dedent`
-    pnpx task publish:all
+    pnpm task publish:all
   `
 })
  function all() {
