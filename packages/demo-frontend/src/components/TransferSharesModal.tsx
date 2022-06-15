@@ -2,7 +2,7 @@ import { OperatorTransferExistingShareholderInput, OperatorTransferNewShareholde
 import { Box, Button, CheckBox, DateInput, FormField, Heading, Layer, RadioButtonGroup, TextInput } from 'grommet';
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useBrok } from '../context/useBrok';
 import { JobProgressResults, OperatorTransferJobProgressResponse } from '../types/brok.types';
@@ -37,7 +37,7 @@ export const TransferSharesModal: React.FC<Props> = ({ ...props }) => {
 
   const { getValues, control, register } = useForm({ defaultValues });
   const [error, setError] = useState<string>();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [toNewShareholder, setToNewShareholder] = useState(false);
   const [isTransferring, setIsTransferring] = useState(false);
   const [toType, setToType] = useState<ToType>('Privatperson');
@@ -58,7 +58,7 @@ export const TransferSharesModal: React.FC<Props> = ({ ...props }) => {
   const navigateBack = async () => {
     const delay = (t: number) => new Promise((resolve) => setTimeout(resolve, t));
     await delay(1500);
-    history.go(0);
+    navigate(-1)
   };
 
   const handleOnSubmit = async () => {

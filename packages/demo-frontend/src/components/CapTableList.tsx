@@ -1,7 +1,7 @@
 import { Button, DataTable, Text } from 'grommet';
 import { More } from 'grommet-icons';
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export type CapTable = {
   name: string;
@@ -15,7 +15,7 @@ interface Props {
 }
 
 export const CapTableList: React.FC<Props> = ({ ...props }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   return (
     <DataTable
       data={props.capTables}
@@ -45,7 +45,7 @@ export const CapTableList: React.FC<Props> = ({ ...props }) => {
               hoverIndicator={true}
               focusIndicator={false}
               icon={<More></More>}
-              onClick={() => history.push('/captable/' + data.id)}
+              onClick={() => navigate('/captable/' + data.id)}
             ></Button>
           ),
         },

@@ -2,7 +2,7 @@ import { Box, Button, Grid, Heading, Paragraph, Spinner, Text } from 'grommet';
 import { CaretDown, CaretUp, Checkmark } from 'grommet-icons';
 import { validateNorwegianIdNumber } from 'norwegian-national-id-validator';
 import React, { useCallback, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useBrok } from '../context/useBrok';
 import { JobProgressResults, OrgData, PrivateTokenTransferData } from '../types/brok.types';
@@ -23,7 +23,7 @@ enum STEP {
 export const CreateCapTableForm: React.FC<Props> = ({ ...props }) => {
   const [step, setStep] = useState(STEP.SELECT_COMPANY); // TEST - ISSUE_SHARES
   const { createCaptable, isLoggedIn } = useBrok();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [resetTokenTransferData, setResetTokenTransferData] = useState(0);
   const [useDefaultPartitions, setUseDefaultPartitions] = useState(true);
   const [orgData, setOrgData] = useState<OrgData>(); // TEST - DEFAULT_ORG_DATA[0]
@@ -101,7 +101,7 @@ export const CreateCapTableForm: React.FC<Props> = ({ ...props }) => {
   const handleIsDone = (result: JobProgressResults) => {
     console.log('handleIsDone', result);
     if ('deployBlockchainRes' in result.data) {
-      history.push(result.data.deployBlockchainRes.capTableAddress);
+      navigate("/captable/" + result.data.deployBlockchainRes.capTableAddress, {replace: true});
     }
   };
 
