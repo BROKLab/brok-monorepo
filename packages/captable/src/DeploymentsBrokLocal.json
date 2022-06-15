@@ -3,7 +3,7 @@
   "chainId": "31337",
   "contracts": {
     "CapTableRegistry": {
-      "address": "0xE19B0a5D322aAfe1FfDABF437f60391B83BFE592",
+      "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
       "abi": [
         {
           "inputs": [
@@ -589,7 +589,7 @@
       ]
     },
     "CapTableFactory": {
-      "address": "0xd8A32038AcDC877B17e5b80Ce4552c2b1CBC9b63",
+      "address": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
       "abi": [
         {
           "inputs": [
@@ -656,7 +656,7 @@
       ]
     },
     "EthereumDIDRegistry": {
-      "address": "0x43837AA517ab5b414F869F97055F50fe825c4B9e",
+      "address": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
       "abi": [
         {
           "anonymous": false,
