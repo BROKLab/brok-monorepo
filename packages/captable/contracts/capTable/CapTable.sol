@@ -6,7 +6,11 @@ import "hardhat/console.sol";
 import "./CapTableRegistry.sol";
 
 contract CapTable is ERC1400 {
-    event CaptableChangedFagsystem(string indexed orgnr, address indexed oldFagsystem, address indexed newFagsystem);
+    event CaptableChangedFagsystem(
+        string indexed orgnr,
+        address indexed oldFagsystem,
+        address indexed newFagsystem
+    );
     event NewCapTable(string indexed orgnr, address indexed fagsystem);
     CapTableRegistry internal _capTableRegistry;
 
@@ -22,13 +26,15 @@ contract CapTable is ERC1400 {
         _capTableRegistry = CapTableRegistry(capTableRegistry);
     }
 
-
-    function setCapTableRegistry(address capTableRegistryAddress) external onlyOwner {
-     _capTableRegistry = CapTableRegistry(capTableRegistryAddress);
+    function setCapTableRegistry(address capTableRegistryAddress)
+        external
+        onlyOwner
+    {
+        _capTableRegistry = CapTableRegistry(capTableRegistryAddress);
     }
 
     /* @dev Overwrites the current fagsystem with a new one
-    */
+     */
     function updateFagsystem() external {
         address oldFagsystem = _controllers[0];
         address[] memory newFagsystemAsArray = new address[](1);
@@ -39,17 +45,58 @@ contract CapTable is ERC1400 {
     }
 
     /* @dev Get the current fagsystem for the cap table
-    */
+     */
     function getFagsystem() public view returns (address) {
-        return  _capTableRegistry.getFagsystemForCapTable(address(this));
+        return _capTableRegistry.getFagsystemForCapTable(address(this));
     }
 
     function getFagsystemDid() public view returns (string memory) {
         address fagsystem = getFagsystem();
-        return  _capTableRegistry.getDidForFagsystem(fagsystem);
+        return _capTableRegistry.getDidForFagsystem(fagsystem);
     }
 
     function getOrgnr() public view returns (string memory) {
         return _symbol;
+    }
+
+    function kapitalforhoyselse(
+        address[] memory addresses,
+        uint256[] memory amount,
+        bytes32[] memory partition,
+        uint256 newCapitalAmount
+    ) external onlyOwner {
+        // only issues
+        // new capital amount must be set
+        // issues(addresses, amounts and partitions) could be empty, just set newCapitalAmount
+    }
+
+    function splitt(
+        address[] memory addresses,
+        uint256[] memory amount,
+        bytes32[] memory partition
+    ) external onlyOwner {
+        // only issues
+        // no new sharesholders
+        // The ratio between shareholders should be the same, but non-divisible shares may be pre-shared (no smart contract enforcement).
+    }
+
+    function kapitalnedsettelse(
+        address[] memory addresses,
+        uint256[] memory amount,
+        bytes32[] memory partition,
+        uint256 newCapitalAmount
+    ) external onlyOwner {
+        // only redeems
+        // redeems(addresses, amounts and partitions) could be empty, just set newCapitalAmount
+    }
+
+    function spleis(
+        address[] memory addresses,
+        uint256[] memory amount,
+        bytes32[] memory partition
+    ) external onlyOwner {
+        // only redeems
+        // no new sharesholders
+        // The ratio between shareholders should be the same, but non-divisible shares may be pre-shared (no smart contract enforcement).
     }
 }
