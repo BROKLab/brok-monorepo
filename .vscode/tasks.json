@@ -11,7 +11,7 @@
             "dependsOrder": "parallel",
             "dependsOn": [
                 "frontend",
-                "graph"
+                "graph-captable"
             ],
             "problemMatcher": []
         },
@@ -101,7 +101,7 @@
             "label": "server",
             "type": "shell",
             "isBackground": true,
-            "command": "pnpm --filter @brok/demo-server start:dev",
+            "command": "DEBUG=brok* pnpm --filter @brok/demo-server start:dev",
             "presentation": {
                 "panel": "dedicated",
                 "group": "server"
@@ -148,7 +148,7 @@
               }
         },
         {
-            "label": "graph",
+            "label": "graph-server",
             "type": "shell",
             "isBackground": true,
             "command": "make graph-stop && make graph-start",
@@ -157,6 +157,42 @@
                 "group": "graph",
                 "focus": true
             },
+            "problemMatcher": {
+                "pattern": [
+                    {
+                      "regexp": "^([^F\\(\\s].*)$",
+                      "file": 1
+                    },
+                    {
+                      "regexp": "^\\((\\d+),(\\d+)\\): (error|warning|info) (TS\\d+): (.*)$",
+                      "line": 1,
+                      "column": 2,
+                      "severity": 3,
+                      "message": 5,
+                      "code": 4,
+                      "loop": true
+                    }
+                  ],
+                  "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "Apply migrations",
+                    "endsPattern": "Starting GraphQL HTTP server"
+                  }          
+            },
+        },
+        {
+            "label": "graph-captable",
+            "type": "shell",
+            "isBackground": true,
+            "command": "pnpm -F @brok/graph deploy:brokLocal",
+            "presentation": {
+                "panel": "dedicated",
+                "group": "graph",
+                "focus": true
+            },
+            "dependsOn": [
+                "graph-server"
+            ],
             "problemMatcher": {
                 "pattern": [
                     {

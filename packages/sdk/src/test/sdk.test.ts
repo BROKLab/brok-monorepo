@@ -46,6 +46,21 @@ describe('sdk', function() {
     expect(res.isOk()).toBeTruthy()
   }).timeout(4000)
 
+  it('get cap table',async  () => {
+    const sdk = await SDK.init({
+      ceramicUrl: process.env.CERAMIC_URL,
+      ethereumRpc: process.env.ETHEREUM_RPC,
+      theGraphUrl: process.env.THE_GRAPH_URL,
+      seed: process.env.SEED,
+    });
+
+
+    const capTableDetailsRes = await sdk.getCapTableDetails("0x09df20712491189de6607fb27bb1dee53acb8555");
+    console.log(capTableDetailsRes)
+    expect(capTableDetailsRes.isOk()).toBeTruthy()
+    if(capTableDetailsRes.isErr()) throw Error(capTableDetailsRes.error.join(', '))
+  }).timeout(30000);
+
   it('should deploy capTable and fetch details',async  () => {
     const sdk = await SDK.init({
       ceramicUrl: process.env.CERAMIC_URL,
@@ -140,8 +155,7 @@ describe('sdk', function() {
       seed: process.env.SEED,
     });
     await sdk.close()
-
-    console.log(sdk)
+    // TODO expect
   }).timeout(30000);
   
 });

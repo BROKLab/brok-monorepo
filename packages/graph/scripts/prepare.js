@@ -1,4 +1,3 @@
-const Mustache = require('mustache');
 const brok = require('@brok/captable');
 const yaml = require('js-yaml');
 const fs = require('fs');
