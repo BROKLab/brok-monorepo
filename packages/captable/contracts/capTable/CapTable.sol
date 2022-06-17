@@ -66,7 +66,7 @@ contract CapTable is ERC1400 {
     ) external onlyOwner {
         // only issues
         // new capital amount must be set
-        // issues(addresses, amounts and partitions) could be empty, just set newCapitalAmount
+        // issues(addresses, amounts and partitions)
     }
 
     function splitt(
@@ -85,7 +85,7 @@ contract CapTable is ERC1400 {
         bytes32[] memory partition
     ) external onlyOwner {
         // only redeems
-        // redeems(addresses, amounts and partitions) could be empty, just set newCapitalAmount
+        // redeems(addresses, amounts and partitions)
     }
 
     function spleis(
