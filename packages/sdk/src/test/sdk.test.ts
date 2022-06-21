@@ -55,7 +55,7 @@ describe('sdk', function() {
     });
 
 
-    const capTableDetailsRes = await sdk.getCapTableDetails("0x09df20712491189de6607fb27bb1dee53acb8555");
+    const capTableDetailsRes = await sdk.getCapTableDetails("0x5392a33f7f677f59e833febf4016cddd88ff9e67");
     console.log(capTableDetailsRes)
     expect(capTableDetailsRes.isOk()).toBeTruthy()
     if(capTableDetailsRes.isErr()) throw Error(capTableDetailsRes.error.join(', '))

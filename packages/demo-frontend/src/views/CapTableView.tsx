@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { CapTableDetails } from '@brok/sdk';
 import { Box, Text, Button, Heading, Grid } from 'grommet';
 import { Trash } from 'grommet-icons';
@@ -48,7 +49,7 @@ export const CapTableView: React.FC<Props> = ({ ...props }) => {
       setCapTable(undefined)
       subscribed = false;
     };
-  }, [address, getCapTableDetails]);
+  }, [address]);
 
   const handleDeleteCapTable = async (capTableAddress: string) => {
     setIsDeleting(true);

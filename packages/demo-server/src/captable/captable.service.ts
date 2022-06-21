@@ -65,8 +65,10 @@ export class CapTableService {
       loggedInUserWithOperatorTransfer.loggedInUserAddress
     )
       return err('Logged in user is not the same as the user that migrated');
-
-    return await this.sdk.transfer(loggedInUserWithOperatorTransfer.transfer);
+    const res = await this.sdk.transfer(
+      loggedInUserWithOperatorTransfer.transfer,
+    );
+    return res;
   }
 
   async getCapTableDetails(capTableAddress: string) {

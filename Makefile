@@ -13,7 +13,7 @@ ENV?=dev
 help: ## Show this help
 	@egrep -h '\s##\s' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
-dev: enviroment install redis-start server-db-start ## setup the dev enviroment
+dev: enviroment install ## setup the dev enviroment
 
 enviroment: ## setup enviorment files
 	test -f packages/demo-server/.env || cp packages/demo-server/.env.example packages/demo-server/.env
@@ -41,18 +41,17 @@ clean-node-modules: ## clean node_modules TODO
 	rm -rf packages/**/node_modules && rm -rf node_modules
 
 redis-start: ## starts redis docker container for local development
-	docker run --rm --name $(redisName) -d -p 6379:6379 $(redisImage) || true
+	docker run --rm --name $(redisName) -p 6379:6379 $(redisImage) 
 	$(log_end)
 
 redis-stop: ## stops the redis container
-	docker stop $(redisName) || true
+	-docker stop $(redisName)
 
 server-db-start: ## starts postgres docker container for local development
 	pnpm -F @brok/demo-server init:db
 
 graph-start: ## spins up graph docker and deploys it
 	docker compose -p ${graphName} -f ops/docker/the-graph.yml up
-
 
 graph-stop: ## stops the ceramic node
 	docker compose -p ${graphName} -f ops/docker/the-graph.yml down -v 
