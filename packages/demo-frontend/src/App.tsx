@@ -2,7 +2,7 @@ import { Grommet, Box, Main, Footer, Paragraph, Text } from 'grommet';
 import { Navigation } from './components/Navigation';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Route, Switch, BrowserRouter } from 'react-router-dom';
+import { Route, BrowserRouter, Routes } from 'react-router-dom';
 import { BrokProvider } from './context/useBrok';
 import { Theme } from './assets/Theme';
 import { Home } from './views/Home';
@@ -33,13 +33,13 @@ function App() {
               <Navigation></Navigation>
               {/* Content swtich */}
               <Box pad="xlarge" height={{ min: '75vh' }}>
-                <Switch>
-                  <Route exact path="/" component={Home} />
-                  <Route path="/captable/create" component={CapTableCreateView} />
-                  <Route path="/login" component={LoginView} />
-                  <Route path="/capTable/:address" component={CapTableView} />
-                  <Route path="/register" component={CapTableRegistryPage} />
-                </Switch>
+                <Routes>
+                  <Route  path="/" element={<Home/>} />
+                  <Route path="/captable/create" element={<CapTableCreateView/>} />
+                  <Route path="/login" element={<LoginView/>} />
+                  <Route path="/capTable/:address" element={<CapTableView/>} />
+                  <Route path="/register" element={<CapTableRegistryPage/>} />
+                </Routes>
               </Box>
 
               {/* footer */}

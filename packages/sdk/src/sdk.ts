@@ -52,7 +52,7 @@ export class SDK {
     }
   }
 
-  parseShareholders(shareholders: ShareholderRequest[]): Shareholder[] {
+  private parseShareholders(shareholders: ShareholderRequest[]): Shareholder[] {
     return shareholders.map((shareholder) => {
       const newAddress = this.blockchain.createRandomWallet().address.toLowerCase();
       return {
@@ -187,7 +187,9 @@ export class SDK {
     if (!ethers.utils.isAddress(transferInput.capTableAddress)) return err('CapTable address is not valid');
     if (!ethers.utils.isAddress(transferInput.from)) return err('from address is not valid');
     if (!(parseInt(transferInput.amount, 10) > 0)) return err('not a valid amount. Must be greater than 0');
-    const ceramicCapTable = await this.ceramic.getPublicCapTableByCapTableAddress(transferInput.capTableAddress, 'TODO');
+    const graphRes = await this.blockchain.getCapTableTheGraph(transferInput.capTableAddress);
+    if(graphRes.isErr()) return err("Could not get The Graph data to find fagsystem DID");
+    const ceramicCapTable = await this.ceramic.getPublicCapTableByCapTableAddress(transferInput.capTableAddress, graphRes.value.fagsystemDid);
     if (ceramicCapTable.isErr()) return err(`Could not get ceramic captable for address ${transferInput.capTableAddress}`);
 
     // create wallet for user

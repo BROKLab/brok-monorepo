@@ -107,7 +107,7 @@ export class Blockchain {
 
   // The Graph
   async getCapTableWithShareholders(capTableAddress: string): Promise<Result<CapTableGraphQLTypes.CapTableQuery.CapTable, string>> {
-    return getCapTable(this.theGraphUrl, capTableAddress).map((res) => res.capTable);
+    return getCapTable(this.theGraphUrl, capTableAddress);
   }
 
   async listCapTables(orgnr: string, name: string): Promise<Result<CapTableQueryResponse, string>> {

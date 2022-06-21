@@ -3,7 +3,6 @@
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
-    "codegen": "graph codegen",
     "build": "graph codegen && graph build",
     "create:local": "graph create --node http://localhost:8020/ brok/captable",
     "remove:local": "graph remove --node http://localhost:8020/ brok/captable",
@@ -12,7 +11,7 @@
     "prepare:brokStage": "node scripts/prepare.js brokStage",
     "prepare:brokLocal": "node scripts/prepare.js brokLocal",
     "prepare:brokProd": "node scripts/prepare.js brokProd",
-    "deploy:brokLocal": "pnpm build && pnpm prepare:brokLocal && pnpm create:local && pnpm deploy:local",
+    "deploy:brokLocal": "pnpm prepare:brokLocal && pnpm build && pnpm create:local && pnpm deploy:local",
     "deploy:brokDev": "pnpm prepare:brokDev && graph deploy --product hosted-service broklab/captable_dev_10",
     "deploy:brokStage": "pnpm prepare:brokStage && graph deploy --product hosted-service  broklab/captable_stage_10",
     "deploy:brokProd": "pnpm prepare:brokProd && graph deploy --product hosted-service  broklab/captable_prod_10"
@@ -21,8 +20,7 @@
     "@brok/captable": "^0.7.0",
     "@graphprotocol/graph-cli": "^0.23.2",
     "@graphprotocol/graph-ts": "^0.23.1",
-    "js-yaml": "^4.1.0",
-    "mustache": "^4.2.0"
+    "js-yaml": "^4.1.0"
   },
   "version": null
 }

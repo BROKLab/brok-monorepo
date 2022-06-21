@@ -22,22 +22,6 @@ export class CapTableConsumer {
   @Process('captable-job')
   async readCapTableJob(job: Job<CreateCapTableWithBoardDirectorAddress>) {
     job.progress(50);
-    return await this.createCapTable(job);
-  }
-
-  @Process('delete-captable-job')
-  async readDeleteCapTableJob(job: Job<string>) {
-    job.progress(50);
-    return await this.deleteCapTable(job);
-  }
-
-  @Process('transfer-job')
-  async readTransferJob(job: Job<TransferWithLoggedInUser>) {
-    job.progress(50);
-    return await this.operatorTransfer(job);
-  }
-
-  async createCapTable(job: Job<CreateCapTableWithBoardDirectorAddress>) {
     const res = await this.capTableService.createCapTable(job.data);
     console.log('createCapTable, ', res);
     if (res.isErr()) {
@@ -54,7 +38,9 @@ export class CapTableConsumer {
     }
   }
 
-  async deleteCapTable(job: Job<string>) {
+  @Process('delete-captable-job')
+  async readDeleteCapTableJob(job: Job<string>) {
+    job.progress(50);
     const res = await this.capTableService.deleteCapTable(job.data);
     job.progress(100);
     if (res.isErr()) {
@@ -70,18 +56,30 @@ export class CapTableConsumer {
     }
   }
 
-  async operatorTransfer(job: Job<TransferWithLoggedInUser>) {
-    const res = await this.capTableService.operatorTransfer(job.data);
-    job.progress(100);
-    if (res.isErr()) {
+  @Process('transfer-job')
+  async readTransferJob(job: Job<TransferWithLoggedInUser>) {
+    try {
+      job.progress(50);
+      console.log('Starting job', job);
+      const res = await this.capTableService.operatorTransfer(job.data);
+      console.log('operatorTransfer, ', res);
+      job.progress(100);
+      if (res.isErr()) {
+        return {
+          success: false,
+          error: res.error,
+        };
+      } else {
+        return {
+          success: true,
+          data: res._unsafeUnwrap,
+        };
+      }
+    } catch (error) {
+      console.log('error', error);
       return {
         success: false,
-        error: res.error,
-      };
-    } else {
-      return {
-        success: true,
-        data: res._unsafeUnwrap(),
+        data: error.message,
       };
     }
   }
