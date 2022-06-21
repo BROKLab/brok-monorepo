@@ -20,6 +20,7 @@ enviroment: ## setup enviorment files
 	test -f packages/demo-frontend/.env || cp packages/demo-frontend/.env.example packages/demo-frontend/.env
 	test -f packages/captable/.env || cp packages/captable/.env.example packages/captable/.env
 	test -f packages/sdk/.env || cp packages/sdk/.env.example packages/sdk/.env
+	test -f .env || cp .env.example .env
 
 start: ## start local dev enviroment
 	pnpm -r --parallel start
