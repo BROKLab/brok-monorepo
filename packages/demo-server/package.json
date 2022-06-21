@@ -1,6 +1,6 @@
 {
   "name": "@brok/demo-server",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "",
   "author": "",
   "private": true,
@@ -23,7 +23,7 @@
     "test:debug": "pnpm run redis & node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand"
   },
   "dependencies": {
-    "@brok/sdk": "^0.9.0",
+    "@brok/sdk": "^0.10.0",
     "@nestjs/bull": "^0.5.3",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^1.2.0",

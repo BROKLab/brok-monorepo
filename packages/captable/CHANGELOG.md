@@ -1,5 +1,11 @@
 # @brok/captable
 
+## 0.9.0
+
+### Minor Changes
+
+- removed postinstall
+
 ## 0.8.0
 
 ### Minor Changes

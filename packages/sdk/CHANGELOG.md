@@ -1,5 +1,16 @@
 # @brok/sdk
 
+## 0.10.0
+
+### Minor Changes
+
+- removed postinstall
+
+### Patch Changes
+
+- Updated dependencies
+  - @brok/captable@0.9.0
+
 ## 0.9.0
 
 ### Minor Changes
