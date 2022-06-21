@@ -1,5 +1,16 @@
 # @brok/demo-frontend
 
+## 0.7.0
+
+### Minor Changes
+
+- Multiple fixes to SDK
+
+### Patch Changes
+
+- Updated dependencies
+  - @brok/sdk@0.9.0
+
 ## 0.6.1
 
 ### Patch Changes
