@@ -21,7 +21,6 @@
     "test:watch": "pnpm run redis & jest --watch",
     "test:cov": "pnpm run redis & jest --coverage",
     "test:debug": "pnpm run redis & node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "postinstall": "pnpm prisma generate"
   },
   "dependencies": {
     "@brok/sdk": "^0.10.0",
