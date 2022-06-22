@@ -10,7 +10,7 @@ import utils from './utils';
 cliHelp(help, "Show this help");
 
 function help() {
-  sh('pnpx task --help', {
+  sh('pnpm task --help', {
     nopipe: true,
     async: false,
   });

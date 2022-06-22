@@ -1,4 +1,3 @@
-// import Deployments from "./deployments_chainid_7766.json";
 import brokLocal from "./DeploymentsBrokLocal.json";
 import brokStage from "./DeploymentsBrokStage.json";
 import brokDev from "./DeploymentsBrokDev.json";
@@ -10,4 +9,5 @@ export const Deployments = {
   brokProd,
 };
 
+// eslint-disable-next-line node/no-missing-import
 export * from "./typechain/index";

@@ -1,6 +1,5 @@
 import { Box, Button, Meter, Tag } from 'grommet';
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useBrok } from '../context/useBrok';
 import { CreateCapTableJobProgressResponse, JobProgressResponse, JobProgressResults } from '../types/brok.types';

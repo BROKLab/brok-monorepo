@@ -4,7 +4,7 @@ import dedent from 'dedent';
 help(destroy, 'Fulle destroys all deployed heroku apps for env', {
   params: ['env'],
   examples: dedent`
-    pnpx task deploy:destroy dev
+    pnpm task deploy:destroy dev
   `,
 });
 function destroy(options: unknown, env: string) {

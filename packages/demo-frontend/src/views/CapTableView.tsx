@@ -1,8 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { CapTableDetails } from '@brok/sdk';
 import { Box, Text, Button, Heading, Grid } from 'grommet';
 import { Trash } from 'grommet-icons';
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { CapTableBalances } from '../components/CapTableBalances';
 import { Details } from '../components/Details';
@@ -15,39 +16,42 @@ var debug = require('debug')('page:CapTableView');
 
 interface Props {}
 
-interface RouteParams {
-  address: string;
-}
+
 
 export const CapTableView: React.FC<Props> = ({ ...props }) => {
-  const history = useHistory();
-  const { address } = useParams<RouteParams>();
+  const navigate = useNavigate();
+  const { address } = useParams();
   const { getCapTableDetails, deleteCapTable } = useBrok();
   const [capTable, setCapTable] = useState<CapTableDetails>();
   const [error, setError] = useState<string>();
   const [isDeleting, setIsDeleting] = useState(false);
   const [jobId, setJobId] = useState('');
 
+
   useEffect(() => {
     let subscribed = true;
     const doAsync = async () => {
-      const res = await getCapTableDetails(address);
-      console.log('res', res);
-      if (res.isErr()) {
-        setError('Kunne ikke hente aksjeeierboken');
-        debug(res.error);
-      } else if (subscribed) {
-        debug(res.value);
-        setCapTable(res.value);
+      if(address){
+        const res = await getCapTableDetails(address);
+        if (res.isErr()) {
+          setError('Kunne ikke hente aksjeeierboken');
+          debug(res.error);
+          setCapTable(undefined)
+        } else if (subscribed) {
+          debug(res.value);
+          setCapTable(res.value);
+        }
       }
+    
     };
     doAsync();
     return () => {
+      setCapTable(undefined)
       subscribed = false;
     };
-  }, []);
+  }, [address]);
 
-  const onDeleteCapTable = async (capTableAddress: string) => {
+  const handleDeleteCapTable = async (capTableAddress: string) => {
     setIsDeleting(true);
     const res = await deleteCapTable(capTableAddress);
     if (res.isErr()) {
@@ -64,9 +68,8 @@ export const CapTableView: React.FC<Props> = ({ ...props }) => {
     if (!res.success) {
       toast(res.error);
     } else {
-      toast('sletter var velykket');
+      toast('Sletting var velykket');
     }
-    history.go(0);
   };
 
   const getStatusMessageForStatus = (status: string) => {
@@ -112,28 +115,30 @@ export const CapTableView: React.FC<Props> = ({ ...props }) => {
               totalSupply: capTable.totalSupply,
             }}
           />
-          {!jobId && (
+          {!jobId && address && (
             <Box pad={{ vertical: 'small' }}>
               {capTable.status === 'APPROVED' ? (
                 <Grid columns={['small', 'flex']}>
                   <Text>Slette</Text>
                   <Box justify="start" width={'small'}>
-                    <Button title="Slette aksjeeierbok" label="Slett" size="small" onClick={() => onDeleteCapTable(address)}></Button>
+                    <Button title="Slette aksjeeierbok" label="Slett" size="small" onClick={() => handleDeleteCapTable(address)}></Button>
                   </Box>
                 </Grid>
               ) : null}
             </Box>
           )}
+          {address && 
           <CapTableBalances
-            balances={capTable.shareholders.flatMap((sh) =>
-              sh.balances.map((bal) => {
-                return { ...sh, ...bal };
-              }),
+          balances={capTable.shareholders.flatMap((sh) =>
+            sh.balances.map((bal) => {
+              return { ...sh, ...bal };
+            }),
             )}
             name={capTable.name}
             boardDirectorName={'jens'}
             capTableAddress={address}
-          />
+            />
+          }
         </>
       ) : null}
     </Box>

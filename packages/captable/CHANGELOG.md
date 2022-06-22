@@ -1,5 +1,17 @@
 # @brok/captable
 
+## 0.9.0
+
+### Minor Changes
+
+- removed postinstall
+
+## 0.8.0
+
+### Minor Changes
+
+- Multiple fixes to SDK
+
 ## 0.7.0
 
 ### Minor Changes

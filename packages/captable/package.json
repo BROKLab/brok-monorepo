@@ -1,7 +1,7 @@
 {
   "name": "@brok/captable",
   "description": "Contract artifacts for brok captables",
-  "version": "0.7.0",
+  "version": "0.9.0",
   "main": "./lib/src/index.js",
   "typings": "./lib/src/index.d.ts",
   "publishConfig": {
@@ -19,17 +19,18 @@
     "build": "pnpm run typechain && pnpm run deploy:brokDev && pnpm run deploy:brokStage && pnpm run deploy:brokLocal && pnpm run deploy:brokProd && pnpm run compile",
     "build:local": "pnpm run typechain && pnpm run deploy:brokLocal && pnpm run compile",
     "clean": "rm -rf lib",
-    "compile": "pnpm run clean && pnpx tsc -p tsconfig.lib.json",
-    "test": "pnpx hardhat test",
+    "compile": "pnpm run clean && pnpm tsc -p tsconfig.lib.json",
+    "test": "pnpm hardhat test",
     "typechain": "hardhat typechain",
-    "deploy:brokLocal": "pnpx hardhat deploy --export src/DeploymentsBrokLocal.json",
-    "deploy:brokDev": "pnpx hardhat deploy --network brokDev --export src/DeploymentsBrokDev.json",
-    "deploy:brokStage": "pnpx hardhat deploy --network brokStage --export src/DeploymentsBrokStage.json",
-    "deploy:brokProd": "pnpx hardhat deploy --network brokProd --export src/DeploymentsBrokProd.json",
-    "start": "pnpx run-p start:contracts start:lib ",
-    "start:contracts": "pnpm run deploy:brokLocal && pnpx hardhat node --watch --export src/DeploymentsBrokLocal.json",
-    "start:lib": "pnpx tsc -w -p tsconfig.lib.json",
-    "demo": "pnpx hardhat run scripts/createCapTable.ts --network localhost"
+    "deploy:brokLocal": "pnpm hardhat deploy --export src/DeploymentsBrokLocal.json",
+    "deploy:brokDev": "pnpm hardhat deploy --network brokDev --export src/DeploymentsBrokDev.json",
+    "deploy:brokStage": "pnpm hardhat deploy --network brokStage --export src/DeploymentsBrokStage.json",
+    "deploy:brokProd": "pnpm hardhat deploy --network brokProd --export src/DeploymentsBrokProd.json",
+    "start": "pnpm run-p start:contracts start:lib ",
+    "start:contracts": "pnpm run deploy:brokLocal && pnpm hardhat node --watch --export src/DeploymentsBrokLocal.json",
+    "start:lib": "pnpm tsc -w -p tsconfig.lib.json",
+    "demo": "pnpm hardhat run scripts/createCapTable.ts --network localhost",
+    "prepare": "pnpm hardhat typechain"
   },
   "devDependencies": {
     "@ethersproject/abi": "^5.0.0",

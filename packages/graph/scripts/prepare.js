@@ -1,11 +1,10 @@
-const Mustache = require('mustache');
 const brok = require('@brok/captable');
 const yaml = require('js-yaml');
 const fs = require('fs');
 
 const args = process.argv.slice(2);
 const env = args[0];
-const subgraphConfig = yaml.load(fs.readFileSync('subgraph.yaml', 'utf8'));
+const subgraphConfig = yaml.load(fs.readFileSync('subgraph.example.yaml', 'utf8'));
 
 // set address
 for (const dataSource of subgraphConfig.dataSources) {

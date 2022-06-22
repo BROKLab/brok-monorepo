@@ -1,6 +1,6 @@
 {
 	"name": "@brok/sdk",
-	"version": "0.8.0",
+	"version": "0.10.0",
 	"type": "commonjs",
 	"main": "lib/index.js",
 	"types": "lib/index.d.ts",
@@ -10,17 +10,17 @@
 	},
 	"scripts": {
 		"test": "mocha",
-		"build": "pnpx tsc -p tsconfig.lib.json",
+		"build": "pnpm tsc -p tsconfig.lib.json",
 		"prepublishOnly": "npm run build",
 		"prebuild": "npm run clean",
-		"lint": "pnpx eslint ./src --ext .js,.jsx,.ts,.tsx",
-		"clean": "pnpx rimraf ./lib",
-		"start": "pnpx tsc --watch",
+		"lint": "pnpm eslint ./src --ext .js,.jsx,.ts,.tsx",
+		"clean": "pnpm rimraf ./lib",
+		"start": "pnpm tsc --watch",
 		"schema:create": "ts-node src/ceramic/schema-publisher.ts"
 	},
 	"dependencies": {
 		"3id-did-provider": "^1.1.1",
-		"@brok/captable": "workspace:0.7.0",
+		"@brok/captable": "workspace:0.9.0",
 		"@ceramicnetwork/3id-did-resolver": "^1.4.17-rc.0",
 		"@ceramicnetwork/blockchain-utils-linking": "^1.5.5",
 		"@ceramicnetwork/common": "^1.11.1-rc.0",

@@ -3,10 +3,8 @@ import { CapTableGraphQLTypes } from '@brok/sdk/lib/ethereum/utils/CapTableGraph
 import { Box, Button, DataTable, Text } from 'grommet';
 import { Edit, Transaction } from 'grommet-icons';
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { useBrok } from '../context/useBrok';
 import { EditShareholderModal } from './EditShareholderModal';
-import { FormatEthereumAddress } from './FormatEthereumAddress';
 import { TransferSharesModal } from './TransferSharesModal';
 var debug = require('debug')('component:CapTableBalances');
 

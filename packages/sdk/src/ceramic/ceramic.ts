@@ -129,19 +129,18 @@ export class CeramicSDK extends CeramicClient {
     }
   }
 
-  loadDeterministicDocument<T>(metadata: TileMetadataArgs): ResultAsync<TileDocument<T>, string> {
-    return ResultAsync.fromPromise(
-      new Promise( (resolve, reject) => {
-        TileDocument.deterministic<T>(this, {
-          ...metadata,
-        }).then(tile => {
-          if (Object.keys(tile.content).length === 0)
-          reject('No data is set in tileDocument. Probably because document has not been created for metadata');
-          resolve(tile);
-        })
-      }),
-      (e) => `Could not load deterministic document because of ${e}`,
-    );
+  async loadDeterministicDocument<T>(metadata: TileMetadataArgs): Promise<Result<TileDocument<T>, string>> {
+    try {
+      const tile = await  TileDocument.deterministic<T>(this, {
+        ...metadata,
+      });
+      debug("TileDocument.deterministic", tile.content)
+      return ok(tile)
+    } catch (error) {
+      debug("Error in loadDeterministicDocument", error)
+      return err(error.message);
+    }
+
   }
 
   // Forget from persistant storage

@@ -4,6 +4,28 @@
 
 ### Minor Changes
 
+- removed postinstall
+
+### Patch Changes
+
+- Updated dependencies
+  - @brok/captable@0.9.0
+
+## null
+
+### Minor Changes
+
+- Multiple fixes to SDK
+
+### Patch Changes
+
+- Updated dependencies
+  - @brok/captable@0.8.0
+
+## null
+
+### Minor Changes
+
 - Update graph and dev deployments
 
 ### Patch Changes

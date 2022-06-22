@@ -1,14 +1,14 @@
 {
   "name": "@brok/demo-server",
-  "version": "0.5.1",
+  "version": "0.7.0",
   "description": "",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "pnpx prisma generate && pnpx prisma migrate reset -f && nest build",
-    "init:db": "pnpx prisma migrate dev --name init",
+    "build": "pnpm prisma generate && pnpm prisma migrate reset -f && nest build",
+    "init:db": "pnpm prisma migrate dev --name init",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "redis": "redis-server 2>&1",
     "start:old": "nest start",
@@ -23,7 +23,7 @@
     "test:debug": "pnpm run redis & node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand"
   },
   "dependencies": {
-    "@brok/sdk": "^0.8.0",
+    "@brok/sdk": "^0.10.0",
     "@nestjs/bull": "^0.5.3",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^1.2.0",
