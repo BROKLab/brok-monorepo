@@ -26,25 +26,25 @@ const config: HardhatUserConfig = {
       },
     },
     brokDev: {
-      url: process.env.RPC_ARBITRUM_RINKEBY,
+      url: process.env.RPC_TESTNET,
       accounts: {
         mnemonic: process.env.SEED_DEV,
       },
     },
     brokStage: {
-      url: process.env.RPC_ARBITRUM_RINKEBY,
+      url: process.env.RPC_TESTNET,
       accounts: {
         mnemonic: process.env.SEED_STAGE,
       },
     },
     brokProd: {
-      url: process.env.RPC_ARBITRUM_RINKEBY,
+      url: process.env.RPC_TESTNET,
       accounts: {
         mnemonic: process.env.SEED_STAGE,
       },
     },
     // brokProd: {
-    //   url: process.env.RPC_ARBITRUM_ONE,
+    //   url: process.env.RPC_MAINNET,
     //   accounts: {
     //     mnemonic: process.env.SEED_PROD,
     //   },
