@@ -1,8 +1,10 @@
+/* eslint-disable no-sequences */
+/* eslint-disable no-unused-expressions */
+/* eslint-disable camelcase */
 /* eslint-disable node/no-missing-import */
 import { expect } from "chai";
-import { ContractReceipt } from "ethers";
 import { deployments, ethers } from "hardhat";
-import { CapTable__factory } from "../src/typechain";
+import { CapTable__factory } from "../src/typechain/";
 
 describe("CapTable", function () {
   beforeEach(async function () {
@@ -57,7 +59,6 @@ describe("CapTable", function () {
       ethers.constants.AddressZero
     );
     await capTable.deployed();
-    console.log("capTable deployed", capTable.address);
     const tx = await capTable.issueByPartition(
       PARTITION,
       randomWallet.address,
@@ -66,8 +67,111 @@ describe("CapTable", function () {
     );
     await tx.wait();
 
-    const balance = await capTable.balanceOf(randomWallet.address);
     expect(capTable.address).properAddress;
-    expect(balance.eq(ethers.utils.parseEther("500")));
+    expect(await capTable.balanceOf(randomWallet.address)).to.equal(
+      ethers.utils.parseEther("500")
+    );
+  });
+
+  it("should kapitalforhoyselse_nye_aksjer", async function () {
+    const randomWallet = ethers.Wallet.createRandom();
+    const randomWallet2 = ethers.Wallet.createRandom();
+    const deployerSigner = (await ethers.getSigners())[0];
+    const deployerAddress = deployerSigner.address;
+    const PARTITION = ethers.utils.formatBytes32String("ordinære");
+    const capTable = await new CapTable__factory(deployerSigner).deploy(
+      "Symfoni AS",
+      "915772137",
+      ethers.utils.parseEther("1"),
+      [deployerAddress],
+      [PARTITION],
+      ethers.constants.AddressZero
+    );
+    await capTable.deployed();
+    const tx = await capTable.kapitalforhoyselse_nye_aksjer(
+      [PARTITION, PARTITION],
+      [randomWallet.address, randomWallet2.address],
+      [ethers.utils.parseEther("500"), ethers.utils.parseEther("300")],
+      "0x"
+    );
+    await tx.wait();
+
+    expect(capTable.address).properAddress;
+
+    expect(await capTable.balanceOf(randomWallet.address)).to.equal(
+      ethers.utils.parseEther("500")
+    );
+
+    expect(await capTable.balanceOf(randomWallet2.address)).to.equal(
+      ethers.utils.parseEther("300")
+    );
+  });
+
+  it("should fail to splitt to new shareholders", async function () {
+    const randomWallet = ethers.Wallet.createRandom();
+    const randomWallet2 = ethers.Wallet.createRandom();
+    const deployerSigner = (await ethers.getSigners())[0];
+    const deployerAddress = deployerSigner.address;
+    const PARTITION = ethers.utils.formatBytes32String("ordinære");
+    const capTable = await new CapTable__factory(deployerSigner).deploy(
+      "Symfoni AS",
+      "915772137",
+      ethers.utils.parseEther("1"),
+      [deployerAddress],
+      [PARTITION],
+      ethers.constants.AddressZero
+    );
+    await capTable.deployed();
+    await expect(
+      capTable.splitt(
+        [PARTITION, PARTITION],
+        [randomWallet.address, randomWallet2.address],
+        [ethers.utils.parseEther("500"), ethers.utils.parseEther("500")],
+        "0x"
+      )
+    ).revertedWith("No new shareholders");
+  });
+
+  it("should splitt to existing shareholders", async function () {
+    const randomWallet = ethers.Wallet.createRandom();
+    const randomWallet2 = ethers.Wallet.createRandom();
+    const deployerSigner = (await ethers.getSigners())[0];
+    const deployerAddress = deployerSigner.address;
+    const PARTITION = ethers.utils.formatBytes32String("ordinære");
+    const capTable = await new CapTable__factory(deployerSigner).deploy(
+      "Symfoni AS",
+      "915772137",
+      ethers.utils.parseEther("1"),
+      [deployerAddress],
+      [PARTITION],
+      ethers.constants.AddressZero
+    );
+    await capTable.deployed();
+    // issue to one, but not the other
+    const tx1 = await capTable.kapitalforhoyselse_nye_aksjer(
+      [PARTITION, PARTITION],
+      [randomWallet.address, randomWallet2.address],
+      [ethers.utils.parseEther("500"), ethers.utils.parseEther("300")],
+      "0x"
+    );
+    await tx1.wait();
+
+    const tx2 = await capTable.splitt(
+      [PARTITION, PARTITION],
+      [randomWallet.address, randomWallet2.address],
+      [ethers.utils.parseEther("500"), ethers.utils.parseEther("500")],
+      "0x"
+    );
+    await tx2.wait();
+
+    expect(capTable.address).properAddress;
+
+    expect(await capTable.balanceOf(randomWallet.address)).to.equal(
+      ethers.utils.parseEther("1000")
+    );
+
+    expect(await capTable.balanceOf(randomWallet2.address)).to.equal(
+      ethers.utils.parseEther("800")
+    );
   });
 });
