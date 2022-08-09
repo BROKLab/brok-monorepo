@@ -1,18 +1,16 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@brok/captable': ^0.7.0
+  '@brok/captable': ^0.9.0
   '@graphprotocol/graph-cli': ^0.23.2
   '@graphprotocol/graph-ts': ^0.23.1
   js-yaml: ^4.1.0
-  mustache: ^4.2.0
 
 dependencies:
   '@brok/captable': link:../captable
   '@graphprotocol/graph-cli': 0.23.2
   '@graphprotocol/graph-ts': 0.23.1
   js-yaml: 4.1.0
-  mustache: 4.2.0
 
 packages:
 
@@ -1940,11 +1938,6 @@ packages:
   /murmurhash3js/3.0.1:
     resolution: {integrity: sha1-Ppg+W0fCoG9DpxMXTn5DXKBEuZg=}
     engines: {node: '>=0.10.0'}
-    dev: false
-
-  /mustache/4.2.0:
-    resolution: {integrity: sha512-71ippSywq5Yb7/tVYyGbkBggbU8H3u5Rz56fH60jGFgr8uHwxs+aSKeqmluIVzM0m0kB7xQjKS6qPfd0b2ZoqQ==}
-    hasBin: true
     dev: false
 
   /mute-stream/0.0.8:
