@@ -2,6 +2,8 @@ import { Button, Container, styled } from '@nextui-org/react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
+import { SDK } from "@brok/sdk2"
+import { useEffect } from 'react'
 
 
 const StyledApp = styled("div", {
@@ -11,6 +13,16 @@ const StyledApp = styled("div", {
 });
 
 const Home: NextPage = () => {
+  useEffect(() => {
+    let subscribed = true
+    const doAsync = async () => {
+      const fdgd = SDK.init({ ceramicUrl: "xxx", ethereumRpc: "xxx", secret: "xxx", theGraphUrl: "xxx" });
+      if (subscribed) {
+      }
+    };
+    doAsync();
+    return () => { subscribed = false }
+  }, [])
   return (
     <StyledApp >
       <Head>
@@ -21,7 +33,7 @@ const Home: NextPage = () => {
 
       <main>
         <Container>
-        <Button>Click me</Button>
+          <Button>{(2)}</Button>
         </Container>
       </main>
 

@@ -5,7 +5,7 @@
   },
   "editor.defaultFormatter": "dbaeumer.vscode-eslint",
   "[typescriptreact]": {
-    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+    "editor.defaultFormatter": "vscode.typescript-language-features"
   },
   "eslint.format.enable": true,
   "peacock.color": "#e37b5b",

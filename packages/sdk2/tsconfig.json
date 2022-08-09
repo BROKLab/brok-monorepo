@@ -1,0 +1,8 @@
+{
+    "include": ["src"],
+    "exclude": ["lib"],
+    "compilerOptions": {
+      "outDir": "lib",
+      "declaration": true
+    }
+  }
