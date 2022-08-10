@@ -6,7 +6,7 @@ import { Result, ok, err } from 'neverthrow';
 // import { CeramicApi } from '@ceramicnetwork/common';
 // import { Resolver } from 'did-resolver';
 
-export async function getDIDfromPrivateKey(privateKey?: string): Promise<Result<DID, string>> {
+export async function getDIDfromPrivateKey(privateKey: string): Promise<Result<DID, string>> {
   try {
     const seed = Uint8Array.from(Buffer.from(privateKey.substring(2), 'hex'));
     const provider = new Ed25519Provider(seed);

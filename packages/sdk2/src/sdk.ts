@@ -20,6 +20,9 @@ export class SDK {
                 throw Error(did.error);
             }
             await ceramic.setDID(did.value);
+            if(!ceramic.did){
+                throw Error("Could not set DID");
+            }
             console.log("SDK address", signer.value.address);
             console.log("SDK did", ceramic.did.id);
             return new SDK(blockchain, ceramic);
