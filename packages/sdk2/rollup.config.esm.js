@@ -6,6 +6,6 @@ export default {
     format: 'esm'
   },
   plugins: [nodeResolve({
-    resolveOnly: ["neverthrow"]
+    resolveOnly: ["neverthrow", "ethers"]
   })]
 };
