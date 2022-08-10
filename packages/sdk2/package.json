@@ -1,6 +1,6 @@
 {
 	"name": "@brok/sdk2",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"private": false,
 	"publishConfig": {
 		"access": "public"
@@ -24,9 +24,9 @@
 		"clean": "rm -fr dist",
 		"build": "pnpm run clean && pnpm run lint && tsc --project tsconfig.build.json && pnpm run bundle:esm && pnpm run bundle:esm:min && pnpm run bundle:umd && pnpm run bundle:umd:min && pnpm run build:stats",
 		"build:stats": "(echo '\\033[35;3m' ; cd dist && ls -lh index*js index*gz | tail -n +2 | awk '{print $5,$9}')",
-		"bundle:esm": "rollup dist/index.js --file dist/index.mjs --format esm",
+		"bundle:esm": "rollup --config rollup.config.esm.js",
 		"bundle:esm:min": "terser --ecma 6 --compress --mangle --module -o dist/index.min.mjs -- dist/index.mjs && gzip -9 -c dist/index.min.mjs > dist/index.min.mjs.gz",
-		"bundle:umd": "rollup dist/index.js --file dist/index.umd.js --format umd --name sayHello",
+		"bundle:umd": "rollup --config rollup.config.umd.js",
 		"bundle:umd:min": "terser --ecma 6 --compress --mangle -o dist/index.umd.min.js -- dist/index.umd.js && gzip -9 -c dist/index.umd.min.js > dist/index.umd.min.js.gz",
 		"watch": "pnpm tsc --watch",
 		"lint": "pnpm eslint ./src --ext .js,.jsx,.ts,.tsx",
@@ -42,6 +42,7 @@
 		"node-fetch": "^3.2.10"
 	},
 	"devDependencies": {
+		"@rollup/plugin-node-resolve": "^13.3.0",
 		"@types/node": "^18.6.5",
 		"@types/tap": "^15.0.7",
 		"@typescript-eslint/eslint-plugin": "^5.33.0",
