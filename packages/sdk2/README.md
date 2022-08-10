@@ -2,7 +2,7 @@
 
 ## Use it
 
-```npm i @brok/sdk```
+```npm i @brok/sdk @ceramicnetwork/http-client```
 
 Example
 

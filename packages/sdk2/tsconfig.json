@@ -1,8 +1,19 @@
 {
     "include": ["src"],
-    "exclude": ["lib"],
+    "exclude": ["lib", "test"],
     "compilerOptions": {
+      "module": "ES2020",
+      "target": "ES2020",
       "outDir": "lib",
-      "declaration": true
+      "resolveJsonModule": false,
+      "moduleResolution": "Node",
+      "allowSyntheticDefaultImports": true,
+      "declaration": true,
+      "declarationMap": true,
+      "skipLibCheck": true,
+      "removeComments": true,
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "sourceMap": true,
     }
   }
