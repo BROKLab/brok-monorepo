@@ -1,18 +1,30 @@
 {
 	"name": "@brok/sdk2",
 	"version": "0.10.0",
-	"main": "lib/bundle.js",
-	"types": "lib/sdk.d.ts",
 	"private": false,
 	"publishConfig": {
 		"access": "public"
 	},
+	"keywords": [
+		"BRØK",
+		"Symfoni",
+		"identity",
+		"captable"
+	],
+	"main": "lib/index.js",
+	"types": "lib/index.d.ts",
+	"type": "module",
+	"directories": {
+		"lib": "lib"
+	},
+	"files": [
+		"lib"
+	],
 	"scripts": {
-		"build": "pnpm build:elliptic && pnpm rollup --config",
-		"build:elliptic": "pnpm webpack --config webpack.elliptic.js",
-		"watch": "pnpm rollup --config --watch",
+		"build": "pnpm tsc ",
+		"watch": "pnpm tsc --watch",
 		"lint": "pnpm eslint ./src --ext .js,.jsx,.ts,.tsx",
-		"test": "pnpm tap --reporter=list --watch --ts"
+		"test": "pnpm tap"
 	},
 	"dependencies": {
 		"@ceramicnetwork/3id-did-resolver": "^2.1.4",
@@ -20,34 +32,29 @@
 		"@ceramicnetwork/http-client": "2.3.1",
 		"@ceramicnetwork/stream-tile": "2.4.0",
 		"did-resolver": "^4.0.0",
-		"ethers": "^5.6.9"
+		"ethers": "^5.6.9",
+		"node-fetch": "^3.2.10"
 	},
 	"devDependencies": {
-		"@rollup/plugin-commonjs": "^22.0.2",
-		"@rollup/plugin-json": "^4.1.0",
-		"@rollup/plugin-node-resolve": "^13.3.0",
-		"@rollup/plugin-typescript": "^8.3.4",
 		"@types/node": "^18.6.5",
 		"@types/tap": "^15.0.7",
 		"@typescript-eslint/eslint-plugin": "^5.33.0",
 		"@typescript-eslint/parser": "^5.33.0",
 		"debug": "^4.3.4",
 		"dotenv": "^10.0.0",
-		"elliptic": "6.5.4",
 		"eslint": "^8.21.0",
 		"neverthrow": "^4.3.1",
 		"prettier": "^2.7.1",
-		"rollup": "^2.77.2",
-		"rollup-plugin-alias": "^2.2.0",
 		"tap": "^16.3.0",
 		"ts-node": "^10.9.1",
-		"tslib": "^2.0.0",
-		"typescript": "^4.7.4",
-		"webpack": "^5.0.0",
-		"webpack-cli": "^4.10.0"
+		"typescript": "^4.7.4"
 	},
 	"tap": {
-		"nyc-arg": [],
-		"check-coverage": false
+		"coverage": false,
+		"node-arg": [
+			"--loader",
+			"ts-node/esm"
+		],
+		"ts": false
 	}
 }

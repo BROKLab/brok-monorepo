@@ -16,7 +16,7 @@ const Home: NextPage = () => {
   useEffect(() => {
     let subscribed = true
     const doAsync = async () => {
-      const fdgd = SDK.init({ ceramicUrl: "xxx", ethereumRpc: "xxx", secret: "xxx", theGraphUrl: "xxx" });
+      const fdgd = SDK.init({ ceramicUrl: "http://localhost:7007/", ethereumRpc: "http://127.0.0.1:8545/", secret: "kid letter bicycle motion maid token change couch useless seven boost strategy", theGraphUrl: "http://localhost:8000/subgraphs/name/brok/captable" });
       if (subscribed) {
       }
     };

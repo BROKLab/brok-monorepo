@@ -5,6 +5,7 @@
       "module": "ES2020",
       "target": "ES2020",
       "outDir": "lib",
+      "rootDir": "src",
       "resolveJsonModule": false,
       "moduleResolution": "Node",
       "allowSyntheticDefaultImports": true,
@@ -15,5 +16,5 @@
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
       "sourceMap": true,
-    }
+    },
   }
