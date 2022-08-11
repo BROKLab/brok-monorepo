@@ -1,8 +1,8 @@
 import { ethers, Wallet, providers } from "ethers";
 import { err, ok } from "neverthrow";
-import { BlockchainSDK } from "./blockchain";
-import { CeramicSDK } from "./ceramic";
-import { getDIDfromPrivateKey } from "./utils/did";
+import { BlockchainSDK } from "./blockchain.js";
+import { CeramicSDK } from "./ceramic.js";
+import { getDIDfromPrivateKey } from "./utils/did.js";
 
 export class SDK {
     private constructor(private blockchain: BlockchainSDK, private ceramic: CeramicSDK) {}

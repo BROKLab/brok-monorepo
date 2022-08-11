@@ -4,6 +4,18 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "dev-backend",
+            "runOptions": {
+                // "runOn": "folderOpen"
+            },
+            "dependsOrder": "parallel",
+            "dependsOn": [
+                "ceramic",
+                "graph-captable"
+            ],
+            "problemMatcher": []
+        },
+        {
             "label": "dev",
             "runOptions": {
                 // "runOn": "folderOpen"

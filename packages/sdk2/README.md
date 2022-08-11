@@ -2,7 +2,10 @@
 
 ## Use it
 
-```npm i @brok/sdk @ceramicnetwork/http-client```
+```npm i @brok/sdk```
+
+
+```pnpm i -D @ceramicnetwork/http-client@^2.3.1 @ceramicnetwork/3id-did-resolver@^2.1.4 @ceramicnetwork/common@^2.4.0 @ceramicnetwork/stream-tile@^2.4.0 dids@^3.2.0 did-resolver@^4.0.0 ethers@^5.6.9 neverthrow@^4.3.1 node-fetch@^2.6.7 debug@^4.3.4```
 
 Example
 

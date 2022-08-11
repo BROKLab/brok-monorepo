@@ -1,6 +1,6 @@
 import { DID } from 'dids';
 import { Ed25519Provider } from 'key-did-provider-ed25519';
-import { getResolver as getResolverKey } from 'key-did-resolver';
+import {getResolver} from 'key-did-resolver';
 import { Result, ok, err } from 'neverthrow';
 // import { getResolver as getResolver3id } from '@ceramicnetwork/3id-did-resolver';
 // import { CeramicApi } from '@ceramicnetwork/common';
@@ -17,7 +17,7 @@ export async function getDIDfromPrivateKey(privateKey: string): Promise<Result<D
     //   ...keyDidResolver,
     // });
 
-    const did = new DID({ provider, resolver: getResolverKey() });
+    const did = new DID({ provider, resolver: getResolver() });
     await did.authenticate();
     return ok(did);
   } catch (error) {
