@@ -13,32 +13,23 @@ const StyledApp = styled("div", {
 });
 
 const Home: NextPage = () => {
-  useEffect(() => {
-    let subscribed = true
-    const doAsync = async () => {
-      const sdk = await SDK.init({ ceramicUrl: "http://localhost:7007/", ethereumRpc: "http://127.0.0.1:8545/", secret: "kid letter bicycle motion maid token change couch useless seven boost strategy", theGraphUrl: "http://localhost:8000/subgraphs/name/brok/captable", env: "brokLocal" });
-      console.log(sdk)
-      const address = await sdk.createCapTable({
-        name: "Test 2413251351",
-        orgnr: "412412451",
-        shareholders: [
-          {
-            amount: "1322",
-            birthDate: "230188",
-            countryCode: "NO",
-            name: "TES PERSON",
-            partition: "ordinære",
-            postalcode: "50553"
-          }
-        ]
-      })
-      console.log(address)
-      if (subscribed) {
-      }
-    };
-    doAsync();
-    return () => { subscribed = false }
-  }, [])
+  const createCapTable = async () => {
+    const sdk = await SDK.init({ ceramicUrl: "https://ceramic-clay.3boxlabs.com", ethereumRpc: "http://127.0.0.1:8545/", secret: "kid letter bicycle motion maid token change couch useless seven boost strategy", theGraphUrl: "http://localhost:8000/subgraphs/name/brok/captable", env: "brokLocal" });
+    const address = await sdk.createCapTable({
+      name: "Test 535325",
+      orgnr: "41241241",
+      shareholders: [
+        {
+          amount: "421412",
+          birthDate: "230188",
+          countryCode: "NO",
+          name: "TES PERSON",
+          partition: "ordinære",
+          postalcode: "50553"
+        }
+      ]
+    })
+  }
   return (
     <StyledApp >
       <Head>
@@ -49,7 +40,7 @@ const Home: NextPage = () => {
 
       <main>
         <Container>
-          <Button>{(2)}</Button>
+          <Button onClick={() => createCapTable()}>{(2)}</Button>
         </Container>
       </main>
 
