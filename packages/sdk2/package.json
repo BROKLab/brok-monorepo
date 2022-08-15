@@ -40,6 +40,7 @@
 		"@ceramicnetwork/stream-tile": "2.4.1-rc.1",
 		"@ceramicnetwork/stream-tile-handler": "2.2.5-rc.1",
 		"@ceramicnetwork/streamid": "2.3.1-rc.0",
+		"cross-fetch": "^3.1.5",
 		"debug": "^4.3.4",
 		"did-resolver": "^4.0.0",
 		"dids": "3.2.0",

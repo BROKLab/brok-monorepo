@@ -3,7 +3,7 @@ import { err, ok } from 'neverthrow';
 import { BlockchainSDK } from './blockchain.js';
 import { createCapTableSafe, getCapTableSafe } from './capTable.js';
 import { CeramicSDK } from './ceramic.js';
-import { CreateCapTableInput, EthereumAddress } from './types.js';
+import { CapTable, CreateCapTableInput, EthereumAddress } from './types.js';
 import { getDIDfromPrivateKey } from './utils/did.js';
 import debug from 'debug';
 
@@ -49,12 +49,12 @@ export class SDK {
     return res.value;
   }
 
-  async getCapTable(capTableAddress: EthereumAddress): Promise<true> {
+  async getCapTable(capTableAddress: EthereumAddress): Promise<CapTable> {
     const res = await this.getCapTableSafe(capTableAddress);
     if (res.isErr()) {
       throw Error(res.error);
     }
-    return true;
+    return res.value;
   }
 
   // private

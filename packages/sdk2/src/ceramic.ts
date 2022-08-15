@@ -7,16 +7,15 @@ import { ok } from 'neverthrow';
 import { Result } from 'neverthrow';
 import { CapTableCeramic, CeramicId, EthereumAddress, Shareholder } from './types';
 
+const log = debug('brok:sdk:ceramic');
 export class CeramicSDK extends CeramicClient {
   constructor(public readonly ceramicUrl: string) {
     super(ceramicUrl);
   }
 
-  async createShareholder(input: Shareholder): Promise<Result<CeramicId, string>> {
+  async createShareholder(shareholder: Shareholder): Promise<Result<CeramicId, string>> {
     const res = await this.createDocument({
-      data: {
-        shareholder: input,
-      },
+      data: shareholder,
     });
     if (res.isErr()) {
       return err(res.error);
@@ -24,7 +23,7 @@ export class CeramicSDK extends CeramicClient {
     if (res.value && 'id' in res.value) {
       return ok(res.value.id.toString());
     } else {
-      debug('brok:sdk:ceramic')('Tildocument value in createShareholder', res.value);
+      log('Tildocument value in createShareholder', res.value);
       return err('Something wrong with TileDocument in createShareholder');
     }
   }
@@ -36,7 +35,7 @@ export class CeramicSDK extends CeramicClient {
   }): Promise<Result<TileDocument, string>> {
     return await this.creatDeterministic(input.data, {
       family: 'capTable',
-      tags: [input.capTableAddress, input.capTableRegistryAddress],
+      tags: [input.capTableAddress.toLowerCase(), input.capTableRegistryAddress.toLowerCase()],
     });
   }
 
@@ -55,26 +54,51 @@ export class CeramicSDK extends CeramicClient {
       if (tile.isErr()) {
         return err(tile.error);
       }
-      if (!tile.value.content) {
-        debug('brok:sdk:ceramic')('getCapTable content is invalid', tile.value.content);
-        return err('Could not find content for capTable on Ceramic');
-      }
       return ok(tile.value.content);
     } catch (error) {
       return err('An error occured trying to find content for capTable on Ceramic');
     }
   }
 
+  async getShareholder(streamId: string): Promise<Result<Shareholder, string>> {
+    try {
+      const tile = await this.getDocument<Shareholder>(streamId);
+      if (tile.isErr()) {
+        return err(tile.error);
+      }
+      return ok(tile.value.content);
+    } catch (error) {
+      log(error);
+      return err('An error occured trying to find content for shareholder on Ceramic');
+    }
+  }
+
+  async getDocument<T>(streamId: string): Promise<Result<TileDocument<T>, string>> {
+    try {
+      const tile = await TileDocument.load<T>(this, streamId);
+      if (!!tile.content && Object.keys(tile.content).length > 0) {
+        return ok(tile);
+      }
+      log('TileDocument content is empty', tile.content);
+      throw new Error('TileDocument is empty');
+    } catch (error) {
+      log('getDocument streamId', streamId);
+      return err('Could not get document from Ceramic');
+    }
+  }
+
   private async getDeterministic<T>(metadata: TileMetadataArgs): Promise<Result<TileDocument<T>, string>> {
     try {
       const tile = await TileDocument.deterministic<T>(this, metadata);
-      if (tile.content) {
+
+      if (!!tile.content && Object.keys(tile.content).length > 0) {
         return ok(tile);
       }
+      log('TileDocument content is empty', tile.content);
       throw new Error('TileDocument is empty');
     } catch (error) {
-      debug('brok:sdk:ceramic')('error in getDeterministic', error);
-      debug('brok:sdk:ceramic')('metadata', metadata);
+      log('getDeterministic metadata', metadata);
+      log('getDeterministic', error);
       return err('Could not get deterministic document from Ceramic');
     }
   }
@@ -94,11 +118,13 @@ export class CeramicSDK extends CeramicClient {
         controllers: [this.did.id],
       });
       await deterministic.update(content);
+      log('create deterministic metadata:', { ...metadata, controllers: [this.did.id] });
+      log('create deterministic content:', content);
       return ok(deterministic);
     } catch (error) {
-      debug('brok:sdk:ceramic')('error in creatDeterministic', error);
-      debug('brok:sdk:ceramic')('content', content);
-      debug('brok:sdk:ceramic')('metadata', metadata);
+      log('error in creatDeterministic', error);
+      log('content', content);
+      log('metadata', metadata);
       return err('Could not create deterministic document on Ceramic');
     }
   }
@@ -128,8 +154,8 @@ export class CeramicSDK extends CeramicClient {
       );
       return ok(document);
     } catch (error) {
-      debug('brok:sdk:ceramic')(error);
-      debug('brok:sdk:ceramic')('input was', input);
+      log(error);
+      log('input was', input);
       return err('Could not create document on Ceramic');
     }
   }

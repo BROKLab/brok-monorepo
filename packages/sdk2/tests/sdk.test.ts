@@ -96,4 +96,5 @@ test.only('get capTable', async (t) => {
   const capTable = await sdk.getCapTable(capTableAddress);
   t.is(typeof capTable, 'object', 'capTable is an object');
   t.truthy(capTable, 'CapTable is not empty');
+  t.is(capTable.name, `Test ${randomOrgNr} AS`, 'name is correct');
 });

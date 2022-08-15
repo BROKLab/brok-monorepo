@@ -2,7 +2,7 @@ import { ethers } from 'ethers';
 import { err, ok, Result } from 'neverthrow';
 import { SDK } from './sdk.js';
 import { getCapTableGraph } from './theGraph.js';
-import { CeramicId, CreateCapTableInput, EthereumAddress } from './types.js';
+import { CapTable, CeramicId, CreateCapTableInput, EthereumAddress } from './types.js';
 import debug from 'debug';
 
 export async function createCapTableSafe(this: SDK, input: CreateCapTableInput): Promise<Result<string, string>> {
@@ -81,7 +81,12 @@ export async function createCapTableSafe(this: SDK, input: CreateCapTableInput):
     // X. Approve cap table on the blockchain
     try {
       const approveRes = await this.blockchain.capTableRegistryContract().approve(deployedCapTableResult.value);
-      await approveRes.wait();
+      await approveRes.wait(1);
+      const status = await this.blockchain.capTableRegistryContract().getStatus(deployedCapTableResult.value);
+      log('captable approved, status: ', status.toNumber());
+      if (status.toNumber() !== 2) {
+        throw new Error(`CapTable had invalid status: ${status.toString()}`);
+      }
     } catch (error) {
       log(error);
       return err('Could not approve captable');
@@ -94,25 +99,69 @@ export async function createCapTableSafe(this: SDK, input: CreateCapTableInput):
   }
 }
 
-export async function getCapTableSafe(this: SDK, capTableAddress: EthereumAddress): Promise<Result<unknown, string>> {
+export async function getCapTableSafe(this: SDK, capTableAddress: EthereumAddress): Promise<Result<CapTable, string>> {
+  const log = debug('brok:sdk:captable');
   try {
-    const log = debug('brok:sdk:captable');
-    const capTableGraphData = await getCapTableGraph(this.blockchain.theGraphUrl, capTableAddress);
+    const capTableGraphData = await getCapTableGraph(this.blockchain.theGraphUrl, capTableAddress, { onlyApproved: true });
     if (capTableGraphData.isErr()) {
       return err(capTableGraphData.error);
     }
+    log('capTableGraphData', capTableGraphData.value);
     const capTableFagsystemDid = capTableGraphData.value.fagsystemDid;
-    log('Getting ceramic');
     const capTableCeramicData = await this.ceramic.getCapTable({
       capTableAddress: capTableAddress,
-      capTableRegistryAddress: this.blockchain.capTableRegistryContract().address,
+      capTableRegistryAddress: this.blockchain.capTableRegistryContract().address.toLowerCase(),
       fagsystemDID: capTableFagsystemDid,
     });
     if (capTableCeramicData.isErr()) {
       return err(capTableCeramicData.error);
     }
-    log('ceramic', capTableCeramicData.value);
-    return ok(capTableGraphData);
+    log('capTableCeramicData', capTableCeramicData.value);
+    const shareholderPromises = Object.entries(capTableCeramicData.value.shareholderEthToCeramic).map(async ([ethAddress, ceramicId]) => {
+      const shareholder = await this.ceramic.getShareholder(ceramicId);
+      if (shareholder.isErr()) {
+        throw new Error(`Could not get shareholder ${ethAddress} and ${ceramicId}`);
+      }
+      log('Got shareholder', shareholder.value);
+      const graphData = capTableGraphData.value.tokenHolders.find((tokenHolder) => tokenHolder.address === ethAddress);
+      if (!graphData) {
+        throw new Error(`Could not find shareholder ${ethAddress} in graph data`);
+      }
+      return {
+        ...shareholder.value,
+        ...graphData,
+        ethAddress,
+      };
+    });
+    const shareholders = await Promise.all(shareholderPromises);
+    const capTable: CapTable = {
+      name: capTableCeramicData.value.name,
+      orgnr: capTableCeramicData.value.orgnr,
+      shareholders: shareholders.map((shareholder) => {
+        let data: any = {
+          balances: shareholder.balances.map((bal) => ({ partition: bal.partition, amount: bal.amount })),
+          ethAddress: shareholder.ethAddress,
+          name: JSON.stringify(shareholder.name),
+          countryCode: shareholder.countryCode,
+          postalcode: shareholder.postalcode,
+        };
+        if ('birthDate' in shareholder) {
+          data = {
+            ...data,
+            birthDate: shareholder.birthDate,
+          };
+        }
+        if ('organizationIdentifier' in shareholder) {
+          data = {
+            ...data,
+            organizationIdentifier: shareholder.organizationIdentifier,
+            organizationIdentifierType: shareholder.organizationIdentifierType,
+          };
+        }
+        return data;
+      }),
+    };
+    return ok(capTable);
   } catch (error) {
     log(error);
     return err('Something unknown went wrong when creating the cap table. See logs or contact administrator.');

@@ -18,6 +18,7 @@ specifiers:
   '@typescript-eslint/eslint-plugin': ^5.33.0
   '@typescript-eslint/parser': ^5.33.0
   ava: ^4.3.1
+  cross-fetch: ^3.1.5
   debug: ^4.3.4
   did-resolver: ^4.0.0
   dids: 3.2.0
@@ -45,6 +46,7 @@ dependencies:
   '@ceramicnetwork/stream-tile': 2.4.1-rc.1_@opentelemetry+api@1.1.0
   '@ceramicnetwork/stream-tile-handler': 2.2.5-rc.1_@opentelemetry+api@1.1.0
   '@ceramicnetwork/streamid': 2.3.1-rc.0
+  cross-fetch: 3.1.5
   debug: 4.3.4
   did-resolver: 4.0.0
   dids: 3.2.0

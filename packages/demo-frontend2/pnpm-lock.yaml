@@ -14,6 +14,7 @@ specifiers:
   '@types/node': 18.6.5
   '@types/react': ^18.0.8
   '@types/react-dom': ^18.0.3
+  cross-fetch: ^3.1.5
   debug: ^4.3.4
   did-resolver: ^4.0.0
   dids: ^3.2.0
@@ -22,7 +23,6 @@ specifiers:
   ethers: ^5.6.9
   neverthrow: ^4.3.1
   next: 12.2.4
-  node-fetch: 2.6.1
   react: ^18.1.0
   react-dom: ^18.1.0
   typescript: 4.7.4
@@ -30,19 +30,19 @@ specifiers:
 dependencies:
   '@brok/sdk2': link:../sdk2
   '@ceramicnetwork/common': 2.5.0-rc.1_@opentelemetry+api@1.1.0
-  '@ceramicnetwork/core': 2.8.0-rc.1_aqzz42rwnwzlejmtvhhpqemfla
+  '@ceramicnetwork/core': 2.8.0-rc.1_3p577qjkxn6hv5rhxgfbfwslmm
   '@ceramicnetwork/http-client': 2.3.2-rc.1_@opentelemetry+api@1.1.0
   '@ceramicnetwork/stream-tile': 2.4.1-rc.1_@opentelemetry+api@1.1.0
   '@ceramicnetwork/stream-tile-handler': 2.2.5-rc.1_@opentelemetry+api@1.1.0
   '@ceramicnetwork/streamid': 2.3.1-rc.0
   '@nextui-org/react': 1.0.0-beta.9_biqbaboplfbrettd7655fr4n2y
+  cross-fetch: 3.1.5
   debug: 4.3.4
   did-resolver: 4.0.0
   dids: 3.2.0
   ethers: 5.6.9
   neverthrow: 4.4.2
   next: 12.2.4_biqbaboplfbrettd7655fr4n2y
-  node-fetch: 2.6.1
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
 
@@ -152,14 +152,14 @@ packages:
       - encoding
     dev: false
 
-  /@ceramicnetwork/core/2.8.0-rc.1_aqzz42rwnwzlejmtvhhpqemfla:
+  /@ceramicnetwork/core/2.8.0-rc.1_3p577qjkxn6hv5rhxgfbfwslmm:
     resolution: {integrity: sha512-+qgE9EF+X0Di/twGRdqT/z7Wqy0mnOGRBRN+WsRo4HD7DHlwSDundocbTJG7BPCQsShZpPl/TepR01mDpHReDw==}
     dependencies:
       '@ceramicnetwork/common': 2.5.0-rc.1_@opentelemetry+api@1.1.0
       '@ceramicnetwork/ipfs-topology': 2.1.4-rc.1_@opentelemetry+api@1.1.0
       '@ceramicnetwork/metrics': 0.0.4-rc.0_@opentelemetry+api@1.1.0
       '@ceramicnetwork/pinning-aggregation': 2.0.10-rc.1
-      '@ceramicnetwork/pinning-ipfs-backend': 2.0.10-rc.1_node-fetch@2.6.1
+      '@ceramicnetwork/pinning-ipfs-backend': 2.0.10-rc.1
       '@ceramicnetwork/stream-caip10-link': 2.2.1-rc.1_@opentelemetry+api@1.1.0
       '@ceramicnetwork/stream-caip10-link-handler': 2.1.2-rc.1_3p577qjkxn6hv5rhxgfbfwslmm
       '@ceramicnetwork/stream-model': 0.4.1-rc.1_@opentelemetry+api@1.1.0
@@ -251,11 +251,11 @@ packages:
       uint8arrays: 3.1.0
     dev: false
 
-  /@ceramicnetwork/pinning-ipfs-backend/2.0.10-rc.1_node-fetch@2.6.1:
+  /@ceramicnetwork/pinning-ipfs-backend/2.0.10-rc.1:
     resolution: {integrity: sha512-AI+GYxMsxpGE7o5AiLg20jxPRpqsWkUwM2HhJXcbN4OmMm5QCz63V8oZHGQVMeis2wnAAgxDLuftbt0VaJ5tBw==}
     dependencies:
       '@stablelib/sha256': 1.0.1
-      ipfs-http-client: 55.0.0_node-fetch@2.6.1
+      ipfs-http-client: 55.0.0
       uint8arrays: 3.1.0
     transitivePeerDependencies:
       - node-fetch
@@ -3072,11 +3072,11 @@ packages:
       path-type: 4.0.0
     dev: true
 
-  /dns-over-http-resolver/1.2.3_node-fetch@2.6.1:
+  /dns-over-http-resolver/1.2.3:
     resolution: {integrity: sha512-miDiVSI6KSNbi4SVifzO/reD8rMnxgrlnkrlkugOLQpWQTe2qMdHsZp5DmfKjxNE+/T3VAAYLQUZMv9SMr6+AA==}
     dependencies:
       debug: 4.3.4
-      native-fetch: 3.0.0_node-fetch@2.6.1
+      native-fetch: 3.0.0
       receptacle: 1.3.2
     transitivePeerDependencies:
       - node-fetch
@@ -4078,18 +4078,18 @@ packages:
     dev: false
     optional: true
 
-  /ipfs-core-types/0.9.0_node-fetch@2.6.1:
+  /ipfs-core-types/0.9.0:
     resolution: {integrity: sha512-VJ8vJSHvI1Zm7/SxsZo03T+zzpsg8pkgiIi5hfwSJlsrJ1E2v68QPlnLshGHUSYw89Oxq0IbETYl2pGTFHTWfg==}
     dependencies:
       interface-datastore: 6.1.1
-      multiaddr: 10.0.1_node-fetch@2.6.1
+      multiaddr: 10.0.1
       multiformats: 9.7.1
     transitivePeerDependencies:
       - node-fetch
       - supports-color
     dev: false
 
-  /ipfs-core-utils/0.13.0_node-fetch@2.6.1:
+  /ipfs-core-utils/0.13.0:
     resolution: {integrity: sha512-HP5EafxU4/dLW3U13CFsgqVO5Ika8N4sRSIb/dTg16NjLOozMH31TXV0Grtu2ZWo1T10ahTzMvrfT5f4mhioXw==}
     dependencies:
       any-signal: 2.1.2
@@ -4097,7 +4097,7 @@ packages:
       browser-readablestream-to-it: 1.0.3
       debug: 4.3.4
       err-code: 3.0.1
-      ipfs-core-types: 0.9.0_node-fetch@2.6.1
+      ipfs-core-types: 0.9.0
       ipfs-unixfs: 6.0.9
       ipfs-utils: 9.0.7
       it-all: 1.0.6
@@ -4105,8 +4105,8 @@ packages:
       it-peekable: 1.0.3
       it-to-stream: 1.0.0
       merge-options: 3.0.4
-      multiaddr: 10.0.1_node-fetch@2.6.1
-      multiaddr-to-uri: 8.0.0_node-fetch@2.6.1
+      multiaddr: 10.0.1
+      multiaddr-to-uri: 8.0.0
       multiformats: 9.7.1
       nanoid: 3.3.4
       parse-duration: 1.0.2
@@ -4117,7 +4117,7 @@ packages:
       - supports-color
     dev: false
 
-  /ipfs-http-client/55.0.0_node-fetch@2.6.1:
+  /ipfs-http-client/55.0.0:
     resolution: {integrity: sha512-GpvEs7C7WL9M6fN/kZbjeh4Y8YN7rY8b18tVWZnKxRsVwM25cIFrRI8CwNt3Ugin9yShieI3i9sPyzYGMrLNnQ==}
     engines: {node: '>=14.0.0', npm: '>=3.0.0'}
     dependencies:
@@ -4128,13 +4128,13 @@ packages:
       any-signal: 2.1.2
       debug: 4.3.4
       err-code: 3.0.1
-      ipfs-core-types: 0.9.0_node-fetch@2.6.1
-      ipfs-core-utils: 0.13.0_node-fetch@2.6.1
+      ipfs-core-types: 0.9.0
+      ipfs-core-utils: 0.13.0
       ipfs-utils: 9.0.7
       it-first: 1.0.7
       it-last: 1.0.6
       merge-options: 3.0.4
-      multiaddr: 10.0.1_node-fetch@2.6.1
+      multiaddr: 10.0.1
       multiformats: 9.7.1
       native-abort-controller: 1.0.4_abort-controller@3.0.0
       parse-duration: 1.0.2
@@ -4811,19 +4811,19 @@ packages:
   /ms/2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
 
-  /multiaddr-to-uri/8.0.0_node-fetch@2.6.1:
+  /multiaddr-to-uri/8.0.0:
     resolution: {integrity: sha512-dq4p/vsOOUdVEd1J1gl+R2GFrXJQH8yjLtz4hodqdVbieg39LvBOdMQRdQnfbg5LSM/q1BYNVf5CBbwZFFqBgA==}
     dependencies:
-      multiaddr: 10.0.1_node-fetch@2.6.1
+      multiaddr: 10.0.1
     transitivePeerDependencies:
       - node-fetch
       - supports-color
     dev: false
 
-  /multiaddr/10.0.1_node-fetch@2.6.1:
+  /multiaddr/10.0.1:
     resolution: {integrity: sha512-G5upNcGzEGuTHkzxezPrrD6CaIHR9uo+7MwqhNVcXTs33IInon4y7nMiGxl2CY5hG7chvYQUQhz5V52/Qe3cbg==}
     dependencies:
-      dns-over-http-resolver: 1.2.3_node-fetch@2.6.1
+      dns-over-http-resolver: 1.2.3
       err-code: 3.0.1
       is-ip: 3.1.0
       multiformats: 9.7.1
@@ -4882,20 +4882,18 @@ packages:
       abort-controller: 3.0.0
     dev: false
 
+  /native-fetch/3.0.0:
+    resolution: {integrity: sha512-G3Z7vx0IFb/FQ4JxvtqGABsOTIqRWvgQz6e+erkB+JJD6LrszQtMozEHI4EkmgZQvnGHrpLVzUWk7t4sJCIkVw==}
+    peerDependencies:
+      node-fetch: '*'
+    dev: false
+
   /native-fetch/3.0.0_hmwa7nplpltavckpkeobtw6pv4:
     resolution: {integrity: sha512-G3Z7vx0IFb/FQ4JxvtqGABsOTIqRWvgQz6e+erkB+JJD6LrszQtMozEHI4EkmgZQvnGHrpLVzUWk7t4sJCIkVw==}
     peerDependencies:
       node-fetch: '*'
     dependencies:
       node-fetch: /@achingbrain/node-fetch/2.6.7
-    dev: false
-
-  /native-fetch/3.0.0_node-fetch@2.6.1:
-    resolution: {integrity: sha512-G3Z7vx0IFb/FQ4JxvtqGABsOTIqRWvgQz6e+erkB+JJD6LrszQtMozEHI4EkmgZQvnGHrpLVzUWk7t4sJCIkVw==}
-    peerDependencies:
-      node-fetch: '*'
-    dependencies:
-      node-fetch: 2.6.1
     dev: false
 
   /natural-compare/1.4.0:
@@ -4981,11 +4979,6 @@ packages:
 
   /node-addon-api/4.3.0:
     resolution: {integrity: sha512-73sE9+3UaLYYFmDsFZnqCInzPyh3MqIwZO9cw58yIqAZhONrrabrYyYe3TuIqtIiOuTXVhsGau8hcrhhwSsDIQ==}
-    dev: false
-
-  /node-fetch/2.6.1:
-    resolution: {integrity: sha512-V4aYg89jEoVRxRb2fJdAg8FHvI7cEyYdVAh94HH0UIK8oJxUfkjlDQN9RbMx+bEjP7+ggMiFRprSti032Oipxw==}
-    engines: {node: 4.x || >=6.0.0}
     dev: false
 
   /node-fetch/2.6.7:

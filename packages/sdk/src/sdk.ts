@@ -85,9 +85,7 @@ export class SDK {
     // TODO implement error handling and be meet ACID and this validityCheck function
     const isValid = this.validityCheck(capTableData);
 
-    if (!isValid) {
-      return err('Invalid input for capTable creation');
-    } else {
+    if (isValid) {
       // 1. Do blockchain deploy
       const addresses: string[] = [];
       const amounts: string[] = [];
@@ -167,6 +165,8 @@ export class SDK {
           deployBlockchainRes: deployedCapTableResult.value,
         });
       }
+    } else {
+      return err('Invalid input for capTable creation');
     }
   }
 

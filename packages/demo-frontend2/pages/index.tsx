@@ -17,10 +17,10 @@ const Home: NextPage = () => {
     const sdk = await SDK.init({ ceramicUrl: "https://ceramic-clay.3boxlabs.com", ethereumRpc: "http://127.0.0.1:8545/", secret: "kid letter bicycle motion maid token change couch useless seven boost strategy", theGraphUrl: "http://localhost:8000/subgraphs/name/brok/captable", env: "brokLocal" });
     const address = await sdk.createCapTable({
       name: "Test 535325",
-      orgnr: "41241241",
+      orgnr: "1241241234",
       shareholders: [
         {
-          amount: "421412",
+          amount: "6664444",
           birthDate: "230188",
           countryCode: "NO",
           name: "TES PERSON",
@@ -29,7 +29,11 @@ const Home: NextPage = () => {
         }
       ]
     })
+    console.log("CapTableAddress", address)
+    const capTable = await sdk.getCapTable(address)
+    console.log("CapTable", capTable)
   }
+
   return (
     <StyledApp >
       <Head>
@@ -40,7 +44,8 @@ const Home: NextPage = () => {
 
       <main>
         <Container>
-          <Button onClick={() => createCapTable()}>{(2)}</Button>
+          <Button onClick={() => createCapTable()}>Create</Button>
+          <Button onClick={() => createCapTable()}>Create</Button>
         </Container>
       </main>
 
