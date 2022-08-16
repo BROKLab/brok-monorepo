@@ -23,7 +23,7 @@ test.before('env variables is set', async (t) => {
       birthDate: '01-01-1988',
       amount: '1000',
       countryCode: 'NO',
-      postalcode: '1234',
+      postalcode: '0655',
       partition: 'ordinære',
     },
     {
@@ -32,7 +32,7 @@ test.before('env variables is set', async (t) => {
       organizationIdentifierType: 'EUID',
       amount: '500',
       countryCode: 'NO',
-      postalcode: '0655',
+      postalcode: '0111',
       partition: 'ordinære',
     },
   ];
@@ -97,7 +97,11 @@ test('transfer', async (t) => {
 
 test('update shareholder', async (t) => {
   const capTable = await t.context.sdk.getCapTable(t.context.capTableAddress);
-  const shareholderToUpdate = capTable.shareholders[0];
+  const shareholderToUpdate = capTable.shareholders.find((s) => s.name === 'Test Testesen');
+  if (!shareholderToUpdate) {
+    t.log(capTable.shareholders);
+    return t.fail('Could not find shareholder to update');
+  }
   const updatedShareholder = await t.context.sdk.updateShareholder(t.context.capTableAddress, {
     name: 'Old Nordmann',
     ethAddress: shareholderToUpdate.ethAddress,

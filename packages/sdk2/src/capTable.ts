@@ -147,26 +147,22 @@ export async function _getCapTable(this: SDK, capTableAddress: EthereumAddress):
       name: capTableCeramicData.value.name,
       orgnr: capTableCeramicData.value.orgnr,
       shareholders: shareholders.map((shareholder) => {
-        let data: any = {
+        // REVIEW - Typehack here
+        const data: any = {
           balances: shareholder.balances.map((bal) => ({ partition: bal.partition, amount: bal.amount })),
           ethAddress: shareholder.ethAddress,
-          name: JSON.stringify(shareholder.name),
+          name: shareholder.name,
           countryCode: shareholder.countryCode,
           postalcode: shareholder.postalcode,
-        };
-        if ('birthDate' in shareholder) {
-          data = {
-            ...data,
-            birthDate: shareholder.birthDate,
-          };
-        }
-        if ('organizationIdentifier' in shareholder) {
-          data = {
-            ...data,
+          ...('birthDate' in shareholder && { birthDate: shareholder.birthDate }),
+          ...('organizationIdentifier' in shareholder && {
             organizationIdentifier: shareholder.organizationIdentifier,
+          }),
+          ...('organizationIdentifierType' in shareholder && {
             organizationIdentifierType: shareholder.organizationIdentifierType,
-          };
-        }
+          }),
+        };
+
         return data;
       }),
     };
