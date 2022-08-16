@@ -73,11 +73,14 @@ test('transfer', async (t) => {
 
   t.truthy(capTable.shareholders[0].ethAddress, 'Should have one shareholder');
   t.truthy(capTable.shareholders[1].ethAddress, 'Should have two shareholder');
+
+  const shareholderA = capTable.shareholders[0];
+  const shareholderB = capTable.shareholders[1];
   const transferResult = await t.context.sdk.transfer(t.context.capTableAddress, [
     {
       amount: '100',
-      from: capTable.shareholders[0].ethAddress,
-      to: capTable.shareholders[1].ethAddress,
+      from: shareholderA.ethAddress,
+      to: shareholderB.ethAddress,
       partition: 'ordinære',
     },
   ]);
@@ -93,6 +96,19 @@ test('transfer', async (t) => {
     }
     t.is(typeof tr.message, 'string', 'transferResult has a message');
   });
+  // TODO : Check that the amount has been transferred, we dont do this because it takes to long for TheGraph to update.
+  // const sleep = (ms: number) => {
+  //   return new Promise((resolve) => setTimeout(resolve, ms));
+  // };
+  // await sleep(2000);
+  // const capTable2 = await t.context.sdk.getCapTable(t.context.capTableAddress);
+  // capTable2.shareholders.map((afterShareholder) => {
+  //   if (afterShareholder.ethAddress === shareholderA.ethAddress) {
+  //     t.not(afterShareholder.balances[0].amount, shareholderA.balances[0].amount, 'shareholderA balance should be adjusted');
+  //   } else {
+  //     capTable2.shareholders.map((s) => s.balances.map((s) => t.log(s.amount)));
+  //   }
+  // });
 });
 
 test('update shareholder', async (t) => {
