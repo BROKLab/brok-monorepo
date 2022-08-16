@@ -28,12 +28,56 @@ export class CeramicSDK extends CeramicClient {
     }
   }
 
+  async updateShareholder(ceramicId: CeramicId, shareholder: Shareholder): Promise<Result<Shareholder, string>> {
+    const res = await this.getDocument<Shareholder>(ceramicId);
+    if (res.isErr()) {
+      return err(res.error);
+    }
+    if (res.value.isReadOnly) {
+      return err('Document is read only');
+    }
+    await res.value.update(shareholder);
+    const res2 = await this.getDocument<Shareholder>(ceramicId);
+    if (res2.isErr()) {
+      return err(res2.error);
+    }
+    if (res2.value && 'content' in res2.value) {
+      return ok(res2.value.content);
+    } else {
+      log('Tildocument value in updateShareholder', res.value);
+      return err('Something wrong with TileDocument in updateShareholder');
+    }
+  }
+
   async createCapTable(input: {
     data: CapTableCeramic;
     capTableAddress: EthereumAddress;
     capTableRegistryAddress: EthereumAddress;
   }): Promise<Result<TileDocument, string>> {
     return await this.creatDeterministic(input.data, {
+      family: 'capTable',
+      tags: [input.capTableAddress.toLowerCase(), input.capTableRegistryAddress.toLowerCase()],
+    });
+  }
+
+  async updateCapTable(input: {
+    data: Partial<CapTableCeramic>;
+    capTableAddress: EthereumAddress;
+    capTableRegistryAddress: EthereumAddress;
+  }): Promise<Result<TileDocument, string>> {
+    if (!this.did) {
+      return err('DID is not set, you must set DID to update on Ceramic.');
+    }
+    const current = await this.getCapTable({
+      capTableAddress: input.capTableAddress,
+      capTableRegistryAddress: input.capTableRegistryAddress,
+      fagsystemDID: this.did.id,
+    });
+    if (current.isErr()) {
+      return err(`Could not get current captable to update it, error: ${current.error}`);
+    }
+    const updated = { ...current.value, ...input.data };
+    return await this.creatDeterministic(updated, {
       family: 'capTable',
       tags: [input.capTableAddress.toLowerCase(), input.capTableRegistryAddress.toLowerCase()],
     });
@@ -48,7 +92,7 @@ export class CeramicSDK extends CeramicClient {
       const tile = await this.getDeterministic<CapTableCeramic>({
         family: 'capTable',
         deterministic: true,
-        tags: [input.capTableAddress, input.capTableRegistryAddress],
+        tags: [input.capTableAddress.toLowerCase(), input.capTableRegistryAddress.toLowerCase()],
         controllers: [input.fagsystemDID],
       });
       if (tile.isErr()) {

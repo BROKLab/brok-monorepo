@@ -1,13 +1,20 @@
-import { CapTableFactory, CapTableFactory__factory, CapTableRegistry, CapTableRegistry__factory, Deployments } from '@brok/captable';
+import {
+  CapTableFactory,
+  CapTableFactory__factory,
+  CapTableRegistry,
+  CapTableRegistry__factory,
+  CapTable__factory,
+  Deployments,
+} from '@brok/captable';
 import debug from 'debug';
 import { ContractReceipt, ethers, Wallet } from 'ethers';
 import { err, ok, Result } from 'neverthrow';
-import { CapTableEthereumId } from './types';
+import { CapTableEthereumId, TransferRequest } from './types';
 
 export type ACCEPTED_BROK_ENVIROMENTS = 'brokLocal' | 'brokDev' | 'brokTest' | 'brokProd';
+const log = debug('brok:sdk:blockchain');
 
 export class BlockchainSDK {
-  private static logger = debug('brok:sdk:blockchain');
   private BROK_ENVIRONMENT: ACCEPTED_BROK_ENVIROMENTS;
   constructor(readonly signer: Wallet, readonly theGraphUrl: string, brokEnviroment: string) {
     if (!BlockchainSDK.acceptedEnviroment(brokEnviroment)) {
@@ -20,10 +27,48 @@ export class BlockchainSDK {
     return ethers.Wallet.createRandom();
   }
 
+  private captableContract(address: string) {
+    return new CapTable__factory(this.signer).attach(address);
+  }
+  async operatorTransfer(capTableAddress: string, transferRequest: TransferRequest): Promise<Result<{ transactionHash: string }, string>> {
+    try {
+      const balance = await this.captableContract(capTableAddress).balanceOfByPartition(
+        ethers.utils.formatBytes32String(transferRequest.partition),
+        transferRequest.from,
+      );
+      if (ethers.BigNumber.from(transferRequest.amount).gt(balance)) {
+        return err(`Balance ${balance.toString()}for address ${transferRequest.from} is insufficient for transfer of ${transferRequest.amount}`);
+      }
+
+      const operatorTransferTX = await this.captableContract(capTableAddress).operatorTransferByPartition(
+        ethers.utils.formatBytes32String(transferRequest.partition),
+        transferRequest.from,
+        transferRequest.to,
+        ethers.utils.parseEther(transferRequest.amount),
+        '0x11',
+        '0x',
+      );
+      const reciept = await operatorTransferTX.wait();
+      return ok({
+        transactionHash: reciept.transactionHash,
+      });
+    } catch (e) {
+      log('operatorTransfer failed with error:', e);
+      return err(
+        `Error while transferring ${transferRequest.amount} from ${transferRequest.from} to ${transferRequest.to} on capTable ${capTableAddress}`,
+      );
+    }
+  }
+
   async deployCapTable(input: { name: string; orgnr: string; addresses: string[]; amounts: string[] }): Promise<Result<CapTableEthereumId, string>> {
     try {
       const { name, orgnr, addresses, amounts } = input;
-      const deployTX = await this.capTableFactory().createCapTable(name, orgnr, addresses, amounts);
+      const deployTX = await this.capTableFactory().createCapTable(
+        name,
+        orgnr,
+        addresses,
+        amounts.map((a) => ethers.utils.parseEther(a)),
+      );
       const reciept = await deployTX.wait();
       const capTableAddress = this.getDeployedCapTableFromEventReceipt(reciept);
       if (capTableAddress.isOk()) {
@@ -32,8 +77,25 @@ export class BlockchainSDK {
         return err(capTableAddress.error);
       }
     } catch (error) {
-      BlockchainSDK.logger(error);
+      log(error);
       return err(`Error while deploying captable ${input.name} on blockchain, input was`);
+    }
+  }
+
+  async deleteCapTable(capTableAddress: string) {
+    try {
+      const capTableStatus = await this.capTableRegistryContract().getStatus(capTableAddress);
+      if (capTableStatus.toNumber() !== 2) {
+        return err(`CapTable must be active in order to be removed. Status is now: ${capTableStatus.toNumber()}`);
+      }
+      const deleteCapTable = await this.capTableRegistryContract().remove(capTableAddress);
+      const tx = await deleteCapTable.wait();
+      return ok({
+        transactionHash: tx.transactionHash,
+      });
+    } catch (error) {
+      log('capTable removal failed with error:', error);
+      return err(`Could not delete capTable ${capTableAddress}`);
     }
   }
 
@@ -46,11 +108,11 @@ export class BlockchainSDK {
       if (address && Array.isArray(address) && address.length > 0 && typeof address[0] === 'string' && address[0].length > 0) {
         return ok(address[0]);
       } else {
-        BlockchainSDK.logger('Address array was:', address);
+        log('Address array was:', address);
         return err('Could not find capTable address for deployed capTable from logs. Could be empty contract');
       }
     } catch (error) {
-      BlockchainSDK.logger(error);
+      log(error);
       return err(`Error while getting deployed capTable from event receipt ${receipt}`);
     }
   }

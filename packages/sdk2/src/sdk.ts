@@ -1,15 +1,27 @@
 import { ethers, providers, Wallet } from 'ethers';
 import { err, ok } from 'neverthrow';
 import { BlockchainSDK } from './blockchain.js';
-import { createCapTableSafe, getCapTableSafe } from './capTable.js';
+import { _createCapTable, _getCapTable, _transfer, _deleteCapTable, _updateShareholder } from './capTable.js';
 import { CeramicSDK } from './ceramic.js';
-import { CapTable, CreateCapTableInput, EthereumAddress } from './types.js';
+import {
+  CapTable,
+  CapTableEthereumId,
+  CreateCapTableInput,
+  EthereumAddress,
+  OperationResult,
+  Shareholder,
+  TransferInput,
+  TransferRequest,
+} from './types.js';
 import { getDIDfromPrivateKey } from './utils/did.js';
 import debug from 'debug';
 
 export class SDK {
-  protected createCapTableSafe = createCapTableSafe;
-  protected getCapTableSafe = getCapTableSafe;
+  protected _createCapTable = _createCapTable;
+  protected _getCapTable = _getCapTable;
+  protected _transfer = _transfer;
+  protected _deleteCapTable = _deleteCapTable;
+  protected _updateShareholder = _updateShareholder;
   private constructor(protected blockchain: BlockchainSDK, protected ceramic: CeramicSDK) {}
 
   public static async init(config: { ceramicUrl: string; ethereumRpc: string; theGraphUrl: string; secret: string; env: string }): Promise<SDK> {
@@ -42,7 +54,7 @@ export class SDK {
   }
 
   async createCapTable(input: CreateCapTableInput): Promise<string> {
-    const res = await this.createCapTableSafe(input);
+    const res = await this._createCapTable(input);
     if (res.isErr()) {
       throw Error(res.error);
     }
@@ -50,7 +62,29 @@ export class SDK {
   }
 
   async getCapTable(capTableAddress: EthereumAddress): Promise<CapTable> {
-    const res = await this.getCapTableSafe(capTableAddress);
+    const res = await this._getCapTable(capTableAddress);
+    if (res.isErr()) {
+      throw Error(res.error);
+    }
+    return res.value;
+  }
+
+  async transfer(capTableAddress: CapTableEthereumId, transfers: TransferInput[]): Promise<(OperationResult & TransferRequest)[]> {
+    const res = await this._transfer(capTableAddress, transfers);
+    if (res.isErr()) {
+      throw Error(res.error);
+    }
+    return res.value;
+  }
+  async deleteCapTable(capTableAddress: CapTableEthereumId): Promise<boolean> {
+    const res = await this._deleteCapTable(capTableAddress);
+    if (res.isErr()) {
+      throw Error(res.error);
+    }
+    return res.value;
+  }
+  async updateShareholder(capTableAddress: CapTableEthereumId, shareholder: Partial<Shareholder>): Promise<Shareholder> {
+    const res = await this._updateShareholder(capTableAddress, shareholder);
     if (res.isErr()) {
       throw Error(res.error);
     }
