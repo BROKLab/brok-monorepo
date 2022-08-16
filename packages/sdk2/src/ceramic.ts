@@ -76,7 +76,12 @@ export class CeramicSDK extends CeramicClient {
     if (current.isErr()) {
       return err(`Could not get current captable to update it, error: ${current.error}`);
     }
-    const updated = { ...current.value, ...input.data };
+    const updated: CapTableCeramic = {
+      name: input.data.name ?? current.value.name,
+      orgnr: input.data.orgnr ?? current.value.orgnr,
+      shareholderEthToCeramic: { ...current.value.shareholderEthToCeramic, ...input.data.shareholderEthToCeramic },
+    };
+    console.log('updated########', updated);
     return await this.creatDeterministic(updated, {
       family: 'capTable',
       tags: [input.capTableAddress.toLowerCase(), input.capTableRegistryAddress.toLowerCase()],

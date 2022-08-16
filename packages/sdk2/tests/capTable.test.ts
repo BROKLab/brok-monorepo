@@ -83,12 +83,21 @@ test('transfer', async (t) => {
       to: shareholderB.ethAddress,
       partition: 'ordinære',
     },
+    {
+      from: shareholderB.ethAddress,
+      amount: '300',
+      partition: 'ordinære',
+      name: "Kari O'Connor",
+      birthDate: '01-01-1988',
+      countryCode: 'NO',
+      postalcode: '0655',
+    },
   ]);
   if (transferResult.length !== 1 || !Array.isArray(transferResult)) {
     t.log(transferResult);
   }
   t.truthy(Array.isArray(transferResult), 'transferResult is an array');
-  t.is(transferResult.length, 1, 'transferResult has one element');
+  t.is(transferResult.length, 2, 'transferResult has one element');
   transferResult.map((tr) => {
     t.is(tr.success, true, 'transferResult is success');
     if (!tr.success) {

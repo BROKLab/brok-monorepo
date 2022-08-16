@@ -31,6 +31,14 @@ const Home: NextPage = () => {
     })
     console.log("CapTableAddress", address)
     const capTable = await sdk.getCapTable(address)
+    // const transferResult = await t.context.sdk.transfer(t.context.capTableAddress, [
+    //   {
+    //     amount: '100',
+    //     from: capTable.shareholders[0].ethAddress,
+    //     to: shareholderB.ethAddress,
+    //     partition: 'ordinære',
+    //   },
+    // ]);
     console.log("CapTable", capTable)
   }
 
