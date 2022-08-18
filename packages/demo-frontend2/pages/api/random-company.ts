@@ -14,7 +14,6 @@ export default function handler(
   res: NextApiResponse<Data>
 ) {
   const serverRuntimeConfig= getConfig()
-  console.log(serverRuntimeConfig)
   const file = resolve( './pages/api/demo-data/companies.json');
   const json = readFileSync( file, "utf8");
   const companies = JSON.parse(json ) as any[]

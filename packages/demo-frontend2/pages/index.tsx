@@ -3,8 +3,8 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Plus, Search } from 'react-iconly';
-import { Footer } from '../src/ui/Footer';
-import { NavBar } from '../src/ui/NavBar';
+import { Footer } from './../src/ui/Footer';
+import { NavBar } from './../src/ui/NavBar';
 
 const Home: NextPage = () => {
   const router = useRouter()

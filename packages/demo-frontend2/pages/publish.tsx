@@ -10,7 +10,37 @@ const Home: NextPage = () => {
   const router = useRouter()
 
   const simulate = async () => {
+    // const sdk = await SDK.init({ ceramicUrl: "https://ceramic-clay.3boxlabs.com", ethereumRpc: "http://127.0.0.1:8545/", secret: "kid letter bicycle motion maid token change couch useless seven boost strategy", theGraphUrl: "http://localhost:8000/subgraphs/name/brok/captable", env: "brokLocal" });
+    // const address = await sdk.createCapTable({
+    //     name: "Test 535325",
+    //     orgnr: "41412124",
+    //     shareholders: [
+    //         {
+    //             amount: "6664444",
+    //             birthDate: "230188",
+    //             countryCode: "NO",
+    //             name: "TES PERSON",
+    //             partition: "ordinære",
+    //             postalcode: "50553"
+    //         }
+    //     ]
+    // })
+    // console.log("CapTableAddress", address)
+    // const capTable = await sdk.getCapTable(address)
+    // console.log("capTable", capTable)
+    // const transferResult = await sdk.transfer(address, [
+    //     {
+    //         amount: '100',
+    //         partition: 'ordinære',
+    //         from: capTable.shareholders[0].ethAddress,
+    //         name: "Jon",
+    //         birthDate: "202020",
+    //         countryCode: "NO",
+    //         postalcode: "0655",
 
+    //     },
+    // ]);
+    // console.log("transferResult", transferResult)
   }
 
 
