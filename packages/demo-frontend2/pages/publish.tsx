@@ -1,30 +1,40 @@
-import { Button, Card, Container, Grid, Spacer, styled, Text } from '@nextui-org/react';
+import { Button, Container, Grid, Spacer } from '@nextui-org/react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Plus, Search } from 'react-iconly';
 import { Footer } from '../src/ui/Footer';
 import { NavBar } from '../src/ui/NavBar';
-import { SDK } from "@brok/sdk2";
-import useSWR from "swr";
+import type { Organisasjon } from './api/demo-data/companies.types';
+import { RandomShareholder } from './api/random-shareholder';
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const Home: NextPage = () => {
   const router = useRouter()
 
   const getRandomOrgs = async (amount: number) => {
-    const company = await fetch(`/api/random-company?${new URLSearchParams({
+    const company = await fetch(`/api/random-org?${new URLSearchParams({
       amount: amount.toString(),
     })}`)
     const json = await company.json()
     if ("data" in json) {
-      return json.data
+      return json.data as Organisasjon[]
+    }
+    throw "No data in response"
+  }
+  const getRandomShareholders = async (amount: number) => {
+    const company = await fetch(`/api/random-shareholder?${new URLSearchParams({
+      amount: amount.toString(),
+    })}`)
+    const json = await company.json()
+    if ("data" in json) {
+      return json.data as RandomShareholder[]
     }
     throw "No data in response"
   }
 
   const simulate = async () => {
     console.log(await getRandomOrgs(2))
+    console.log(await getRandomShareholders(4))
 
     // const sdk = await SDK.init({ ceramicUrl: "https://ceramic-clay.3boxlabs.com", ethereumRpc: "http://127.0.0.1:8545/", secret: "kid letter bicycle motion maid token change couch useless seven boost strategy", theGraphUrl: "http://localhost:8000/subgraphs/name/brok/captable", env: "brokLocal" });
     // const address = await sdk.createCapTable({

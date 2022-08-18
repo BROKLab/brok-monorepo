@@ -14,8 +14,7 @@ export default function handler(
   res: NextApiResponse<Data>
 ) {
   if (req.method === 'GET') {
-    if("amount" in req.query && typeof req.query.amount === "string") {
-      const amount = parseInt(req.query.amount)
+    const amount = parseInt("amount" in req.query && typeof req.query.amount === "string" ? req.query.amount : "1")
       const file = resolve( './pages/api/demo-data/companies.json');
       const json = readFileSync( file, "utf8");
       const data = JSON.parse(json ) as Organisasjon[]
@@ -29,6 +28,5 @@ export default function handler(
         data: orgs
       })
     }
-  }
   res.status(500)
 }
