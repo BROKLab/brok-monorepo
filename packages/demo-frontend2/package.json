@@ -11,7 +11,7 @@
     "postinstall": "pnpm playwright install"
   },
   "dependencies": {
-    "@brok/sdk2": "workspace:^0.0.19",
+    "@brok/sdk2": "^0.0.22",
     "@ceramicnetwork/common": "2.5.0-rc.1",
     "@ceramicnetwork/core": "2.8.0-rc.1",
     "@ceramicnetwork/http-client": "2.3.2-rc.1",
@@ -27,7 +27,8 @@
     "neverthrow": "^4.3.1",
     "next": "12.2.4",
     "react": "^18.1.0",
-    "react-dom": "^18.1.0"
+    "react-dom": "^18.1.0",
+    "react-iconly": "^2.2.5"
   },
   "devDependencies": {
     "@opentelemetry/api": "^1.1.0",
@@ -37,6 +38,7 @@
     "@types/react-dom": "^18.0.3",
     "eslint": "8.21.0",
     "eslint-config-next": "12.2.4",
+    "prettier": "^2.7.1",
     "typescript": "4.7.4"
   }
 }

@@ -8,8 +8,13 @@ import {
   CeramicId,
   CreateCapTableInput,
   EthereumAddress,
+  EthereumIdentifier,
   OperationResult,
   Shareholder,
+  ShareholderBalances,
+  ShareholderIndetifier,
+  ShareholderOrganization,
+  ShareholderPerson,
   TransferInput,
   TransferRequest,
 } from './types.js';
@@ -18,6 +23,13 @@ const log = debug('brok:sdk:captable');
 
 export async function _createCapTable(this: SDK, input: CreateCapTableInput): Promise<Result<string, string>> {
   try {
+    // because we are useing captable factory deploy, we can only deploy defaul partitions.
+    for (const sh of input.shareholders) {
+      if (sh.partition !== 'ordinære') {
+        return err('Only ordinære partitions are supported for now.');
+      }
+    }
+    // create new eth addresses on shareholder where this is not set.)
     const shareholders = input.shareholders.map((shareholder) => ({
       ...shareholder,
       ethAddress: this.blockchain.createRandomWallet().address.toLowerCase(),
@@ -147,23 +159,27 @@ export async function _getCapTable(this: SDK, capTableAddress: EthereumAddress):
       name: capTableCeramicData.value.name,
       orgnr: capTableCeramicData.value.orgnr,
       shareholders: shareholders.map((shareholder) => {
-        // REVIEW - Typehack here
-        const data: any = {
-          balances: shareholder.balances.map((bal) => ({ partition: bal.partition, amount: bal.amount })),
-          ethAddress: shareholder.ethAddress,
-          name: shareholder.name,
-          countryCode: shareholder.countryCode,
-          postalcode: shareholder.postalcode,
-          ...('birthDate' in shareholder && { birthDate: shareholder.birthDate }),
-          ...('organizationIdentifier' in shareholder && {
+        // REVIEW - Ugly repeated code
+        if ('birthDate' in shareholder) {
+          return {
+            balances: shareholder.balances.map((bal) => ({ partition: bal.partition, amount: bal.amount })),
+            ethAddress: shareholder.ethAddress,
+            name: shareholder.name,
+            countryCode: shareholder.countryCode,
+            postalcode: shareholder.postalcode,
+            birthDate: shareholder.birthDate,
+          };
+        } else {
+          return {
+            balances: shareholder.balances.map((bal) => ({ partition: bal.partition, amount: bal.amount })),
+            ethAddress: shareholder.ethAddress,
+            name: shareholder.name,
+            countryCode: shareholder.countryCode,
+            postalcode: shareholder.postalcode,
             organizationIdentifier: shareholder.organizationIdentifier,
-          }),
-          ...('organizationIdentifierType' in shareholder && {
             organizationIdentifierType: shareholder.organizationIdentifierType,
-          }),
-        };
-
-        return data;
+          };
+        }
       }),
     };
     return ok(capTable);

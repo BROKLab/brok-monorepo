@@ -1,7 +1,7 @@
 // Operative types
 
 export type CreateCapTableInput = Organisation & {
-  shareholders: (NewShareholder & PartitionAmount)[];
+  shareholders: (NewShareholder & PartitionAmount & Partial<EthereumIdentifier>)[];
 };
 
 export type CapTable = Organisation & {

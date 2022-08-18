@@ -4,8 +4,9 @@ services:
     name: demo-frontend2-dev
     env: node
     repo: https://github.com/BROKLab/brok-monorepo
-    branch: robertosnap/sym-12-make-sdk-browser-friendly
+    branch: robertosnap/sym-31-demo-side
     region: frankfurt
     buildCommand: 'pnpm build'
     startCommand: 'pnpm start'
     plan: Starter
+    rootDir: packages/demo-frontend2

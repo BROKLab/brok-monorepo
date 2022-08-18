@@ -1,6 +1,6 @@
 {
 	"name": "@brok/sdk2",
-	"version": "0.0.19",
+	"version": "0.0.22",
 	"private": false,
 	"publishConfig": {
 		"access": "public"
