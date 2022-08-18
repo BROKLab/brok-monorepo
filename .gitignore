@@ -50,4 +50,3 @@ Thumbs.db
 ops/docker/data
 .pnpm-debug.log
 .wallet*
-packages/demo-frontend2/src
