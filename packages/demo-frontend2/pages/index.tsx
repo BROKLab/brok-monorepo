@@ -3,6 +3,7 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Plus, Search } from 'react-iconly';
+import { ToastContainer } from 'react-toastify';
 import { Footer } from './../src/ui/Footer';
 import { NavBar } from './../src/ui/NavBar';
 
@@ -29,7 +30,7 @@ const Home: NextPage = () => {
       >
         <Grid.Container gap={2} css={{ p: '$sm' }} >
           <Grid xs={12} sm={6}>
-            <Card isHoverable isPressable css={{ p: "$sm", maxWidth: "400px" }} onClick={() => router.push('/search')}>
+            <Card isHoverable isPressable css={{ p: "$sm", maxWidth: "400px" }} onPress={() => router.push('/search')}>
               <Card.Header >
                 <Search></Search>
                 <Grid.Container css={{ pl: "$6" }}>
