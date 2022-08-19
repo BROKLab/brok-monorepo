@@ -1,64 +1,55 @@
 /* eslint-disable @typescript-eslint/no-namespace */
-export declare namespace CapTableGraphQLTypes {
-  export namespace CapTableQuery {
-    export interface Balance {
-      amount: string;
-      id: string;
-      partition: string;
-    }
 
-    export interface TokenHolder {
-      address: string;
-      balances: Balance[];
-      id: string;
-    }
-
-    export interface CapTable {
-      controllers: string[];
-      id: string;
-      minter: string;
-      name: string;
-      fagsystem: string;
-      fagsystemDid: string;
-      orgnr: string;
-      owner: string;
-      partitions: string[];
-      status: string;
-      symbol: string;
-      tokenHolders: TokenHolder[];
-      totalSupply: string;
-    }
-
-    export interface Response {
-      capTable: CapTable;
-    }
-  }
-  export namespace BalancesQuery {
-    export interface CapTable {
-      partitions: string[];
-      totalSupply: string;
-      owner: string;
-    }
-
-    export interface TokenHolder {
-      address: string;
-    }
-
-    export interface Balance {
-      amount: string;
-      capTable: CapTable;
-      partition: string;
-      tokenHolder: TokenHolder;
-    }
-
-    export interface Response {
-      balances: Balance[];
-    }
-  }
+export interface BalanceGraphQL {
+  amount: string;
+  id: string;
+  partition: string;
 }
 
-export class CapTableGraphQL {
-  static CAP_TABLE_QUERY(address: string) {
+export interface TokenHolderGraphQL {
+  address: string;
+  balances: BalanceGraphQL[];
+  id: string;
+}
+
+export interface CapTableGraphQL {
+  controllers: string[];
+  id: string;
+  minter: string;
+  name: string;
+  fagsystem: string;
+  fagsystemDid: string;
+  orgnr: string;
+  owner: string;
+  partitions: string[];
+  status: string;
+  symbol: string;
+  tokenHolders: TokenHolderGraphQL[];
+  totalSupply: string;
+}
+
+export interface CapTableQuery {
+  capTable: CapTableGraphQL;
+}
+
+export interface BalancesQuery {
+  balances: BalanceGraphQL[];
+  tokenHolder: {
+    address: string;
+  };
+  capTable: {
+    totalSupply: string;
+    owner: string;
+    partitions: string[];
+  };
+}
+
+export interface ListQuery {
+  capTables: CapTableGraphQL[];
+}
+
+export class GraphQLQueries {
+  static CAP_TABLE(address: string) {
     return `{
       capTable(id: "${address.toLowerCase()}") {
           id
@@ -85,7 +76,7 @@ export class CapTableGraphQL {
         }
     }`;
   }
-  static BALANCES_QUERY(address: string) {
+  static BALANCES(address: string) {
     return `
     {
         balances(where: {capTable: "${address.toLowerCase()}", amount_gt: 0}) {
@@ -103,29 +94,31 @@ export class CapTableGraphQL {
       }
       `;
   }
-}
-
-export const CAP_TABLES_QUERY = `
-query MyQuery($name: String, $orgnr: String) {
-  capTables(where: {
-    name_contains_nocase: $name, 
-    orgnr_contains_nocase: $orgnr
-  }) {
-    name
-    orgnr
-    status
-    id
+  static LIST(skip = 0, limit = 10, status = 'APPROVED') {
+    return `{
+      capTables(skip: ${skip.toString()}, first: ${limit.toString()}, where: {status: "${status}"}) {
+        id
+        name
+        orgnr
+        fagsystem
+        symbol
+        status
+        partitions
+        owner
+        minter
+        controllers
+        totalSupply
+        fagsystemDid
+        tokenHolders {
+          id
+          address
+          balances {
+            id
+            amount
+            partition
+          }
+        }
+      }
+    }`;
   }
 }
-`;
-
-export type CapTableQueryResponse = {
-  capTables: CapTable[];
-};
-
-export type CapTable = {
-  name: string;
-  orgnr: string;
-  id: string;
-  status: string;
-};

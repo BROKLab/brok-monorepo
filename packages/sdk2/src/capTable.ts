@@ -1,3 +1,4 @@
+import debug from 'debug';
 import { ethers } from 'ethers';
 import { err, ok, Result } from 'neverthrow';
 import { SDK } from './sdk.js';
@@ -8,17 +9,11 @@ import {
   CeramicId,
   CreateCapTableInput,
   EthereumAddress,
-  EthereumIdentifier,
   OperationResult,
   Shareholder,
-  ShareholderBalances,
-  ShareholderIndetifier,
-  ShareholderOrganization,
-  ShareholderPerson,
   TransferInput,
   TransferRequest,
 } from './types.js';
-import debug from 'debug';
 const log = debug('brok:sdk:captable');
 
 export async function _createCapTable(this: SDK, input: CreateCapTableInput): Promise<Result<string, string>> {

@@ -15,6 +15,8 @@ import {
 } from './types.js';
 import { getDIDfromPrivateKey } from './utils/did.js';
 import debug from 'debug';
+import { getCapTableListGraph } from './theGraph.js';
+import { CapTableGraphQL } from './utils/CapTableGraphQL.utils.js';
 
 export class SDK {
   protected _createCapTable = _createCapTable;
@@ -63,6 +65,14 @@ export class SDK {
 
   async getCapTable(capTableAddress: EthereumAddress): Promise<CapTable> {
     const res = await this._getCapTable(capTableAddress);
+    if (res.isErr()) {
+      throw Error(res.error);
+    }
+    return res.value;
+  }
+
+  async getCapTableList(): Promise<CapTableGraphQL[]> {
+    const res = await getCapTableListGraph(this.blockchain.theGraphUrl);
     if (res.isErr()) {
       throw Error(res.error);
     }
