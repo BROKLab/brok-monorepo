@@ -69,7 +69,7 @@ export async function getCapTableListGraph(url: string): Promise<Result<CapTable
     };
 
     const data = await getData();
-    if ('data' in data && 'capTable' in data.data) {
+    if ('data' in data && 'capTables' in data.data) {
       return ok(data.data.capTables);
     }
     debug('brok:sdk:thegraph')('invalid data from theGraph', data);
