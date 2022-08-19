@@ -55,6 +55,10 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     capTableRegistryDeploy.address
   )) as CapTableRegistry;
   console.log("CapTableRegistry deployed", capTableRegistry.address);
+  // await hre.ethernal.push({
+  //   name: "CapTableRegistry",
+  //   address: capTableRegistry.address,
+  // });
 
   // capTableFactory
   const capTableFactoryDeploy = await deploy("CapTableFactory", {
@@ -72,6 +76,10 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   )) as CapTableFactory;
 
   console.log("CapTableFactory deployed", capTableFactory.address);
+  // await hre.ethernal.push({
+  //   name: "CapTableFactory",
+  //   address: capTableFactory.address,
+  // });
 };
 export default func;
 

@@ -23,11 +23,16 @@ const log = debug('brok:sdk:captable');
 
 export async function _createCapTable(this: SDK, input: CreateCapTableInput): Promise<Result<string, string>> {
   try {
+    log('Start creating cap table with input', input);
     // because we are useing captable factory deploy, we can only deploy defaul partitions.
     for (const sh of input.shareholders) {
       if (sh.partition !== 'ordinære') {
         return err('Only ordinære partitions are supported for now.');
       }
+    }
+    // because we are useing captable factory deploy, we have to issue on deploy because of a convience thing.
+    if (input.shareholders.length === 0) {
+      return err('Must issue shares on publish. Please register som shareholders.');
     }
     // create new eth addresses on shareholder where this is not set.)
     const shareholders = input.shareholders.map((shareholder) => ({
@@ -113,7 +118,7 @@ export async function _createCapTable(this: SDK, input: CreateCapTableInput): Pr
       log(error);
       return err('Could not approve captable');
     }
-
+    log('End created cap table with result', deployedCapTableResult);
     return ok(deployedCapTableResult.value);
   } catch (error) {
     log(error);
@@ -123,6 +128,7 @@ export async function _createCapTable(this: SDK, input: CreateCapTableInput): Pr
 
 export async function _getCapTable(this: SDK, capTableAddress: EthereumAddress): Promise<Result<CapTable, string>> {
   try {
+    log('Getting cap table with address', capTableAddress);
     const capTableGraphData = await getCapTableGraph(this.blockchain.theGraphUrl, capTableAddress, { onlyApproved: true });
     if (capTableGraphData.isErr()) {
       return err(capTableGraphData.error);
@@ -195,6 +201,10 @@ export async function _transfer(
   transferInputs: TransferInput[],
 ): Promise<Result<(OperationResult & TransferRequest)[], string>> {
   try {
+    log('Start transferring with inputs', {
+      capTableAddress,
+      transferInputs,
+    });
     // Prepare possible ceramic updates
     const shareholderEthToCeramic: Record<EthereumAddress, CeramicId> = {};
     let transferRequests: TransferRequest[] = [];
@@ -266,6 +276,7 @@ export async function _transfer(
         });
       }
     }
+    log('End transferring with result', operationResult);
     return ok(operationResult);
   } catch (error) {
     log(error);

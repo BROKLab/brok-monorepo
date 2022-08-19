@@ -87,16 +87,21 @@ const Home: NextPage = () => {
     });
     const orgs = await getRandomOrgs(1)
     const org = orgs[0]
-    const amountShareholders = Math.random() * (5 + 1) + 0;
+    const amountShareholders = Math.floor(Math.random() * (6 - 3 + 1) + 3)
+    console.log("amountShareholders", amountShareholders)
     const shareholders = await getRandomShareholders(amountShareholders)
+    const issueShareholders = shareholders.slice(0, -1)
+    const trasferShareholders = shareholders.slice(-1)
+    console.log("shareholders", shareholders)
+    console.log("iss", issueShareholders)
+    console.log("tra", trasferShareholders)
     const capTableAddress = await sdk.createCapTable({
       name: org.navn,
       orgnr: org.organisasjonsnummer,
       // Skip last
-      shareholders: shareholders.slice(0, -1).map((s, i, arr) => {
+      shareholders: issueShareholders.map((s, i, arr) => {
         const amount = Math.random() * 100_000 | 10;
         const amountRounded = Math.round(amount / 1000) * 1000
-        console.log(amountRounded)
         return {
           name: s.visningnavn,
           birthDate: s.foedselsdato,
@@ -131,36 +136,28 @@ const Home: NextPage = () => {
     toast((t) => <Container>
       <Grid.Container>
         <Grid>
-          {`Created cap table ${org.navn}`}
+          <Text size={"small"}>{`Created cap table ${org.navn}`}</Text>
         </Grid>
-        <Button onPress={() => router.push(`/cap-table/${capTableAddress}`)}></Button>
+        <Grid>
+          <Button onPress={() => router.push(`/cap-table/${capTableAddress}`)}>View cap table</Button>
+        </Grid>
       </Grid.Container>
     </Container>, { type: "success" })
     transferResult.map(tr => {
       toast((t) => <Container>
         <Grid.Container>
           <Grid>
-            {`Transfered ${tr.amount} from ${tr.from} to ${tr.to}`}
+            <Text size={"small"}>{`Transfered ${tr.amount} from ${tr.from.slice(0, 5)} to ${tr.to.slice(0, 5)}`}</Text>
           </Grid>
-          <Button onPress={() => router.push(`/cap-table/${capTableAddress}`)}>View cap table</Button>
+          <Grid>
+            <Button size={"xs"} onPress={() => router.push(`/cap-table/${capTableAddress}`)}>View cap table</Button>
+          </Grid>
         </Grid.Container>
       </Container>, { type: "success" })
     })
 
     console.log("transferResult", transferResult)
   }
-
-  const test = () => {
-    toast((t) => <Container>
-      <Grid.Container>
-        <Grid>
-          {`Transfered`}
-        </Grid>
-        <Button onPress={() => router.push(`/cap-table/}`)}>YO</Button>
-      </Grid.Container>
-    </Container>, { type: "success" })
-  }
-
   return (
     <Container >
       <Head>
@@ -181,18 +178,16 @@ const Home: NextPage = () => {
         <Grid.Container gap={2} css={{ p: '$sm' }} justify="center" >
           <Grid>
             <Text h3>Dine selskaper</Text>
-            <Button onPress={() => createCompany()}>Start simulation</Button>
-            <Button onPress={() => test()}>Start 2</Button>
+            <Button onPress={() => createCompany()}>Start publisering</Button>
           </Grid>
         </Grid.Container>
 
       </Container>
       <Footer></Footer>
       <ToastContainer position="top-right"
-        autoClose={5000}
         hideProgressBar={true}
         closeOnClick
-        pauseOnHover />
+        pauseOnHover ></ToastContainer>
 
     </Container >
   )

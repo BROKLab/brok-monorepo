@@ -8,7 +8,7 @@ import "./CapTableRegistry.sol";
 contract CapTableFactory {
     CapTableRegistry internal _capTableRegistry;
     uint256 internal _defaultGranularity;
-    address internal _defaultOwner; 
+    address internal _defaultOwner;
     bytes32[] internal _defaultPartitions;
     bytes32 internal _defaultIssueData;
 
@@ -40,7 +40,7 @@ contract CapTableFactory {
         bytes32[] memory defaultPartitions = _defaultPartitions;
         bytes memory defaultIssueData = abi.encodePacked(_defaultIssueData);
 
-        address[] memory controller = new address[](1);  
+        address[] memory controller = new address[](1);
         controller[0] = msg.sender; // Fagsystem is controller.
 
         CapTable capTable = new CapTable(
@@ -54,7 +54,8 @@ contract CapTableFactory {
 
         _capTableRegistry.que(address(capTable), orgnr);
 
-        for (uint256 i = 0; i < to.length;) {
+        require(to.length > 0, "Must issue on deploy"); // REVIEW: Just a convinience thing for the graph.
+        for (uint256 i = 0; i < to.length; ) {
             capTable.issueByPartition(
                 _defaultPartitions[0], // Cant accept partitions also as it would trigger stack to deep.
                 to[i],
@@ -62,7 +63,9 @@ contract CapTableFactory {
                 defaultIssueData
             );
 
-            unchecked { ++i; } // Avoids safemath to save gas
+            unchecked {
+                ++i;
+            } // Avoids safemath to save gas
         }
         capTable.addMinter(msg.sender); // Fagsystem is minter
         capTable.transferOwnership(_defaultOwner); // BR is owner
