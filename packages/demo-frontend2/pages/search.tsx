@@ -9,6 +9,7 @@ import NoSSR from "../src/components/utils/NoSSR";
 import { Footer } from '../src/ui/Footer';
 import { NavBar } from '../src/ui/NavBar';
 import { ethers } from "ethers"
+import { formatBN, formatCurrency } from "../src/components/utils/Formatters";
 
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -73,13 +74,14 @@ const Search: NextPage = () => {
           <Grid>
             <Text h3>Registry</Text>
           </Grid>
-          <Grid xs={12}>
+          <Grid xs={12} justify="center">
             <NoSSR>
               <Table
                 aria-label="Example table with static content"
                 hoverable
                 onSelectionChange={(keys) => onSelect(Object.values(keys)[1])}
                 selectionMode="single"
+
                 css={{
                   height: "auto",
                   minWidth: "100%",
@@ -91,12 +93,12 @@ const Search: NextPage = () => {
                   <Table.Column>TOTAL SHARES</Table.Column>
                   <Table.Column>SHAREHOLDERS</Table.Column>
                 </Table.Header>
-                <Table.Body>
+                <Table.Body >
                   {capTables.map(capTable => (
                     <Table.Row key={capTable.id} >
                       <Table.Cell>{capTable.orgnr}</Table.Cell>
                       <Table.Cell>{capTable.name}</Table.Cell>
-                      <Table.Cell>{ethers.utils.formatEther(capTable.totalSupply)}</Table.Cell>
+                      <Table.Cell>{formatBN(ethers.BigNumber.from(capTable.totalSupply))}</Table.Cell>
                       <Table.Cell>{`${capTable.tokenHolders.length + 1}`}</Table.Cell>
 
                     </Table.Row>
@@ -109,8 +111,8 @@ const Search: NextPage = () => {
           </Grid>
           <Grid>
             <Button.Group>
-              <Button disabled={skip === 0} onPress={() => setSkip(old => old - 10)}>Back</Button>
-              <Button onPress={() => setSkip(old => old + 10)}>Forward</Button>
+              <Button disabled={skip === 0} onPress={() => setSkip(old => old - 10)}>Previous</Button>
+              <Button onPress={() => setSkip(old => old + 10)}>Next</Button>
             </Button.Group>
           </Grid>
         </Grid.Container>

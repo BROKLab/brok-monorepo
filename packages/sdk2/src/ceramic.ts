@@ -5,7 +5,7 @@ import debug from 'debug';
 import { err } from 'neverthrow';
 import { ok } from 'neverthrow';
 import { Result } from 'neverthrow';
-import { CapTableCeramic, CeramicId, EthereumAddress, Shareholder } from './types';
+import { CapTableCeramic, CeramicID, CeramicIdentifier, EthereumAddress, Shareholder } from './types';
 
 const log = debug('brok:sdk:ceramic');
 export class CeramicSDK extends CeramicClient {
@@ -13,7 +13,7 @@ export class CeramicSDK extends CeramicClient {
     super(ceramicUrl);
   }
 
-  async createShareholder(shareholder: Shareholder): Promise<Result<CeramicId, string>> {
+  async createShareholder(shareholder: Shareholder): Promise<Result<CeramicID, string>> {
     const res = await this.createDocument({
       data: shareholder,
     });
@@ -28,7 +28,7 @@ export class CeramicSDK extends CeramicClient {
     }
   }
 
-  async updateShareholder(ceramicId: CeramicId, shareholder: Shareholder): Promise<Result<Shareholder, string>> {
+  async updateShareholder(ceramicId: CeramicID, shareholder: Shareholder): Promise<Result<Shareholder, string>> {
     const res = await this.getDocument<Shareholder>(ceramicId);
     if (res.isErr()) {
       return err(res.error);
@@ -92,7 +92,7 @@ export class CeramicSDK extends CeramicClient {
     capTableAddress: EthereumAddress;
     capTableRegistryAddress: EthereumAddress;
     fagsystemDID: string;
-  }): Promise<Result<CapTableCeramic, string>> {
+  }): Promise<Result<CapTableCeramic & CeramicIdentifier, string>> {
     try {
       const tile = await this.getDeterministic<CapTableCeramic>({
         family: 'capTable',
@@ -103,19 +103,19 @@ export class CeramicSDK extends CeramicClient {
       if (tile.isErr()) {
         return err(tile.error);
       }
-      return ok(tile.value.content);
+      return ok({ ...tile.value.content, ceramicID: tile.value.id.toString() });
     } catch (error) {
       return err('An error occured trying to find content for capTable on Ceramic');
     }
   }
 
-  async getShareholder(streamId: string): Promise<Result<Shareholder, string>> {
+  async getShareholder(streamId: string): Promise<Result<Shareholder & CeramicIdentifier, string>> {
     try {
       const tile = await this.getDocument<Shareholder>(streamId);
       if (tile.isErr()) {
         return err(tile.error);
       }
-      return ok(tile.value.content);
+      return ok({ ...tile.value.content, ceramicID: tile.value.id.toString() });
     } catch (error) {
       log(error);
       return err('An error occured trying to find content for shareholder on Ceramic');

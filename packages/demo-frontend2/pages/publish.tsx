@@ -128,7 +128,8 @@ const Home: NextPage = () => {
       partition: 'ordinære',
       from: capTable.shareholders[0].ethAddress,
       name: newShareholder.visningnavn,
-      birthDate: newShareholder.foedselsdato,
+      organizationIdentifier: Math.floor(100000000 + Math.random() * 900000000).toString(),
+      organizationIdentifierType: "EUID",
       postalcode: newShareholder.postalCode,
       countryCode: "NO",
     }]

@@ -4,9 +4,15 @@ export type CreateCapTableInput = Organisation & {
   shareholders: (NewShareholder & PartitionAmount & Partial<EthereumIdentifier>)[];
 };
 
-export type CapTable = Organisation & {
-  shareholders: (ShareholderIndetifier & EthereumIdentifier & (ShareholderOrganization | ShareholderPerson) & ShareholderBalances)[];
-};
+export type CapTable = Organisation &
+  CeramicIdentifier & {
+    totalShares: string;
+    shareholders: (ShareholderIndetifier &
+      EthereumIdentifier &
+      CeramicIdentifier &
+      (ShareholderOrganization | ShareholderPerson) &
+      ShareholderBalances)[];
+  };
 
 export type TransferInput = FromShareholder & PartitionAmount & (ExsistingShareholder | NewShareholder);
 export type TransferRequest = FromShareholder & PartitionAmount & ExsistingShareholder;
@@ -42,7 +48,7 @@ export type ShareholderIndetifier = {
 
 export type ShareholderOrganization = {
   organizationIdentifier: string; // Selskapets unike identifikator
-  organizationIdentifierType: 'OrganizationNumber' | 'EUID' | 'LEI';
+  organizationIdentifierType: 'OrganizationNumber' | 'EUID' | 'LEI' | string;
 };
 
 export type ShareholderPerson = {
@@ -70,8 +76,11 @@ export type ShareholderEthereumId = EthereumAddress;
 export type EthereumAddress = string;
 
 // Ceramic types
+export type CeramicIdentifier = {
+  ceramicID: CeramicID;
+};
 
-export type CeramicId = string;
+export type CeramicID = string;
 export type CapTableCeramic = Organisation & {
-  shareholderEthToCeramic: Record<EthereumAddress, CeramicId>;
+  shareholderEthToCeramic: Record<EthereumAddress, CeramicID>;
 };

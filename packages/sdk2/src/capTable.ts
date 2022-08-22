@@ -6,7 +6,7 @@ import { getCapTableGraph } from './theGraph.js';
 import {
   CapTable,
   CapTableEthereumId,
-  CeramicId,
+  CeramicID,
   CreateCapTableInput,
   EthereumAddress,
   OperationResult,
@@ -75,7 +75,7 @@ export async function _createCapTable(this: SDK, input: CreateCapTableInput): Pr
       return err(deployedCapTableResult.error);
     }
     // 2. Insert shareholder public data on Ceramic
-    const shareholderEthToCeramic: Record<EthereumAddress, CeramicId> = {};
+    const shareholderEthToCeramic: Record<EthereumAddress, CeramicID> = {};
 
     for await (const shareholder of shareholders) {
       const ceramicId = await this.ceramic.createShareholder(shareholder);
@@ -159,6 +159,8 @@ export async function _getCapTable(this: SDK, capTableAddress: EthereumAddress):
     const capTable: CapTable = {
       name: capTableCeramicData.value.name,
       orgnr: capTableCeramicData.value.orgnr,
+      ceramicID: capTableCeramicData.value.ceramicID,
+      totalShares: ethers.utils.formatEther(capTableGraphData.value.totalSupply),
       shareholders: shareholders.map((shareholder) => {
         // REVIEW - Ugly repeated code
         if ('birthDate' in shareholder) {
@@ -169,6 +171,7 @@ export async function _getCapTable(this: SDK, capTableAddress: EthereumAddress):
             countryCode: shareholder.countryCode,
             postalcode: shareholder.postalcode,
             birthDate: shareholder.birthDate,
+            ceramicID: shareholder.ceramicID,
           };
         } else {
           return {
@@ -179,6 +182,7 @@ export async function _getCapTable(this: SDK, capTableAddress: EthereumAddress):
             postalcode: shareholder.postalcode,
             organizationIdentifier: shareholder.organizationIdentifier,
             organizationIdentifierType: shareholder.organizationIdentifierType,
+            ceramicID: shareholder.ceramicID,
           };
         }
       }),
@@ -201,7 +205,7 @@ export async function _transfer(
       transferInputs,
     });
     // Prepare possible ceramic updates
-    const shareholderEthToCeramic: Record<EthereumAddress, CeramicId> = {};
+    const shareholderEthToCeramic: Record<EthereumAddress, CeramicID> = {};
     let transferRequests: TransferRequest[] = [];
     let operationResult: (OperationResult & TransferRequest)[] = [];
     for await (const transferInput of transferInputs) {
