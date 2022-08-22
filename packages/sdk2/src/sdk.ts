@@ -71,8 +71,8 @@ export class SDK {
     return res.value;
   }
 
-  async getCapTableList(): Promise<CapTableGraphQL[]> {
-    const res = await getCapTableListGraph(this.blockchain.theGraphUrl);
+  async getCapTableList(skip?: number, limit?: number): Promise<CapTableGraphQL[]> {
+    const res = await getCapTableListGraph(this.blockchain.theGraphUrl, skip, limit);
     if (res.isErr()) {
       throw Error(res.error);
     }

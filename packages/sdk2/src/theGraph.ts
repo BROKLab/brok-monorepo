@@ -54,10 +54,10 @@ export async function getCapTableGraph(
   }
 }
 
-export async function getCapTableListGraph(url: string): Promise<Result<CapTableGraphQL[], string>> {
+export async function getCapTableListGraph(url: string, skip?: number, limit?: number): Promise<Result<CapTableGraphQL[], string>> {
   try {
     const getData = async () => {
-      const query = GraphQLQueries.LIST();
+      const query = GraphQLQueries.LIST(skip, limit);
       const res = await fetch(url, {
         method: 'post',
         body: JSON.stringify({
