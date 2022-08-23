@@ -7,7 +7,7 @@
     "peerDependencyRules": {
       "ignoreMissing": [
         "@testing-library/react",
-        "grommet",
+        "react-iconly",
         "react-router-dom"
       ],
       "allowedVersions": {
