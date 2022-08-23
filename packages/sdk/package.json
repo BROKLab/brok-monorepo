@@ -33,7 +33,7 @@
 		"test:watch": "pnpm ava --watch --serial"
 	},
 	"dependencies": {
-		"@brok/captable": "workspace:^0.10.0",
+		"@brok/captable": "^0.10.0",
 		"@ceramicnetwork/3id-did-resolver": "2.1.5-rc.1",
 		"@ceramicnetwork/blockchain-utils-linking": "^1.5.5",
 		"@ceramicnetwork/common": "2.5.0-rc.1",
