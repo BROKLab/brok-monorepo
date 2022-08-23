@@ -59,65 +59,65 @@ contract CapTable is ERC1400 {
         return _symbol;
     }
 
-    function kapitalforhoyselse_nye_aksjer(
-        bytes32[] memory partition,
-        address[] memory to,
-        uint256[] memory value,
-        bytes memory data
-    ) external onlyMinter isIssuableToken {
-        for (uint256 i = 0; i < to.length; i++) {
-            _issueByPartition(partition[i], msg.sender, to[i], value[i], data);
-        }
-    }
+    // function kapitalforhoyselse_nye_aksjer(
+    //     bytes32[] memory partition,
+    //     address[] memory to,
+    //     uint256[] memory value,
+    //     bytes memory data
+    // ) external onlyMinter isIssuableToken {
+    //     for (uint256 i = 0; i < to.length; i++) {
+    //         _issueByPartition(partition[i], msg.sender, to[i], value[i], data);
+    //     }
+    // }
 
-    function splitt(
-        bytes32[] memory partition,
-        address[] memory to,
-        uint256[] memory value,
-        bytes memory data
-    ) external {
-        for (uint256 i = 0; i < to.length; i++) {
-            // no new shareholders
-            require(_balances[to[i]] != uint256(0), "No new shareholders");
-            _issueByPartition(partition[i], msg.sender, to[i], value[i], data);
-        }
-    }
+    // function splitt(
+    //     bytes32[] memory partition,
+    //     address[] memory to,
+    //     uint256[] memory value,
+    //     bytes memory data
+    // ) external {
+    //     for (uint256 i = 0; i < to.length; i++) {
+    //         // no new shareholders
+    //         require(_balances[to[i]] != uint256(0), "No new shareholders");
+    //         _issueByPartition(partition[i], msg.sender, to[i], value[i], data);
+    //     }
+    // }
 
-    function kapitalnedsettelse_reduksjon_aksjer(
-        bytes32[] memory partition,
-        address[] memory from,
-        uint256[] memory value,
-        bytes memory data,
-        bytes memory operatorData
-    ) external {
-        for (uint256 i = 0; i < from.length; i++) {
-            _redeemByPartition(
-                partition[i],
-                msg.sender,
-                from[i],
-                value[i],
-                data,
-                operatorData
-            );
-        }
-    }
+    // function kapitalnedsettelse_reduksjon_aksjer(
+    //     bytes32[] memory partition,
+    //     address[] memory from,
+    //     uint256[] memory value,
+    //     bytes memory data,
+    //     bytes memory operatorData
+    // ) external {
+    //     for (uint256 i = 0; i < from.length; i++) {
+    //         _redeemByPartition(
+    //             partition[i],
+    //             msg.sender,
+    //             from[i],
+    //             value[i],
+    //             data,
+    //             operatorData
+    //         );
+    //     }
+    // }
 
-    function spleis(
-        bytes32[] memory partition,
-        address[] memory from,
-        uint256[] memory value,
-        bytes memory data,
-        bytes memory operatorData
-    ) external {
-        for (uint256 i = 0; i < from.length; i++) {
-            _redeemByPartition(
-                partition[i],
-                msg.sender,
-                from[i],
-                value[i],
-                data,
-                operatorData
-            );
-        }
-    }
+    // function spleis(
+    //     bytes32[] memory partition,
+    //     address[] memory from,
+    //     uint256[] memory value,
+    //     bytes memory data,
+    //     bytes memory operatorData
+    // ) external {
+    //     for (uint256 i = 0; i < from.length; i++) {
+    //         _redeemByPartition(
+    //             partition[i],
+    //             msg.sender,
+    //             from[i],
+    //             value[i],
+    //             data,
+    //             operatorData
+    //         );
+    //     }
+    // }
 }

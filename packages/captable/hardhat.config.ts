@@ -8,6 +8,7 @@ import "hardhat-gas-reporter";
 import "solidity-coverage";
 import "hardhat-deploy-ethers";
 import "hardhat-deploy";
+import "hardhat-contract-sizer";
 // import "hardhat-ethernal";
 import { HardhatUserConfig } from "hardhat/config";
 
@@ -22,6 +23,11 @@ const config: HardhatUserConfig = {
   //   uploadAst: true, // If set to true, plugin will upload AST, and you'll be able to use the storage feature (longer sync time though)
   //   disabled: false, // If set to true, the plugin will be disabled, nohting will be synced, ethernal.push won't do anything either
   // },
+  contractSizer: {
+    alphaSort: true,
+    runOnCompile: true,
+    disambiguatePaths: false,
+  },
   networks: {
     hardhat: {
       allowUnlimitedContractSize: true,
@@ -75,7 +81,7 @@ const config: HardhatUserConfig = {
         settings: {
           optimizer: {
             enabled: true,
-            runs: 100000,
+            runs: 1,
           },
         },
       },
@@ -84,7 +90,7 @@ const config: HardhatUserConfig = {
         settings: {
           optimizer: {
             enabled: true,
-            runs: 100000,
+            runs: 1,
           },
         },
       },
@@ -93,7 +99,7 @@ const config: HardhatUserConfig = {
         settings: {
           optimizer: {
             enabled: true,
-            runs: 100000,
+            runs: 1,
           },
         },
       },

@@ -54,7 +54,7 @@ contract CapTableFactory {
 
         _capTableRegistry.que(address(capTable), orgnr);
 
-        require(to.length > 0, "Must issue on deploy"); // REVIEW: Just a convinience thing for the graph.
+        // require(to.length > 0, "Must issue on deploy"); // REVIEW: Just a convinience thing for the graph.
         for (uint256 i = 0; i < to.length; ) {
             capTable.issueByPartition(
                 _defaultPartitions[0], // Cant accept partitions also as it would trigger stack to deep.
