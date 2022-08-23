@@ -9,7 +9,7 @@ services:
     buildCommand: 'pnpm i; pnpm build'
     startCommand: 'pnpm start'
     plan: Starter
-    rootDir: packages/demo-frontend2
+    rootDir: packages/demo-frontend
     # buildFilter:
     #   paths:
     #   # Changes to the `frontend` directory do not match this pattern.
