@@ -22,5 +22,5 @@ enviroment: ## setup enviorment files
 	test -f packages/sdk/.env || cp packages/sdk/.env.example packages/sdk/.env
 	test -f .env || cp .env.example .env
 
-clean-node-modules: ## clean node_modules TODO
+clean: ## clean node_modules TODO
 	rm -rf packages/**/node_modules && rm -rf node_modules
