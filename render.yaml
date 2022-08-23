@@ -6,7 +6,7 @@ services:
     repo: https://github.com/BROKLab/brok-monorepo
     branch: robertosnap/sym-31-demo-side
     region: frankfurt
-    buildCommand: 'pnpm i; pnpm unlink @brok/sdk; pnpm i --no-frozen-lockfile; pnpm build'
+    buildCommand: 'pnpm i; pnpm build'
     startCommand: 'pnpm start'
     plan: Starter
     rootDir: packages/demo-frontend
