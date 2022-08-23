@@ -1,18 +1,21 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "ES2020",
-    "resolveJsonModule": false,
-    "moduleResolution": "Node",
-    "allowSyntheticDefaultImports": true,
     "declaration": true,
-    "declarationMap": true,
-    "skipLibCheck": true,
+    "lib": ["es6", "dom", "dom.iterable"],
+    "module": "es6",
+    "moduleResolution": "node",
     "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
     "sourceMap": true,
-    "outDir": "lib",
+    "strict": true,
+    "target": "es6",
+    "outDir": "./dist",
+    "skipLibCheck": true,
   },
-  "include": ["src"]
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules"
+  ]
 }

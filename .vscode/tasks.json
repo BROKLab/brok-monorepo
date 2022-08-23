@@ -191,8 +191,7 @@
         {
             "label": "graph-server",
             "type": "shell",
-            "isBackground": true,
-            "command": "make graph-stop && make graph-start",
+            "command" : "docker compose -p symfoni_graph -f ops/docker/the-graph.yml down -v; rm -rf ops/docker/data; docker compose -p symfoni_graph -f ops/docker/the-graph.yml up",
             "presentation": {
                 "panel": "dedicated",
                 "group": "graph",
