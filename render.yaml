@@ -9,7 +9,12 @@ services:
     buildCommand: 'pnpm i; pnpm build'
     startCommand: 'pnpm start'
     plan: Starter
-    rootDir: packages/demo-frontend
+    rootDir: packages/demo-frontend2
+    # buildFilter:
+    #   paths:
+    #   # Changes to the `frontend` directory do not match this pattern.
+    #   - packages/demo-frontend2/**
+    #   - packages/sdk2/**
     envVars:
     - key: NEXT_PUBLIC_CERAMIC_URL
       sync: false
