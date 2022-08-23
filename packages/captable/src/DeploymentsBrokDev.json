@@ -3,7 +3,7 @@
   "chainId": "421611",
   "contracts": {
     "CapTable": {
-      "address": "0x1BcfcAe1BF9928F0C60B5BBB040210f64729Ce3D",
+      "address": "0xA8517022dC0eA288239541F65F778023eBCf6727",
       "abi": [
         {
           "inputs": [
@@ -1750,8 +1750,75 @@
         }
       ]
     },
+    "CapTableFactory": {
+      "address": "0x3fBFd803CAED5419A97b35537489e6c464fEAa98",
+      "abi": [
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "capTableRegistryAddress",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "defaultOwner",
+              "type": "address"
+            },
+            {
+              "internalType": "bytes32",
+              "name": "defaultPartition",
+              "type": "bytes32"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "constructor"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "string",
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "orgnr",
+              "type": "string"
+            },
+            {
+              "internalType": "address[]",
+              "name": "to",
+              "type": "address[]"
+            },
+            {
+              "internalType": "uint256[]",
+              "name": "value",
+              "type": "uint256[]"
+            }
+          ],
+          "name": "createCapTable",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "getCapTableRegistryAddress",
+          "outputs": [
+            {
+              "internalType": "address",
+              "name": "capTableRegistryAddress",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        }
+      ]
+    },
     "CapTableRegistry": {
-      "address": "0x3E119078F3b2B51815deAFEaD6d62B9Ac1d72F1f",
+      "address": "0x431ae9E8f24e4f38358454162480b25F01f7ea2a",
       "abi": [
         {
           "inputs": [
@@ -2336,75 +2403,8 @@
         }
       ]
     },
-    "CapTableFactory": {
-      "address": "0xAC12A87Ff7876383Ea133936EfA0EB59677be7Cf",
-      "abi": [
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "capTableRegistryAddress",
-              "type": "address"
-            },
-            {
-              "internalType": "address",
-              "name": "defaultOwner",
-              "type": "address"
-            },
-            {
-              "internalType": "bytes32",
-              "name": "defaultPartition",
-              "type": "bytes32"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "constructor"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "string",
-              "name": "name",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "orgnr",
-              "type": "string"
-            },
-            {
-              "internalType": "address[]",
-              "name": "to",
-              "type": "address[]"
-            },
-            {
-              "internalType": "uint256[]",
-              "name": "value",
-              "type": "uint256[]"
-            }
-          ],
-          "name": "createCapTable",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "inputs": [],
-          "name": "getCapTableRegistryAddress",
-          "outputs": [
-            {
-              "internalType": "address",
-              "name": "capTableRegistryAddress",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        }
-      ]
-    },
     "EthereumDIDRegistry": {
-      "address": "0x8A62FfaEF4b0F9A89b433d468F13345B603aB796",
+      "address": "0x317505E77D88350512167700A22a271B2a8C1B4e",
       "abi": [
         {
           "anonymous": false,

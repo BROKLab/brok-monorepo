@@ -1,6 +1,6 @@
 {
 	"name": "@brok/sdk",
-	"version": "0.11.0",
+	"version": "0.11.1",
 	"private": false,
 	"publishConfig": {
 		"access": "public"
@@ -21,7 +21,7 @@
 	],
 	"scripts": {
 		"build2": "pnpm tsc ",
-		"clean": "rm -fr dist",
+		"clean": "rm -rf dist",
 		"build": "pnpm run clean && pnpm run lint && tsc --project tsconfig.json && rollup --config rollup.config.js && pnpm run build:stats",
 		"watch:rollup": "rollup --config rollup.config.js --watch",
 		"watch:ts": "pnpm tsc --watch",
@@ -33,7 +33,7 @@
 		"test:watch": "pnpm ava --watch --serial"
 	},
 	"dependencies": {
-		"@brok/captable": "^0.10.0",
+		"@brok/captable": "^0.11.0",
 		"@ceramicnetwork/3id-did-resolver": "2.1.5-rc.1",
 		"@ceramicnetwork/blockchain-utils-linking": "^1.5.5",
 		"@ceramicnetwork/common": "2.5.0-rc.1",
@@ -69,6 +69,24 @@
 		"tap": "^16.3.0",
 		"terser": "^5.14.2",
 		"typescript": "^4.7.4"
+	},
+	"peerDependencies": {
+		"@ceramicnetwork/3id-did-resolver": "2.1.5-rc.1",
+		"@ceramicnetwork/blockchain-utils-linking": "^1.5.5",
+		"@ceramicnetwork/common": "2.5.0-rc.1",
+		"@ceramicnetwork/core": "2.8.0-rc.1",
+		"@ceramicnetwork/http-client": "2.3.2-rc.1",
+		"@ceramicnetwork/stream-tile": "2.4.1-rc.1",
+		"@ceramicnetwork/stream-tile-handler": "2.2.5-rc.1",
+		"@ceramicnetwork/streamid": "2.3.1-rc.0",
+		"cross-fetch": "^3.1.5",
+		"debug": "^4.3.4",
+		"did-resolver": "^4.0.0",
+		"dids": "3.2.0",
+		"ethers": "^5.6.9",
+		"neverthrow": "^4.3.1",
+		"node-fetch": "^3.2.10",
+		"@opentelemetry/api": ">=1.0.0 <1.2.0"
 	},
 	"ava": {
 		"extensions": {
