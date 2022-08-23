@@ -1,4 +1,4 @@
-import { SDK } from "@brok/sdk2";
+import { SDK } from "@brok/sdk";
 import { Button, Container, Grid, Spacer, Text, Table } from '@nextui-org/react';
 import type { NextPage } from 'next';
 import Head from 'next/head';

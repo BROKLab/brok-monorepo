@@ -1,5 +1,5 @@
 {
-  "name": "demo-frontend",
+  "name": "@brok/demo-frontend",
   "version": "0.1.0",
   "private": true,
   "scripts": {

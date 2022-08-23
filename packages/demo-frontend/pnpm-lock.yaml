@@ -1,7 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@brok/sdk2': ^0.0.22
+  '@brok/sdk': ^0.0.23
   '@ceramicnetwork/common': 2.5.0-rc.1
   '@ceramicnetwork/core': 2.8.0-rc.1
   '@ceramicnetwork/http-client': 2.3.2-rc.1
@@ -32,7 +32,7 @@ specifiers:
   typescript: 4.7.4
 
 dependencies:
-  '@brok/sdk2': link:../sdk2
+  '@brok/sdk': link:../sdk
   '@ceramicnetwork/common': 2.5.0-rc.1_@opentelemetry+api@1.1.0
   '@ceramicnetwork/core': 2.8.0-rc.1_3p577qjkxn6hv5rhxgfbfwslmm
   '@ceramicnetwork/http-client': 2.3.2-rc.1_@opentelemetry+api@1.1.0

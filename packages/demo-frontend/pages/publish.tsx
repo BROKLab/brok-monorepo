@@ -6,7 +6,7 @@ import { Footer } from '../src/ui/Footer';
 import { NavBar } from '../src/ui/NavBar';
 import type { Organisasjon } from './api/demo-data/companies.types';
 import { RandomShareholder } from './api/random-shareholder';
-import { SDK } from "@brok/sdk2";
+import { SDK } from "@brok/sdk";
 import { toast, ToastContainer } from 'react-toastify';
 import { ethers } from "ethers"
 

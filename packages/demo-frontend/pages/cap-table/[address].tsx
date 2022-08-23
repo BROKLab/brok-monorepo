@@ -1,17 +1,15 @@
-import { SDK } from "@brok/sdk2";
-import { Button, Container, Grid, Spacer, Text, Table } from '@nextui-org/react';
+import { SDK } from "@brok/sdk";
+import { Button, Container, Grid, Spacer, Table, Text } from '@nextui-org/react';
+import { ethers } from "ethers";
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Key, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ToastContainer } from 'react-toastify';
+import { formatBN, formatCurrency, formatOrgNumber } from "../../src/components/utils/Formatters";
 import NoSSR from "../../src/components/utils/NoSSR";
 import { Footer } from '../../src/ui/Footer';
 import { NavBar } from '../../src/ui/NavBar';
-import { ethers } from "ethers"
-import { formatBN, formatCurrency, formatOrgNumber } from "../../src/components/utils/Formatters";
-import { Shareholder } from "@brok/sdk2/dist/types";
-import Link from "next/link";
 
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
