@@ -25,15 +25,15 @@ const Home: NextPage = () => {
         display="flex"
         direction="column"
         justify="center"
-        alignItems="center"
         style={{ height: '80vh' }}
       >
-        <Grid.Container gap={2} css={{ p: '$sm' }} >
-          <Grid xs={12} sm={6}>
+        <Grid.Container gap={2} justify="flex-end" >
+          <Grid sm></Grid>
+          <Grid xs={12} sm={4} >
             <Card isHoverable isPressable css={{ p: "$sm", maxWidth: "400px" }} onPress={() => router.push('/search')}>
               <Card.Header >
                 <Search></Search>
-                <Grid.Container css={{ pl: "$6" }}>
+                <Grid.Container css={{ pl: "$6" }} >
                   <Grid xs={12}>
                     <Text h4 css={{ lineHeight: "$xs" }}>
                       Find
@@ -46,7 +46,7 @@ const Home: NextPage = () => {
               </Card.Header>
             </Card>
           </Grid>
-          <Grid xs={12} sm={6}>
+          <Grid xs={12} sm={4}>
             <Card isHoverable isPressable css={{ p: "$sm", maxWidth: "400px" }} onClick={() => router.push('/publish')}>
               <Card.Header >
                 <Plus></Plus>
@@ -64,6 +64,7 @@ const Home: NextPage = () => {
               </Card.Header>
             </Card>
           </Grid>
+          <Grid sm></Grid>
         </Grid.Container>
 
       </Container>
