@@ -51,29 +51,29 @@ export interface ListQuery {
 export class GraphQLQueries {
   static CAP_TABLE(address: string, status = 'APPROVED') {
     return `{
-      capTable(id: "${address.toLowerCase()}", where: {status: "${status}") {
+      capTable(id: "${address.toLowerCase()}", where: {status: "${status}"}) {
+        id
+        name
+        orgnr
+        fagsystem
+        symbol
+        status
+        partitions
+        owner
+        minter
+        controllers
+        totalSupply
+        fagsystemDid
+        tokenHolders {
           id
-          name
-          orgnr
-          fagsystem
-          symbol
-          status
-          partitions
-          owner
-          minter
-          controllers
-          totalSupply
-          fagsystemDid
-          tokenHolders {
+          address
+          balances {
             id
-            address
-            balances {
-              id
-              amount
-              partition
-            }
+            amount
+            partition
           }
         }
+      }
     }`;
   }
   static BALANCES(address: string) {

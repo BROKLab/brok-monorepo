@@ -124,7 +124,7 @@ export async function _createCapTable(this: SDK, input: CreateCapTableInput): Pr
 export async function _getCapTable(this: SDK, capTableAddress: EthereumAddress): Promise<Result<CapTable, string>> {
   try {
     log('Getting cap table with address', capTableAddress);
-    const capTableGraphData = await getCapTableGraph(this.blockchain.theGraphUrl, capTableAddress, { onlyApproved: true });
+    const capTableGraphData = await getCapTableGraph(this.blockchain.theGraphUrl, capTableAddress);
     if (capTableGraphData.isErr()) {
       return err(capTableGraphData.error);
     }
@@ -235,7 +235,7 @@ export async function _transfer(
       }
     }
 
-    const capTableGraphData = await getCapTableGraph(this.blockchain.theGraphUrl, capTableAddress, { onlyApproved: true });
+    const capTableGraphData = await getCapTableGraph(this.blockchain.theGraphUrl, capTableAddress);
     if (capTableGraphData.isErr()) {
       return err(capTableGraphData.error);
     }
