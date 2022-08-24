@@ -10,6 +10,7 @@ import { formatBN, formatCurrency, formatOrgNumber } from "../../src/components/
 import NoSSR from "../../src/components/utils/NoSSR";
 import { Footer } from '../../src/ui/Footer';
 import { NavBar } from '../../src/ui/NavBar';
+import { NavBarAvisenNo } from "../../src/ui/NavBarAvisen";
 
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -19,7 +20,6 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 const CapTable: NextPage = () => {
   const router = useRouter()
   const { address } = router.query
-  console.log(address)
   const [capTable, setCapTable] = useState<Awaited<ReturnType<SDK["getCapTable"]>>>();
 
   const getCapTable = async (address: string) => {
@@ -55,6 +55,60 @@ const CapTable: NextPage = () => {
   //   router.push("/cap-table/" + key)
   // }
 
+  const CAP_TABLE_QUERY = (address: string, status = 'APPROVED') => {
+    const query = `{
+      capTable(id: "${address.toLowerCase()}") {
+          name
+          id
+          orgnr
+          fagsystem
+          symbol
+          status
+          partitions
+          owner
+          minter
+          controllers
+          totalSupply
+          fagsystemDid
+          tokenHolders {
+            address
+            balances {
+              amount
+              partition
+            }
+          }
+        }
+    }`;
+    const url = `${process.env.NEXT_PUBLIC_THE_GRAPH_URL}/graphql?query=${encodeURIComponent(query)}`
+    return url
+  }
+  if (typeof address !== "string") {
+    console.error("Malformed address", address)
+    return null
+  }
+
+  const SHAERHOLDER_QUERY = (shareholderAddress: string, status = 'APPROVED') => {
+    const query = `{
+      tokenHolders(where: {address: "${shareholderAddress}"}) {
+        address
+        capTable {
+          id
+          name
+          totalSupply
+        }
+        balances {
+          amount
+          partition
+        }
+      }
+    }`;
+    const url = `${process.env.NEXT_PUBLIC_THE_GRAPH_URL}/graphql?query=${encodeURIComponent(query)}`
+    return url
+  }
+  if (typeof address !== "string") {
+    console.error("Malformed address", address)
+    return null
+  }
 
   return (
     <Container >
@@ -64,7 +118,7 @@ const CapTable: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
         <link rel="shortcut icon" href="/favicon.ico" />
       </Head>
-      <NavBar></NavBar>
+      <NavBarAvisenNo></NavBarAvisenNo>
       <Container
         as="main"
         display="flex"
@@ -74,7 +128,7 @@ const CapTable: NextPage = () => {
       >
         <Spacer y={4}></Spacer>
         <Grid.Container gap={2} >
-          <Grid xs={12}>
+          <Grid xs={12} xl={12}>
             <Text h1>Cap Table</Text>
           </Grid>
           <Grid xs={12}>
@@ -103,14 +157,15 @@ const CapTable: NextPage = () => {
                 </Grid>
                 <Grid xs={6} >
                   <Button.Group size="xs">
-                    <Button as="a" target={"_blank"} href={`https://testnet.arbiscan.io/address/${address}`}>Blockchain</Button>
+                    {/* <Button as="a" target={"_blank"} href={`https://testnet.arbiscan.io/address/${address}`}>Blockchain</Button> */}
+                    <Button as="a" target={"_blank"} href={CAP_TABLE_QUERY(address)}>Blockchain</Button>
                     <Button as="a" target={"_blank"} href={`https://ceramic-clay.3boxlabs.com/api/v0/streams/${capTable.ceramicID}`}>Ceramic</Button>
                   </Button.Group>
                 </Grid>
               </Grid.Container>
             }
           </Grid>
-          <Grid>
+          <Grid xs={12}>
 
             <Text h2>Shareholders</Text>
           </Grid>
@@ -121,8 +176,9 @@ const CapTable: NextPage = () => {
                 <Table
                   aria-label="Example table with static content"
                   hoverable
-
-                  selectionMode="single"
+                  lined
+                  headerLined
+                  shadow={false}
                   css={{
                     height: "auto",
                     minWidth: "100%",
@@ -152,7 +208,8 @@ const CapTable: NextPage = () => {
                         <Table.Cell>{(shareholder.balances.reduce((prev, b) => prev.add(ethers.BigNumber.from(b.amount)), ethers.constants.Zero).mul(ethers.BigNumber.from("100")).div(ethers.utils.parseEther(capTable.totalShares))).toString()} %</Table.Cell>
                         <Table.Cell>
                           <Button.Group size="xs">
-                            <Button as="a" target={"_blank"} href={`https://testnet.arbiscan.io/address/${shareholder.ethAddress}`}>Blockchain</Button>
+                            {/* <Button as="a" target={"_blank"} href={`https://testnet.arbiscan.io/address/${shareholder.ethAddress}`}>Blockchain</Button> */}
+                            <Button as="a" target={"_blank"} href={SHAERHOLDER_QUERY(shareholder.ethAddress)}>Blockchain</Button>
                             <Button as="a" target={"_blank"} href={`https://ceramic-clay.3boxlabs.com/api/v0/streams/${shareholder.ceramicID}`}>Ceramic</Button>
                           </Button.Group>
                         </Table.Cell>
@@ -170,7 +227,6 @@ const CapTable: NextPage = () => {
 
 
       </Container>
-      <Footer></Footer>
       <ToastContainer position="top-right"
         hideProgressBar={true}
         closeOnClick

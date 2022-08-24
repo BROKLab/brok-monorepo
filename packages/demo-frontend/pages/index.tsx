@@ -36,11 +36,11 @@ const Home: NextPage = () => {
                 <Grid.Container css={{ pl: "$6" }}>
                   <Grid xs={12}>
                     <Text h4 css={{ lineHeight: "$xs" }}>
-                      Search
+                      Find
                     </Text>
                   </Grid>
                   <Grid xs={12}>
-                    <Text css={{ color: "$accents8" }}>Search for cap tables</Text>
+                    <Text css={{ color: "$accents8" }}>Find cap tables</Text>
                   </Grid>
                 </Grid.Container>
               </Card.Header>

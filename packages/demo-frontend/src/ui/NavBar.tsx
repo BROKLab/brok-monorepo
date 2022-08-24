@@ -36,7 +36,7 @@ export const NavBar = () => {
 
                         <Grid.Container justify="center" gap={1}>
                             <Grid>
-                                <Link href="/search">Search</Link>
+                                <Link href="/search">Find</Link>
                             </Grid>
                             <Grid>
                                 <Link href="/publish">Publish</Link>
