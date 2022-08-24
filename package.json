@@ -17,7 +17,8 @@
     }
   },
   "scripts": {
-    "task": "ts-node ./ops/task/tasksfile.ts"
+    "task": "ts-node ./ops/task/tasksfile.ts",
+    "publish:sdk": "pnpm --filter @brok/sdk publish --no-git-check"
   },
   "repository": {
     "type": "git",

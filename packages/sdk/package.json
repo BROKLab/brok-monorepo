@@ -1,6 +1,6 @@
 {
 	"name": "@brok/sdk",
-	"version": "0.11.1",
+	"version": "0.11.2",
 	"private": false,
 	"publishConfig": {
 		"access": "public"
@@ -20,7 +20,7 @@
 		"dist"
 	],
 	"scripts": {
-		"build2": "pnpm tsc ",
+		"prepublishOnly": "pnpm build",
 		"clean": "rm -rf dist",
 		"build": "pnpm run clean && pnpm run lint && tsc --project tsconfig.json && rollup --config rollup.config.js && pnpm run build:stats",
 		"watch:rollup": "rollup --config rollup.config.js --watch",
