@@ -1,4 +1,4 @@
-import { Button, Container, Grid, Spacer, Text } from '@nextui-org/react';
+import { Button, Card, Container, Grid, Loading, Spacer, Text } from '@nextui-org/react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -9,11 +9,14 @@ import { RandomShareholder } from './api/random-shareholder';
 import { SDK } from "@brok/sdk";
 import { toast, ToastContainer } from 'react-toastify';
 import { ethers } from "ethers"
+import { useEffect, useState } from 'react';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const Home: NextPage = () => {
   const router = useRouter()
+  const [randomOrgs, setRandomOrgs] = useState<Organisasjon[]>([]);
+  const [publishing, setPublishing] = useState(false);
 
   const getRandomOrgs = async (amount: number) => {
     const company = await fetch(`/api/random-org?${new URLSearchParams({
@@ -36,129 +39,117 @@ const Home: NextPage = () => {
     throw "No data in response"
   }
 
-  const simulate = async () => {
-    console.log(await getRandomOrgs(2))
-    console.log(await getRandomShareholders(4))
-
-    // const sdk = await SDK.init({ ceramicUrl: "https://ceramic-clay.3boxlabs.com", ethereumRpc: "http://127.0.0.1:8545/", secret: "kid letter bicycle motion maid token change couch useless seven boost strategy", theGraphUrl: "http://localhost:8000/subgraphs/name/brok/captable", env: "brokLocal" });
-    // const address = await sdk.createCapTable({
-    //   name: "Test 535325",
-    //   orgnr: "41412124",
-    //   shareholders: [
-    //     {
-    //       amount: "6664444",
-    //       birthDate: "230188",
-    //       countryCode: "NO",
-    //       name: "TES PERSON",
-    //       partition: "ordinære",
-    //       postalcode: "50553"
-    //     }
-    //   ]
-    // })
-    // console.log("CapTableAddress", address)
-    // const capTable = await sdk.getCapTable(address)
-    // console.log("capTable", capTable)
-    // const transferResult = await sdk.transfer(address, [
-    //   {
-    //     amount: '100',
-    //     partition: 'ordinære',
-    //     from: capTable.shareholders[0].ethAddress,
-    //     name: "Jon",
-    //     birthDate: "202020",
-    //     countryCode: "NO",
-    //     postalcode: "0655",
-
-    //   },
-    // ]);
-    // console.log("transferResult", transferResult)
-  }
-
-  const createCompany = async () => {
-    if (!(process.env.NEXT_PUBLIC_BROK_ENVIRONMENT &&
-      process.env.NEXT_PUBLIC_CERAMIC_URL &&
-      process.env.NEXT_PUBLIC_ETHEREUM_RPC &&
-      process.env.NEXT_PUBLIC_THE_GRAPH_URL &&
-      process.env.NEXT_PUBLIC_SECRET)) {
-      throw "Please set ENV variables"
-    }
-    const sdk = await SDK.init({
-      ceramicUrl: process.env.NEXT_PUBLIC_CERAMIC_URL, ethereumRpc: process.env.NEXT_PUBLIC_ETHEREUM_RPC,
-      secret: process.env.NEXT_PUBLIC_SECRET, theGraphUrl: process.env.NEXT_PUBLIC_THE_GRAPH_URL, env: process.env.NEXT_PUBLIC_BROK_ENVIRONMENT
-    });
-    const orgs = await getRandomOrgs(1)
-    const org = orgs[0]
-    const amountShareholders = Math.floor(Math.random() * (6 - 3 + 1) + 3)
-    console.log("amountShareholders", amountShareholders)
-    const shareholders = await getRandomShareholders(amountShareholders)
-    const issueShareholders = shareholders.slice(0, -1)
-    const trasferShareholders = shareholders.slice(-1)
-    console.log("shareholders", shareholders)
-    console.log("iss", issueShareholders)
-    console.log("tra", trasferShareholders)
-    const capTableAddress = await sdk.createCapTable({
-      name: org.navn,
-      orgnr: org.organisasjonsnummer,
-      // Skip last
-      shareholders: issueShareholders.map((s, i, arr) => {
-        const amount = Math.random() * 100_000 | 10;
-        const amountRounded = Math.round(amount / 1000) * 1000
-        return {
-          name: s.visningnavn,
-          birthDate: s.foedselsdato,
-          postalcode: s.postalCode,
-          countryCode: "NO",
-          partition: "ordinære",
-          amount: amountRounded.toString()
-        }
+  const publishOrg = async (org: Organisasjon) => {
+    try {
+      setPublishing(true)
+      if (!(process.env.NEXT_PUBLIC_BROK_ENVIRONMENT &&
+        process.env.NEXT_PUBLIC_CERAMIC_URL &&
+        process.env.NEXT_PUBLIC_ETHEREUM_RPC &&
+        process.env.NEXT_PUBLIC_THE_GRAPH_URL &&
+        process.env.NEXT_PUBLIC_SECRET)) {
+        console.log("process.env", process.env)
+        throw "Please set ENV variables"
+      }
+      const sdk = await SDK.init({
+        ceramicUrl: process.env.NEXT_PUBLIC_CERAMIC_URL, ethereumRpc: process.env.NEXT_PUBLIC_ETHEREUM_RPC,
+        secret: process.env.NEXT_PUBLIC_SECRET, theGraphUrl: process.env.NEXT_PUBLIC_THE_GRAPH_URL, env: process.env.NEXT_PUBLIC_BROK_ENVIRONMENT
+      });
+      const amountShareholders = Math.floor(Math.random() * (6 - 3 + 1) + 3)
+      console.log("amountShareholders", amountShareholders)
+      const shareholders = await getRandomShareholders(amountShareholders)
+      const issueShareholders = shareholders.slice(0, -1)
+      const trasferShareholders = shareholders.slice(-1)
+      console.log("shareholders", shareholders)
+      console.log("iss", issueShareholders)
+      console.log("tra", trasferShareholders)
+      const capTableAddress = await sdk.createCapTable({
+        name: org.navn,
+        orgnr: org.organisasjonsnummer,
+        // Skip last
+        shareholders: issueShareholders.map((s, i, arr) => {
+          const amount = Math.random() * 100_000 | 10;
+          const amountRounded = Math.round(amount / 1000) * 1000
+          return {
+            name: s.visningnavn,
+            birthDate: s.foedselsdato,
+            postalcode: s.postalCode,
+            countryCode: "NO",
+            partition: "ordinære",
+            amount: amountRounded.toString()
+          }
+        })
       })
-    })
 
-    console.log("CapTableAddress", capTableAddress)
-    const capTable = await sdk.getCapTable(capTableAddress)
-    console.log(capTable)
-    const transferAmount = ethers.utils.formatEther(capTable.shareholders[0].balances[0].amount)
-    const newShareholder = shareholders.slice(-1)[0]
-    const transferRequest = [{
-      amount: Math.round(Math.max(parseInt(transferAmount) / 4, 1)).toString(),
-      partition: 'ordinære',
-      from: capTable.shareholders[0].ethAddress,
-      to: capTable.shareholders[1].ethAddress
-    }, {
-      amount: Math.round(Math.max(parseInt(transferAmount) / 4, 1)).toString(),
-      partition: 'ordinære',
-      from: capTable.shareholders[0].ethAddress,
-      name: newShareholder.visningnavn,
-      organizationIdentifier: Math.floor(100000000 + Math.random() * 900000000).toString(),
-      organizationIdentifierType: "EUID",
-      postalcode: newShareholder.postalCode,
-      countryCode: "NO",
-    }]
-    const transferResult = await sdk.transfer(capTableAddress, transferRequest);
-    toast((t) => <Container>
-      <Grid.Container>
-        <Grid>
-          <Text size={"small"}>{`Created cap table ${org.navn}`}</Text>
-        </Grid>
-        <Grid>
-          <Button onPress={() => router.push(`/cap-table/${capTableAddress}`)}>View cap table</Button>
-        </Grid>
-      </Grid.Container>
-    </Container>, { type: "success" })
-    transferResult.map(tr => {
+      console.log("CapTableAddress", capTableAddress)
+      const capTable = await sdk.getCapTable(capTableAddress)
+      console.log(capTable)
+      const transferAmount = ethers.utils.formatEther(capTable.shareholders[0].balances[0].amount)
+      const newShareholder = shareholders.slice(-1)[0]
+      const transferRequest = [{
+        amount: Math.round(Math.max(parseInt(transferAmount) / 4, 1)).toString(),
+        partition: 'ordinære',
+        from: capTable.shareholders[0].ethAddress,
+        to: capTable.shareholders[1].ethAddress
+      }, {
+        amount: Math.round(Math.max(parseInt(transferAmount) / 4, 1)).toString(),
+        partition: 'ordinære',
+        from: capTable.shareholders[0].ethAddress,
+        name: newShareholder.visningnavn,
+        organizationIdentifier: Math.floor(100000000 + Math.random() * 900000000).toString(),
+        organizationIdentifierType: "EUID",
+        postalcode: newShareholder.postalCode,
+        countryCode: "NO",
+      }]
+      const transferResult = await sdk.transfer(capTableAddress, transferRequest);
       toast((t) => <Container>
         <Grid.Container>
           <Grid>
-            <Text size={"small"}>{`Transfered ${tr.amount} from ${tr.from.slice(0, 5)} to ${tr.to.slice(0, 5)}`}</Text>
+            <Text size={"small"}>{`Created cap table ${org.navn}`}</Text>
           </Grid>
           <Grid>
-            <Button size={"xs"} onPress={() => router.push(`/cap-table/${capTableAddress}`)}>View cap table</Button>
+            <Button onPress={() => router.push(`/cap-table/${capTableAddress}`)}>View cap table</Button>
           </Grid>
         </Grid.Container>
       </Container>, { type: "success" })
-    })
-
-    console.log("transferResult", transferResult)
+      transferResult.map(tr => {
+        toast((t) => <Container>
+          <Grid.Container>
+            <Grid>
+              <Text size={"small"}>{`Transfered ${tr.amount} from ${tr.from.slice(0, 5)} to ${tr.to.slice(0, 5)}`}</Text>
+            </Grid>
+            <Grid>
+              <Button size={"xs"} onPress={() => router.push(`/cap-table/${capTableAddress}`)}>View cap table</Button>
+            </Grid>
+          </Grid.Container>
+        </Container>, { type: "success" })
+      })
+      console.log("transferResult", transferResult)
+      setPublishing(false)
+    } catch (e) {
+      if (e instanceof Error) {
+        toast(e.message, { type: "error" })
+      }
+      console.error(e)
+      setPublishing(false)
+    }
   }
+
+
+  useEffect(() => {
+    let subscribed = true
+    const doAsync = async () => {
+      if (randomOrgs.length === 0) {
+        const orgs = await getRandomOrgs(2).catch(() =>
+          getRandomOrgs(1)
+        )
+        if (subscribed) {
+          setRandomOrgs(orgs)
+        }
+      }
+    };
+    doAsync();
+    return () => { subscribed = false }
+  }, [randomOrgs])
   return (
     <Container >
       <Head>
@@ -179,11 +170,35 @@ const Home: NextPage = () => {
         <Grid.Container gap={2} css={{ p: '$sm' }} justify="center" >
           <Grid>
             <Text h3>Dine selskaper</Text>
-            <Button onPress={() => createCompany()}>Start publisering</Button>
+            <Grid.Container gap={1}>
+
+              {randomOrgs.map(org => (
+                <Grid xs={12} sm={6} key={org.organisasjonsnummer}>
+                  <Card>
+                    <Card.Header>
+                      <Text h4>{org.navn}</Text>
+                    </Card.Header>
+                    <Card.Body>
+                      <Grid.Container gap={1}>
+                        <Grid xs={6}>Orgnr:</Grid>
+                        <Grid xs={6}>{org.organisasjonsnummer}</Grid>
+                        <Grid xs={6}>Founded:</Grid>
+                        <Grid xs={6}>{org.stiftelsesdato}</Grid>
+                        <Grid xs={6}>Industry:</Grid>
+                        <Grid xs={6}>{org.naeringskode1.beskrivelse}</Grid>
+                      </Grid.Container>
+                    </Card.Body>
+                    <Card.Footer>
+                      <Button flat size={"sm"} disabled={publishing} onPress={() => publishOrg(org)}>{publishing ? <Loading style={{ margin: 5 }}></Loading> : "Publish"}</Button>
+                    </Card.Footer>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid.Container>
           </Grid>
         </Grid.Container>
 
-      </Container>
+      </Container >
       <Footer></Footer>
       <ToastContainer position="top-right"
         hideProgressBar={true}

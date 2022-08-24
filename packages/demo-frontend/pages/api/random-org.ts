@@ -21,7 +21,6 @@ export default function handler(
       let orgs : Organisasjon[]= [];
       for(let i = 0; i < amount; i++) {
         const random = Math.floor(Math.random() * (data.length + 1) + 0)
-        console.log(random)
         orgs.push(data[random])
       }
       res.status(200).json({

@@ -49,9 +49,9 @@ export interface ListQuery {
 }
 
 export class GraphQLQueries {
-  static CAP_TABLE(address: string) {
+  static CAP_TABLE(address: string, status = 'APPROVED') {
     return `{
-      capTable(id: "${address.toLowerCase()}") {
+      capTable(id: "${address.toLowerCase()}", where: {status: "${status}") {
           id
           name
           orgnr

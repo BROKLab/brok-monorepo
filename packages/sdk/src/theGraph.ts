@@ -32,7 +32,12 @@ export async function getCapTableGraph(
         if (data.data.capTable.status !== 'APPROVED') {
           log('CapTable status NOT approved, sleep 2 seconds and try again');
           await sleep(2000);
-          const dataRetry = await getData();
+
+          let dataRetry = await getData();
+          if (dataRetry.data.capTable.status !== 'APPROVED') {
+            await sleep(3000);
+          }
+          dataRetry = await getData();
           if ('data' in dataRetry && 'capTable' in dataRetry.data) {
             log('CapTable status is now', dataRetry.data.capTable.status);
             if (dataRetry.data.capTable.status === 'APPROVED') {

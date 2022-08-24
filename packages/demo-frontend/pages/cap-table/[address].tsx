@@ -21,8 +21,6 @@ const CapTable: NextPage = () => {
   const { address } = router.query
   console.log(address)
   const [capTable, setCapTable] = useState<Awaited<ReturnType<SDK["getCapTable"]>>>();
-  const [skip, setSkip] = useState(0);
-  const [limit, setLimit] = useState(10);
 
   const getCapTable = async (address: string) => {
     if (!(process.env.NEXT_PUBLIC_BROK_ENVIRONMENT &&
@@ -76,7 +74,7 @@ const CapTable: NextPage = () => {
       >
         <Spacer y={4}></Spacer>
         <Grid.Container gap={2} >
-          <Grid>
+          <Grid xs={12}>
             <Text h1>Cap Table</Text>
           </Grid>
           <Grid xs={12}>

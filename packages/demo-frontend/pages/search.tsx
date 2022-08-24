@@ -111,8 +111,8 @@ const Search: NextPage = () => {
           </Grid>
           <Grid>
             <Button.Group>
-              <Button disabled={skip === 0} onPress={() => setSkip(old => old - 10)}>Previous</Button>
-              <Button onPress={() => setSkip(old => old + 10)}>Next</Button>
+              <Button disabled={skip === 0} onPress={() => setSkip(old => old - limit)}>Previous</Button>
+              <Button onPress={() => setSkip(old => old + limit)}>Next</Button>
             </Button.Group>
           </Grid>
         </Grid.Container>

@@ -28,7 +28,6 @@ export default function handler(
     while(shareholders.length < amount) {
       const random = Math.floor(Math.random() * (data.length + 1) + 0)
       const shareholder = data[random];
-      console.log(shareholder)
       // const res = shareholder.bostedsadresse.match(regex)
       const test = regex.exec(shareholder.bostedsadresse)
       if(Array.isArray(test)){

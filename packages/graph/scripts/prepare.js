@@ -13,7 +13,8 @@ for (const dataSource of subgraphConfig.dataSources) {
         dataSource.source.startBlock =  1;
     } 
     if (env === 'brokStage' || env === 'brokDev') {
-        dataSource.source.startBlock =  10778701;
+        dataSource.source.startBlock =  
+        14045504;
     } 
     if( env === 'brokProd') {
         dataSource.source.startBlock =  10722028;
