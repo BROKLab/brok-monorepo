@@ -1,0 +1,11 @@
+services:
+  # DEV SERVER
+  - type: web
+    name: demo-frontend2-dev
+    env: node
+    repo: https://github.com/BROKLab/brok-monorepo
+    branch: robertosnap/sym-12-make-sdk-browser-friendly
+    region: frankfurt
+    buildCommand: 'pnpm build'
+    startCommand: 'pnpm start'
+    plan: Starter

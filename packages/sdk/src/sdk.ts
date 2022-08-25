@@ -1,7 +1,7 @@
 import { JsonRpcProvider } from '@ethersproject/providers';
 import { Wallet } from '@ethersproject/wallet';
 import { ethers } from 'ethers';
-import {  err, ok, Result } from 'neverthrow';
+import { err, ok, Result } from 'neverthrow';
 import { CeramicSDK } from './ceramic/ceramic';
 import { makeDID } from './ceramic/make-did';
 import { Blockchain, CreateCapTableResult } from './ethereum/blockchain';
@@ -21,7 +21,6 @@ import {
 } from './types';
 const debug = require('debug')('brok:sdk:main');
 export class SDK {
-  
   private constructor(private blockchain: Blockchain, private ceramic: CeramicSDK) {}
 
   public static async init(config: { ceramicUrl: string; ethereumRpc: string; theGraphUrl: string; seed: string }) {
@@ -32,13 +31,13 @@ export class SDK {
 
     await ceramic.setDID(await makeDID(ceramic, signer.value.privateKey));
 
-    debug("address", signer.value.address)
-    debug("did", ceramic.did.id);
+    debug('address', signer.value.address);
+    debug('did', ceramic.did.id);
 
     return new SDK(blockchain, ceramic);
   }
 
-  public async close(){
+  public async close() {
     await this.ceramic.close();
   }
 
@@ -86,9 +85,7 @@ export class SDK {
     // TODO implement error handling and be meet ACID and this validityCheck function
     const isValid = this.validityCheck(capTableData);
 
-    if (!isValid) {
-      return err('Invalid input for capTable creation');
-    } else {
+    if (isValid) {
       // 1. Do blockchain deploy
       const addresses: string[] = [];
       const amounts: string[] = [];
@@ -99,15 +96,15 @@ export class SDK {
       }
 
       try {
-            // eslint-disable-next-line max-len
-          const isFagsystem = await this.blockchain
-            .capTableRegistryContract()
-            .hasRole(ethers.utils.solidityKeccak256(['string'], ['FAGSYSTEM']), this.blockchain.signer.address);
-          if (!isFagsystem) {
-            debug("Current signer is not fagsystem");
-            debug("Current signer",this.blockchain.signer.address);
-            return err('Must be fagsystem to deploy cap table');
-          }
+        // eslint-disable-next-line max-len
+        const isFagsystem = await this.blockchain
+          .capTableRegistryContract()
+          .hasRole(ethers.utils.solidityKeccak256(['string'], ['FAGSYSTEM']), this.blockchain.signer.address);
+        if (!isFagsystem) {
+          debug('Current signer is not fagsystem');
+          debug('Current signer', this.blockchain.signer.address);
+          return err('Must be fagsystem to deploy cap table');
+        }
       } catch (error) {
         return err('Could not check if fagsystem was approved.');
       }
@@ -118,7 +115,6 @@ export class SDK {
         return err(`CapTable deploy failed. Reason: ${deployedCapTableResult.error}`);
       }
       try {
-    
         const approveRes = await this.blockchain.capTableRegistryContract().approve(deployedCapTableResult.value.capTableAddress);
         await approveRes.wait();
       } catch (error) {
@@ -169,6 +165,8 @@ export class SDK {
           deployBlockchainRes: deployedCapTableResult.value,
         });
       }
+    } else {
+      return err('Invalid input for capTable creation');
     }
   }
 
@@ -188,7 +186,7 @@ export class SDK {
     if (!ethers.utils.isAddress(transferInput.from)) return err('from address is not valid');
     if (!(parseInt(transferInput.amount, 10) > 0)) return err('not a valid amount. Must be greater than 0');
     const graphRes = await this.blockchain.getCapTableTheGraph(transferInput.capTableAddress);
-    if(graphRes.isErr()) return err("Could not get The Graph data to find fagsystem DID");
+    if (graphRes.isErr()) return err('Could not get The Graph data to find fagsystem DID');
     const ceramicCapTable = await this.ceramic.getPublicCapTableByCapTableAddress(transferInput.capTableAddress, graphRes.value.fagsystemDid);
     if (ceramicCapTable.isErr()) return err(`Could not get ceramic captable for address ${transferInput.capTableAddress}`);
 
@@ -290,11 +288,11 @@ export class SDK {
     debug('getCapTableDetails START', capTableAddress);
     const capTableGraphData = await this.blockchain.getCapTableTheGraph(capTableAddress);
     if (capTableGraphData.isErr()) throw new Error(capTableGraphData.error);
-    debug("graph data", capTableGraphData.value)
+    debug('graph data', capTableGraphData.value);
     const capTableFagsystemDid = capTableGraphData.value.fagsystemDid;
     const capTableCeramicData = await this.ceramic.findUsersForCapTable(capTableAddress, capTableFagsystemDid);
     if (capTableCeramicData.isErr()) throw new Error(capTableCeramicData.error);
-    debug("ceramic data", capTableCeramicData.value)
+    debug('ceramic data', capTableCeramicData.value);
     const merged = this.mergeTheGraphWithCeramic(capTableGraphData.value, capTableCeramicData.value);
     debug('getCapTableDetails END', merged);
     return merged;

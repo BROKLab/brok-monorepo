@@ -5,11 +5,37 @@
   },
   "editor.defaultFormatter": "dbaeumer.vscode-eslint",
   "[typescriptreact]": {
-    "editor.defaultFormatter": "SimonSiefke.prettier-vscode"
+    "editor.defaultFormatter": "vscode.typescript-language-features"
   },
   "eslint.format.enable": true,
   "peacock.color": "#e37b5b",
   "[solidity]": {
     "editor.defaultFormatter": "NomicFoundation.hardhat-solidity"
+  },
+  "workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#ea9e87",
+    "activityBar.activeBorder": "#188832",
+    "activityBar.background": "#ea9e87",
+    "activityBar.foreground": "#15202b",
+    "activityBar.inactiveForeground": "#15202b99",
+    "activityBarBadge.background": "#188832",
+    "activityBarBadge.foreground": "#e7e7e7",
+    "sash.hoverBorder": "#ea9e87",
+    "statusBar.background": "#e37b5b",
+    "statusBar.foreground": "#15202b",
+    "statusBarItem.hoverBackground": "#dc582f",
+    "statusBarItem.remoteBackground": "#e37b5b",
+    "statusBarItem.remoteForeground": "#15202b",
+    "titleBar.activeBackground": "#e37b5b",
+    "titleBar.activeForeground": "#15202b",
+    "titleBar.inactiveBackground": "#e37b5b99",
+    "titleBar.inactiveForeground": "#15202b99",
+    "commandCenter.border": "#15202b99"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
   },
 }
