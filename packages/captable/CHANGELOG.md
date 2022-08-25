@@ -1,5 +1,11 @@
 # @brok/captable
 
+## 0.13.0
+
+### Minor Changes
+
+- Update
+
 ## 0.12.0
 
 ### Minor Changes

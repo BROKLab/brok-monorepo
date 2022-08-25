@@ -24,7 +24,7 @@ The graph takes some time to start. Once it is started it will keep running in d
 ## Release packages of SDK and CapTable
 ```
 pnpm changeset
-pnpn changeset version
+pnpm changeset version
 pnpm install
 # commit the changes
 pnpm publish -r
