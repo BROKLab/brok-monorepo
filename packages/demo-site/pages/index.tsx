@@ -98,7 +98,7 @@ const Home: NextPage = () => {
           </Grid>
           <StylerdGrid xs={12} sm={4}>
             <Col>
-              <Text h3>Public Cap Table insights </Text>
+              <Text h3>Public Cap Table insights</Text>
               <Text>See public information on cap tables</Text>
               <Spacer y={2}></Spacer>
               <Card isHoverable isPressable css={{ p: "$xs", maxWidth: "400px" }} onPress={() => router.push('/search')}>
