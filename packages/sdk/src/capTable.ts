@@ -42,7 +42,8 @@ export async function _createCapTable(this: SDK, input: CreateCapTableInput): Pr
       }
     } catch (error) {
       log(error);
-      return err('Could not check if captable exist in registry');
+      log("Could not check if captable exist in registry. Assuming it doesn't.");
+      // return err('Could not check if captable exist in registry');
     }
     // Check is fagsystem
     try {

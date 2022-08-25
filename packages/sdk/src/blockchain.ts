@@ -120,33 +120,6 @@ export class BlockchainSDK {
     }
   }
 
-  private getDeployedCapTableFromEventReceipt(receipt: ContractReceipt): Result<string, string> {
-    try {
-      // Get correct event using event signature
-      const eventSignature = 'NewCapTable(string,address)';
-      const eventFingerprint = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(eventSignature));
-      const address = receipt.logs.filter((log) => log.topics[0] === eventFingerprint).map((log) => log.address);
-      if (address && Array.isArray(address) && address.length > 0 && typeof address[0] === 'string' && address[0].length > 0) {
-        return ok(address[0]);
-      } else {
-        log('Address array was:', address);
-        return err('Could not find capTable address for deployed capTable from logs. Could be empty contract');
-      }
-    } catch (error) {
-      log(error);
-      return err(`Error while getting deployed capTable from event receipt ${receipt}`);
-    }
-  }
-
-  // capTableFactory(): CapTableFactory {
-  //   if (!BlockchainSDK.acceptedEnviroment(this.BROK_ENVIRONMENT)) {
-  //     throw Error('Please set env variable BROK_ENVIRONMENT');
-  //   }
-  //   return new CapTableFactory__factory(this.signer).attach(
-  //     Deployments[this.BROK_ENVIRONMENT as keyof typeof Deployments].contracts.CapTableFactory.address,
-  //   );
-  // }
-
   capTableRegistryContract() {
     if (!BlockchainSDK.acceptedEnviroment(this.BROK_ENVIRONMENT)) {
       throw Error('Please set env variable BROK_ENVIRONMENT');
