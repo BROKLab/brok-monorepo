@@ -93,7 +93,7 @@ test('transfer', async (t) => {
       postalcode: '0655',
     },
   ]);
-  if (transferResult.length !== 1 || !Array.isArray(transferResult)) {
+  if (transferResult.length !== 2 || !Array.isArray(transferResult)) {
     t.log(transferResult);
   }
   t.truthy(Array.isArray(transferResult), 'transferResult is an array');

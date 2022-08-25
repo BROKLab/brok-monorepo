@@ -63,19 +63,47 @@ export class BlockchainSDK {
   async deployCapTable(input: { name: string; orgnr: string; addresses: string[]; amounts: string[] }): Promise<Result<CapTableEthereumId, string>> {
     try {
       const { name, orgnr, addresses, amounts } = input;
-      const deployTX = await this.capTableFactory().createCapTable(
+
+      if (addresses.length === 0) {
+        return err('Must issue on deploy');
+      }
+
+      const DEFAULT_PARTITION = ethers.utils.formatBytes32String('ordinære');
+      const deployTX = await new CapTable__factory(this.signer).deploy(
         name,
         orgnr,
-        addresses,
-        amounts.map((a) => ethers.utils.parseEther(a)),
+        ethers.utils.parseEther('1'),
+        ['0xb977651ac2f276c3a057003f9a6a245ef04c7147'],
+        [DEFAULT_PARTITION],
+        this.capTableRegistryContract().address,
       );
-      const reciept = await deployTX.wait();
-      const capTableAddress = this.getDeployedCapTableFromEventReceipt(reciept);
-      if (capTableAddress.isOk()) {
-        return ok(capTableAddress.value.toLowerCase());
-      } else {
-        return err(capTableAddress.error);
+      const capTable = await deployTX.deployed();
+      log('Deployed capTable:', capTable.address);
+
+      const queTX = await this.capTableRegistryContract().que(capTable.address, orgnr);
+      const queReceipt = await queTX.wait();
+      log(`Qued capTable ${capTable.address} for orgnr ${orgnr}`, queReceipt);
+
+      for await (const i of addresses.keys()) {
+        const issueTX = await capTable.issueByPartition(DEFAULT_PARTITION, addresses[i], ethers.utils.parseEther(amounts[i]), '0x11');
+        const issueReceipt = await issueTX.wait();
+        log(`Issue ${amounts[i]} to ${addresses[i]} on ${capTable.address} with receipt:`, issueReceipt);
       }
+      const transferOwenrshipTX = await capTable.transferOwnership('0xb977651ac2f276c3a057003f9a6a245ef04c7147');
+      const transferOwenrshipReceipt = await transferOwenrshipTX.wait();
+      log(`Transfer ownership to ${'0xb977651ac2f276c3a057003f9a6a245ef04c7147'} on ${capTable.address} with receipt:`, transferOwenrshipReceipt);
+
+      const approveTx = await this.capTableRegistryContract().approve(capTable.address);
+      await approveTx.wait();
+      log(`Approved capTable ${capTable.address} for orgnr ${orgnr}`);
+      return ok(capTable.address);
+
+      // const capTableAddress = this.getDeployedCapTableFromEventReceipt(reciept);
+      // if (capTableAddress.isOk()) {
+      //   return ok(capTableAddress.value.toLowerCase());
+      // } else {
+      //   return err(capTableAddress.error);
+      // }
     } catch (error) {
       log(error);
       return err(`Error while deploying captable ${input.name} on blockchain, input was`);

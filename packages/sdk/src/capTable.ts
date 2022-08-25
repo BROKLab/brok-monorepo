@@ -100,10 +100,8 @@ export async function _createCapTable(this: SDK, input: CreateCapTableInput): Pr
       return err(ceramicCapTableRes.error);
     }
 
-    // X. Approve cap table on the blockchain
+    // X. Check approval status for captable
     try {
-      const approveRes = await this.blockchain.capTableRegistryContract().approve(deployedCapTableResult.value);
-      await approveRes.wait(1);
       const status = await this.blockchain.capTableRegistryContract().getStatus(deployedCapTableResult.value);
       log('captable approved, status: ', status.toNumber());
       if (status.toNumber() !== 2) {
