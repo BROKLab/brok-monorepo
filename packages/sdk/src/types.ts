@@ -1,96 +1,86 @@
-import { CapTableGraphQLTypes, CapTableQueryResponse } from './ethereum/utils/CapTableGraphQL.utils';
+// Operative types
 
-export type Organisation = {};
-export type CapTable = {};
-export type TransactionHash = {};
-
-export type OrganizationIdentifierType = 'OrganizationNumber' | 'EUID' | 'LEI';
-
-export type CapTableRegistryResponse = CapTableQueryResponse;
-
-export type ShareholderUnion = ShareholderCeramic & { balances: CapTableGraphQLTypes.CapTableQuery.Balance[] };
-
-export type CapTableDetails = {
-  name: string;
-  orgnr: string;
-  totalSupply: string;
-  status: string;
-  owner: string;
-  shareholders: ShareholderUnion[];
+export type CreateCapTableInput = Organisation & {
+  shareholders: (NewShareholder & PartitionAmount & Partial<EthereumIdentifier>)[];
 };
 
-// Handled by BRØK. Immutable blockchain data. No personal info!
-export interface ShareholderBlockchain {
-  ethAddress?: string;
-  amount: string;
-  partition: string;
-}
+export type CapTable = Organisation &
+  CeramicIdentifier & {
+    totalShares: string;
+    shareholders: (ShareholderIndetifier &
+      EthereumIdentifier &
+      CeramicIdentifier &
+      (ShareholderOrganization | ShareholderPerson) &
+      ShareholderBalances)[];
+  };
 
-// Handled by BRØK. Stored in mutable "blockchain"
-export type ShareholderCeramic = {
+export type TransferInput = FromShareholder & PartitionAmount & (ExsistingShareholder | NewShareholder);
+export type TransferRequest = FromShareholder & PartitionAmount & ExsistingShareholder;
+
+export type OperationResult = { success: boolean; message: string };
+
+// == Models ==
+
+export type Organisation = {
+  orgnr: string;
+  name: string;
+};
+
+export type FromShareholder = {
+  from: EthereumAddress;
+};
+export type ExsistingShareholder = {
+  to: EthereumAddress;
+};
+export type NewShareholder = ShareholderIndetifier & (ShareholderOrganization | ShareholderPerson);
+export type ShareholderWithBalances = (ShareholderIndetifier &
+  EthereumIdentifier &
+  (ShareholderOrganization | ShareholderPerson) &
+  ShareholderBalances)[];
+
+export type Shareholder = ShareholderIndetifier & EthereumIdentifier & (ShareholderOrganization | ShareholderPerson);
+
+export type ShareholderIndetifier = {
   name: string; // Personens fulle navn eller selskapsnavn
-  birthDate?: string; // Fylles kun ut for personer
   postalcode: string;
   countryCode: string;
-  ethAddress: string;
-  organizationIdentifier?: string; // Selskapets unike identifikator
-  organizationIdentifierType?: OrganizationIdentifierType;
 };
 
-export type Shareholder = {
-  ceramic: ShareholderCeramic;
-  blockchain: ShareholderBlockchain;
+export type ShareholderOrganization = {
+  organizationIdentifier: string; // Selskapets unike identifikator
+  organizationIdentifierType: 'OrganizationNumber' | 'EUID' | 'LEI' | string;
 };
 
-export type ShareholderRequest = {
-  ceramic: Omit<ShareholderCeramic, 'ethAddress'>;
-  blockchain: Omit<ShareholderBlockchain, 'ethAddress'>;
+export type ShareholderPerson = {
+  birthDate: string; // Fylles kun ut for personer
 };
 
-export type CreateCapTableRequestInput = {
-  shareholders: ShareholderRequest[];
-  orgnr: string;
-  name: string;
+export type ShareholderBalances = {
+  balances: PartitionAmount[];
 };
 
-export type CreateCapTableInput = {
-  shareholders: Shareholder[];
-  orgnr: string;
-  name: string;
-};
-
-export type CeramicUriAndEthAddress = {
-  ethAddress: string;
-  ceramicUri: string;
-};
-
-export type CapTableCeramic = {
-  orgnr: string;
-  name: string;
-  shareholdersEthAddressToCeramicUri: Record<string, string>;
-};
-
-export type TransferInput = {
-  capTableAddress: string;
-  from: string;
+// CapTable types
+export type Balance = EthereumIdentifier & PartitionAmount;
+export type PartitionAmount = {
   amount: string;
   partition: string;
 };
 
-export type OperatorTransferNewShareholderInput = TransferInput & {
-  name: string; // Personens fulle navn eller selskapsnavn
-  birthDate?: string; // Fylles kun ut for personer
-  postalcode: string;
-  countryCode: string;
-  organizationIdentifier?: string; // Selskapets unike identifikator
-  organizationIdentifierType?: OrganizationIdentifierType;
+// Ethereum types
+export type EthereumIdentifier = {
+  ethAddress: EthereumAddress;
 };
 
-export type OperatorTransferExistingShareholderInput = TransferInput & {
-  to: string;
+export type CapTableEthereumId = EthereumAddress;
+export type ShareholderEthereumId = EthereumAddress;
+export type EthereumAddress = string;
+
+// Ceramic types
+export type CeramicIdentifier = {
+  ceramicID: CeramicID;
 };
 
-export type BlockchainOperationResponse = {
-  success: boolean;
-  transactionHash: string;
+export type CeramicID = string;
+export type CapTableCeramic = Organisation & {
+  shareholderEthToCeramic: Record<EthereumAddress, CeramicID>;
 };

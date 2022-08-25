@@ -55,8 +55,45 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     capTableRegistryDeploy.address
   )) as CapTableRegistry;
   console.log("CapTableRegistry deployed", capTableRegistry.address);
+  // await hre.ethernal.push({
+  //   name: "CapTableRegistry",
+  //   address: capTableRegistry.address,
+  // });
 
   // capTableFactory
+  console.log(
+    "CapTableFactory len",
+    Buffer.from(
+      hre.artifacts
+        .readArtifactSync("CapTableFactory")
+        .deployedBytecode.replace(/__\$\w*\$__/g, "0".repeat(40))
+        .slice(2),
+      "hex"
+    ).length
+  );
+  console.log(
+    "CapTable len",
+    Buffer.from(
+      hre.artifacts
+        .readArtifactSync("CapTable")
+        .deployedBytecode.replace(/__\$\w*\$__/g, "0".repeat(40))
+        .slice(2),
+      "hex"
+    ).length
+  );
+  const testCapTable = await deploy("CapTable", {
+    from: deployer,
+    args: [
+      "Symfoni AS",
+      "915772137",
+      ethers.utils.parseEther("1"),
+      [],
+      [ethers.utils.formatBytes32String("ordinære")],
+      ethers.constants.AddressZero,
+    ],
+  });
+  console.log("CapTable deployed", testCapTable.address);
+
   const capTableFactoryDeploy = await deploy("CapTableFactory", {
     from: deployer,
     args: [
@@ -72,6 +109,10 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   )) as CapTableFactory;
 
   console.log("CapTableFactory deployed", capTableFactory.address);
+  // await hre.ethernal.push({
+  //   name: "CapTableFactory",
+  //   address: capTableFactory.address,
+  // });
 };
 export default func;
 

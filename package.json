@@ -7,7 +7,7 @@
     "peerDependencyRules": {
       "ignoreMissing": [
         "@testing-library/react",
-        "grommet",
+        "react-iconly",
         "react-router-dom"
       ],
       "allowedVersions": {
@@ -17,9 +17,8 @@
     }
   },
   "scripts": {
-    "logs:test:demo-server": "pnpm heroku logs -a brok-demo-server-test -t",
-    "logs:test:demo-frontend": "pnpm heroku logs -a brok-demo-frontend-test -t",
-    "task": "ts-node ./ops/task/tasksfile.ts"
+    "task": "ts-node ./ops/task/tasksfile.ts",
+    "publish:sdk": "pnpm --filter @brok/sdk publish --no-git-check"
   },
   "repository": {
     "type": "git",

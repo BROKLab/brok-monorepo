@@ -22,41 +22,5 @@ enviroment: ## setup enviorment files
 	test -f packages/sdk/.env || cp packages/sdk/.env.example packages/sdk/.env
 	test -f .env || cp .env.example .env
 
-start: ## start local dev enviroment
-	pnpm -r --parallel start
-
-install: ## install monorepo and package dependencies
-	pnpm install
-
-build: build-contracts build-sdk ## build the app
-
-build-contracts: ## build the contracts
-	pnpm --stream --filter @brok/captable build
-
-build-sdk: ## build the sdk
-	pnpm --stream --filter @brok/sdk build
-
-clean: redis-stop postgres-stop graph-stop clean-node-modules## removes everything
-
-clean-node-modules: ## clean node_modules TODO
+clean: ## clean node_modules TODO
 	rm -rf packages/**/node_modules && rm -rf node_modules
-
-redis-start: ## starts redis docker container for local development
-	docker run --rm --name $(redisName) -p 6379:6379 $(redisImage) 
-	$(log_end)
-
-redis-stop: ## stops the redis container
-	-docker stop $(redisName)
-
-server-db-start: ## starts postgres docker container for local development
-	pnpm -F @brok/demo-server init:db
-
-graph-start: ## spins up graph docker and deploys it
-	docker compose -p ${graphName} -f ops/docker/the-graph.yml up
-
-graph-stop: ## stops the ceramic node
-	docker compose -p ${graphName} -f ops/docker/the-graph.yml down -v 
-	-sudo rm -rf ops/docker/data
-
-demo-data: ## spins up graph docker and deploys it
-	pnpm --filter @brok/captable --stream demo 

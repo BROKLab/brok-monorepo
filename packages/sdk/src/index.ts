@@ -1,2 +1,1 @@
-export * from "./sdk.js";
-export * from "./types";
+export * from './sdk.js';

@@ -36,7 +36,6 @@
                 "panel": "dedicated",
                 "group": "contracts"
             },
-            
             "problemMatcher": {
                 "pattern": {
                     "regexp": "^([^\\s].*)\\((\\d+|\\d+,\\d+|\\d+,\\d+,\\d+,\\d+)\\):\\s+(error|warning|info)\\s+(TS\\d+)\\s*:\\s*(.*)$",
@@ -45,11 +44,11 @@
                     "severity": 3,
                     "code": 4,
                     "message": 5
-                  },
+                },
                 "background": {
                     "activeOnStart": true,
                     "beginsPattern": "change detected",
-                    "endsPattern" : "EthereumDIDRegistry deployed"
+                    "endsPattern": "EthereumDIDRegistry deployed"
                 }
             }
         },
@@ -65,7 +64,9 @@
             "dependsOn": [
                 "captable contracts"
             ],
-            "problemMatcher": ["$tsc-watch"],
+            "problemMatcher": [
+                "$tsc-watch"
+            ],
         },
         {
             "label": "ceramic",
@@ -87,11 +88,11 @@
                     "severity": 3,
                     "code": 4,
                     "message": 5
-                  },
+                },
                 "background": {
                     "activeOnStart": true,
                     "beginsPattern": "Swarm listening",
-                    "endsPattern" : "Ceramic API running on"
+                    "endsPattern": "Ceramic API running on"
                 }
             }
         },
@@ -99,7 +100,7 @@
             "label": "sdk",
             "type": "shell",
             "isBackground": true,
-            "command": "pnpm --filter @brok/sdk start",
+            "command": "pnpm --filter @brok/sdk watch",
             "presentation": {
                 "panel": "dedicated",
                 "group": "sdk"
@@ -107,7 +108,9 @@
             "dependsOn": [
                 "ceramic"
             ],
-            "problemMatcher": ["$tsc-watch"],
+            "problemMatcher": [
+                "$tsc-watch"
+            ],
         },
         {
             "label": "server-reddis",
@@ -118,9 +121,9 @@
                 "panel": "dedicated",
                 "group": "server"
             },
-            "dependsOn": [
-                "sdk"
-            ],
+            // "dependsOn": [
+            //     "sdk"
+            // ],
             "problemMatcher": {
                 "pattern": {
                     "regexp": "^([^\\s].*)\\((\\d+|\\d+,\\d+|\\d+,\\d+,\\d+,\\d+)\\):\\s+(error|warning|info)\\s+(TS\\d+)\\s*:\\s*(.*)$",
@@ -129,11 +132,11 @@
                     "severity": 3,
                     "code": 4,
                     "message": 5
-                  },
+                },
                 "background": {
                     "activeOnStart": true,
                     "beginsPattern": "Swarm listening",
-                    "endsPattern" : "Ready to accept connections"
+                    "endsPattern": "Ready to accept connections"
                 }
             }
         },
@@ -147,78 +150,66 @@
                 "group": "server"
             },
             "dependsOn": [
-                "server-reddis"
+                "server-reddis",
+                "sdk"
             ],
-            "problemMatcher": ["$tsc-watch"],
+            "problemMatcher": [
+                "$tsc-watch"
+            ],
         },
-    
         {
             "label": "frontend",
             "type": "shell",
             "isBackground": true,
-            "command": "pnpm --filter @brok/demo-frontend start",
+            "command": "pnpm --filter @brok/demo-frontend dev",
             "presentation": {
                 "panel": "dedicated",
                 "clear": true
             },
             "dependsOn": [
-                "server",
+                "sdk"
             ],
             "problemMatcher": {
                 "owner": "typescript",
-                "pattern": [
-                  {
-                    "regexp": "^([^F\\(\\s].*)$",
-                    "file": 1
-                  },
-                  {
-                    "regexp": "^\\((\\d+),(\\d+)\\): (error|warning|info) (TS\\d+): (.*)$",
-                    "line": 1,
-                    "column": 2,
-                    "severity": 3,
-                    "message": 5,
-                    "code": 4,
-                    "loop": true
-                  }
-                ],
+                "pattern":    [
+                    {
+                      "regexp": ".",
+                      "file": 1,
+                      "location": 2,
+                      "message": 3
+                    }
+                  ],
                 "background": {
-                  "activeOnStart": true,
-                  "beginsPattern": "Compiling",
-                  "endsPattern": "Compiled"
+                    "activeOnStart": true,
+                    "beginsPattern": "Compiling",
+                    "endsPattern": "compiled client and server successfully"
                 }
-              }
+            }
         },
         {
             "label": "graph-server",
             "type": "shell",
-            "isBackground": true,
-            "command": "make graph-stop && make graph-start",
+            "command": "docker compose -p symfoni_graph -f ops/docker/the-graph.yml down -v; rm -rf ops/docker/data; docker compose -p symfoni_graph -f ops/docker/the-graph.yml up",
             "presentation": {
                 "panel": "dedicated",
                 "group": "graph",
                 "focus": true
             },
+            "isBackground": true,
             "problemMatcher": {
                 "pattern": [
                     {
-                      "regexp": "^([^F\\(\\s].*)$",
-                      "file": 1
-                    },
-                    {
-                      "regexp": "^\\((\\d+),(\\d+)\\): (error|warning|info) (TS\\d+): (.*)$",
-                      "line": 1,
-                      "column": 2,
-                      "severity": 3,
-                      "message": 5,
-                      "code": 4,
-                      "loop": true
+                        "regexp": ".",
+                        "file": 1,
+                        "location": 2,
+                        "message": 3
                     }
-                  ],
-                  "background": {
+                ],
+                "background": {
                     "activeOnStart": true,
                     "beginsPattern": "Apply migrations",
-                    "endsPattern": "Starting GraphQL HTTP server"
-                  }          
+                    "endsPattern": "Starting GraphQL HTTP server",
+                }
             },
         },
         {
@@ -235,28 +226,20 @@
                 "graph-server"
             ],
             "problemMatcher": {
-                "pattern": [
+                "pattern":    [
                     {
-                      "regexp": "^([^F\\(\\s].*)$",
-                      "file": 1
-                    },
-                    {
-                      "regexp": "^\\((\\d+),(\\d+)\\): (error|warning|info) (TS\\d+): (.*)$",
-                      "line": 1,
-                      "column": 2,
-                      "severity": 3,
-                      "message": 5,
-                      "code": 4,
-                      "loop": true
+                      "regexp": ".",
+                      "file": 1,
+                      "location": 2,
+                      "message": 3
                     }
                   ],
-                  "background": {
+                "background": {
                     "activeOnStart": true,
                     "beginsPattern": "Apply migrations",
                     "endsPattern": "Deployed to"
-                  }          
+                }
             },
         },
-
     ]
 }

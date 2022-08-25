@@ -4,8 +4,25 @@ services:
     name: demo-frontend2-dev
     env: node
     repo: https://github.com/BROKLab/brok-monorepo
-    branch: robertosnap/sym-12-make-sdk-browser-friendly
+    branch: robertosnap/sym-31-demo-side
     region: frankfurt
-    buildCommand: 'pnpm build'
+    buildCommand: 'pnpm i; pnpm unlink @brok/sdk; pnpm i --frozen-lockfile; pnpm build'
     startCommand: 'pnpm start'
     plan: Starter
+    rootDir: packages/demo-frontend
+    # buildFilter:
+    #   paths:
+    #   # Changes to the `frontend` directory do not match this pattern.
+    #   - packages/demo-frontend2/**
+    #   - packages/sdk2/**
+    envVars:
+    - key: NEXT_PUBLIC_CERAMIC_URL
+      sync: false
+    - key: NEXT_PUBLIC_SECRET
+      sync: false
+    - key: NEXT_PUBLIC_ETHEREUM_RPC
+      sync: false
+    - key: NEXT_PUBLIC_THE_GRAPH_URL
+      sync: false
+    - key: NEXT_PUBLIC_BROK_ENVIRONMENT
+      sync: false
