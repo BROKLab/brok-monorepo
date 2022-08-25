@@ -1,5 +1,11 @@
 # @brok/captable
 
+## 0.12.0
+
+### Minor Changes
+
+- 1aa3240: New deployment
+
 ## 0.9.0
 
 ### Minor Changes

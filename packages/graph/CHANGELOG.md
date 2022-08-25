@@ -2,6 +2,13 @@
 
 ## null
 
+### Patch Changes
+
+- Updated dependencies [1aa3240]
+  - @brok/captable@0.12.0
+
+## null
+
 ### Minor Changes
 
 - removed postinstall
