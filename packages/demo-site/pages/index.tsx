@@ -61,7 +61,7 @@ const Home: NextPage = () => {
               <Text>Requested changes from fagsystem</Text>
               <Spacer y={1}></Spacer>
 
-              <Card isHoverable isPressable css={{ p: "$xs", maxWidth: "400px" }} onClick={() => router.push('/publish')}>
+              <Card isHoverable isPressable css={{ p: "$xs", maxWidth: "400px" }} onClick={() => router.push('/publish-transfer-shares')}>
                 <Card.Header >
                   <TwoUsers></TwoUsers>
                   <Grid.Container css={{ pl: "$6" }} gap={1}>
@@ -96,9 +96,7 @@ const Home: NextPage = () => {
 
             </Col>
           </Grid>
-          <StylerdGrid xs={12} sm={4} style={{
-            linearGradient: '19deg, #21D4FD 0%, #B721FF 100%',
-          }}>
+          <StylerdGrid xs={12} sm={4}>
             <Col>
               <Text h3>Public Cap Table insights </Text>
               <Text>See public information on cap tables</Text>

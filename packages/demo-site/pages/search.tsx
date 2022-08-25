@@ -6,8 +6,8 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from "react";
 import { ToastContainer } from 'react-toastify';
-import { formatBN } from "../src/components/utils/Formatters";
-import NoSSR from "../src/components/utils/NoSSR";
+import { formatBN } from "../src/utils/Formatters";
+import NoSSR from "../src/utils/NoSSR";
 import { Footer } from '../src/ui/Footer';
 import { NavBarAvisenNo } from "../src/ui/NavBarAvisen";
 
