@@ -2,7 +2,7 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 import { ethers } from "ethers";
-import { CapTableFactory, CapTableRegistry } from "./../src/typechain/index";
+import { CapTableRegistry } from "./../src/typechain/index";
 import { DID } from "dids";
 import { Ed25519Provider } from "key-did-provider-ed25519";
 import { getResolver } from "key-did-resolver";
@@ -60,59 +60,18 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   //   address: capTableRegistry.address,
   // });
 
-  // capTableFactory
-  console.log(
-    "CapTableFactory len",
-    Buffer.from(
-      hre.artifacts
-        .readArtifactSync("CapTableFactory")
-        .deployedBytecode.replace(/__\$\w*\$__/g, "0".repeat(40))
-        .slice(2),
-      "hex"
-    ).length
-  );
-  console.log(
-    "CapTable len",
-    Buffer.from(
-      hre.artifacts
-        .readArtifactSync("CapTable")
-        .deployedBytecode.replace(/__\$\w*\$__/g, "0".repeat(40))
-        .slice(2),
-      "hex"
-    ).length
-  );
-  const testCapTable = await deploy("CapTable", {
-    from: deployer,
-    args: [
-      "Symfoni AS",
-      "915772137",
-      ethers.utils.parseEther("1"),
-      [],
-      [ethers.utils.formatBytes32String("ordinære")],
-      ethers.constants.AddressZero,
-    ],
-  });
-  console.log("CapTable deployed", testCapTable.address);
-
-  const capTableFactoryDeploy = await deploy("CapTableFactory", {
-    from: deployer,
-    args: [
-      capTableRegistry.address,
-      signer.address,
-      ethers.utils.formatBytes32String("ordinære"),
-    ],
-  });
-
-  const capTableFactory = (await hre.ethers.getContractAt(
-    "CapTableFactory",
-    capTableFactoryDeploy.address
-  )) as CapTableFactory;
-
-  console.log("CapTableFactory deployed", capTableFactory.address);
-  // await hre.ethernal.push({
-  //   name: "CapTableFactory",
-  //   address: capTableFactory.address,
+  // const testCapTable = await deploy("CapTable", {
+  //   from: deployer,
+  //   args: [
+  //     "Symfoni AS",
+  //     "915772137",
+  //     ethers.utils.parseEther("1"),
+  //     [],
+  //     [ethers.utils.formatBytes32String("ordinære")],
+  //     ethers.constants.AddressZero,
+  //   ],
   // });
+  // console.log("CapTable deployed", testCapTable.address);
 };
 export default func;
 
