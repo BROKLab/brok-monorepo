@@ -104,25 +104,13 @@ const Home: NextPage = () => {
       toast((t) => <Container>
         <Grid.Container>
           <Grid>
-            <Text size={"small"}>{`Created cap table ${org.navn}`}</Text>
+            <Text>{`Published cap table ${org.navn}`}</Text>
           </Grid>
           <Grid>
-            <Button onPress={() => router.push(`/cap-table/${capTableAddress}`)}>View cap table</Button>
+            <Button as='a' target="_blank" onPress={() => router.push(`/cap-table/${capTableAddress}`)}>View cap table</Button>
           </Grid>
         </Grid.Container>
       </Container>, { type: "success" })
-      transferResult.map(tr => {
-        toast((t) => <Container>
-          <Grid.Container>
-            <Grid>
-              <Text size={"small"}>{`Transfered ${tr.amount} from ${tr.from.slice(0, 5)} to ${tr.to.slice(0, 5)}`}</Text>
-            </Grid>
-            <Grid>
-              <Button size={"xs"} onPress={() => router.push(`/cap-table/${capTableAddress}`)}>View cap table</Button>
-            </Grid>
-          </Grid.Container>
-        </Container>, { type: "success" })
-      })
       console.log("transferResult", transferResult)
       setPublishing(false)
     } catch (e) {
@@ -169,7 +157,10 @@ const Home: NextPage = () => {
         <Spacer y={4}></Spacer>
         <Grid.Container gap={2} css={{ p: '$sm' }} justify="center" >
           <Grid>
-            <Text h3>Dine selskaper</Text>
+            <Text h3>Your companies ready for BRØK publish</Text>
+            <Spacer y={2}></Spacer>
+            <Text >Initial publish one of your companies cap tables to BRØK .</Text>
+            <Spacer y={2}></Spacer>
             <Grid.Container gap={1}>
 
               {randomOrgs.map(org => (

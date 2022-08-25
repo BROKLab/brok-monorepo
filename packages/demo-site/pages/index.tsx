@@ -3,13 +3,16 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Plus, Search, TwoUsers, User } from 'react-iconly';
-import { ToastContainer } from 'react-toastify';
 import { Footer } from './../src/ui/Footer';
 import { NavBar } from './../src/ui/NavBar';
 
 const Home: NextPage = () => {
   const router = useRouter()
 
+  const StylerdGrid = styled(Grid, {
+    linearGradient: '19deg, $background 40%, $red400 190%',
+    borderRadius: "$base"
+  })
 
   return (
     <Container >
@@ -29,12 +32,13 @@ const Home: NextPage = () => {
       >
 
 
-        <Grid.Container gap={2} >
+        <Grid.Container gap={4} >
           <Grid sm></Grid>
 
           <Grid xs={12} sm={4}>
             <Col>
               <Text h3>Fagsystem</Text>
+              <Text>First time publish</Text>
               <Spacer y={2}></Spacer>
 
               <Card isHoverable isPressable css={{ p: "$xs", maxWidth: "400px", maxHeight: "200px" }} onClick={() => router.push('/publish')}>
@@ -53,6 +57,9 @@ const Home: NextPage = () => {
                 </Card.Header>
               </Card>
               <Spacer y={1}></Spacer>
+              <Text h3>Fagsystem changes</Text>
+              <Text>Requested changes from fagsystem</Text>
+              <Spacer y={1}></Spacer>
 
               <Card isHoverable isPressable css={{ p: "$xs", maxWidth: "400px" }} onClick={() => router.push('/publish')}>
                 <Card.Header >
@@ -60,7 +67,7 @@ const Home: NextPage = () => {
                   <Grid.Container css={{ pl: "$6" }} gap={1}>
                     <Grid xs={12}>
                       <Text h4 css={{ lineHeight: "$xs" }}>
-                        Publish transfer
+                        Publish transfer of shares
                       </Text>
                     </Grid>
                     <Grid xs={12}>
@@ -89,9 +96,12 @@ const Home: NextPage = () => {
 
             </Col>
           </Grid>
-          <Grid xs={12} sm={4}>
+          <StylerdGrid xs={12} sm={4} style={{
+            linearGradient: '19deg, #21D4FD 0%, #B721FF 100%',
+          }}>
             <Col>
-              <Text h3>Insights </Text>
+              <Text h3>Public Cap Table insights </Text>
+              <Text>See public information on cap tables</Text>
               <Spacer y={2}></Spacer>
               <Card isHoverable isPressable css={{ p: "$xs", maxWidth: "400px" }} onPress={() => router.push('/search')}>
                 <Card.Header >
@@ -99,18 +109,18 @@ const Home: NextPage = () => {
                   <Grid.Container css={{ pl: "$6" }} >
                     <Grid xs={12}>
                       <Text h4 css={{ lineHeight: "$xs" }}>
-                        Find
+                        Find cap table
                       </Text>
                     </Grid>
                     <Grid xs={12}>
-                      <Text css={{ color: "$accents8" }}>Find cap tables</Text>
+                      <Text css={{ color: "$accents8" }}>Lookup public information about captables</Text>
                     </Grid>
                   </Grid.Container>
                 </Card.Header>
               </Card>
             </Col>
 
-          </Grid>
+          </StylerdGrid>
           <Grid sm></Grid>
         </Grid.Container>
 
