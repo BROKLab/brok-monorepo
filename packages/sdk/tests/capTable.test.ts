@@ -1,4 +1,4 @@
-import anyTest, { TestFn, SerialFn } from 'ava';
+import anyTest, { TestFn } from 'ava';
 import { SDK } from '../src/sdk.js';
 import { config } from 'dotenv';
 import { ethers } from 'ethers';

@@ -1,11 +1,4 @@
-import {
-  CapTableFactory,
-  CapTableFactory__factory,
-  CapTableRegistry,
-  CapTableRegistry__factory,
-  CapTable__factory,
-  Deployments,
-} from '@brok/captable';
+import { CapTableRegistry, CapTableRegistry__factory, CapTable__factory, Deployments } from '@brok/captable';
 import debug from 'debug';
 import { ContractReceipt, ethers, Wallet } from 'ethers';
 import { err, ok, Result } from 'neverthrow';
@@ -145,14 +138,14 @@ export class BlockchainSDK {
     }
   }
 
-  capTableFactory(): CapTableFactory {
-    if (!BlockchainSDK.acceptedEnviroment(this.BROK_ENVIRONMENT)) {
-      throw Error('Please set env variable BROK_ENVIRONMENT');
-    }
-    return new CapTableFactory__factory(this.signer).attach(
-      Deployments[this.BROK_ENVIRONMENT as keyof typeof Deployments].contracts.CapTableFactory.address,
-    );
-  }
+  // capTableFactory(): CapTableFactory {
+  //   if (!BlockchainSDK.acceptedEnviroment(this.BROK_ENVIRONMENT)) {
+  //     throw Error('Please set env variable BROK_ENVIRONMENT');
+  //   }
+  //   return new CapTableFactory__factory(this.signer).attach(
+  //     Deployments[this.BROK_ENVIRONMENT as keyof typeof Deployments].contracts.CapTableFactory.address,
+  //   );
+  // }
 
   capTableRegistryContract() {
     if (!BlockchainSDK.acceptedEnviroment(this.BROK_ENVIRONMENT)) {

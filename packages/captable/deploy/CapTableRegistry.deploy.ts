@@ -94,21 +94,21 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   });
   console.log("CapTable deployed", testCapTable.address);
 
-  const capTableFactoryDeploy = await deploy("CapTableFactory", {
-    from: deployer,
-    args: [
-      capTableRegistry.address,
-      signer.address,
-      ethers.utils.formatBytes32String("ordinære"),
-    ],
-  });
+  // const capTableFactoryDeploy = await deploy("CapTableFactory", {
+  //   from: deployer,
+  //   args: [
+  //     capTableRegistry.address,
+  //     signer.address,
+  //     ethers.utils.formatBytes32String("ordinære"),
+  //   ],
+  // });
 
-  const capTableFactory = (await hre.ethers.getContractAt(
-    "CapTableFactory",
-    capTableFactoryDeploy.address
-  )) as CapTableFactory;
+  // const capTableFactory = (await hre.ethers.getContractAt(
+  //   "CapTableFactory",
+  //   capTableFactoryDeploy.address
+  // )) as CapTableFactory;
 
-  console.log("CapTableFactory deployed", capTableFactory.address);
+  // console.log("CapTableFactory deployed", capTableFactory.address);
   // await hre.ethernal.push({
   //   name: "CapTableFactory",
   //   address: capTableFactory.address,

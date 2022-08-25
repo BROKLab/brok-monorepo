@@ -9,6 +9,24 @@ services:
     buildCommand: 'pnpm i; pnpm unlink @brok/sdk; pnpm i --frozen-lockfile; pnpm build'
     startCommand: 'pnpm start'
     plan: Starter
+    rootDir: packages/demo-site
+    # buildFilter:
+    #   paths:
+    #   # Changes to the `frontend` directory do not match this pattern.
+    #   - packages/demo-frontend2/**
+    #   - packages/sdk2/**
+    envVars:
+      - fromGroup: brokDev-next
+
+  - type: web
+    name: demo-frontend-dev
+    env: node
+    repo: https://github.com/BROKLab/brok-monorepo
+    branch: dev
+    region: frankfurt
+    buildCommand: 'pnpm i; pnpm unlink @brok/sdk; pnpm i --frozen-lockfile; pnpm build'
+    startCommand: 'pnpm start'
+    plan: Starter
     rootDir: packages/demo-frontend
     # buildFilter:
     #   paths:
@@ -16,13 +34,5 @@ services:
     #   - packages/demo-frontend2/**
     #   - packages/sdk2/**
     envVars:
-    - key: NEXT_PUBLIC_CERAMIC_URL
-      sync: false
-    - key: NEXT_PUBLIC_SECRET
-      sync: false
-    - key: NEXT_PUBLIC_ETHEREUM_RPC
-      sync: false
-    - key: NEXT_PUBLIC_THE_GRAPH_URL
-      sync: false
-    - key: NEXT_PUBLIC_BROK_ENVIRONMENT
-      sync: false
+      - fromGroup: brokDev-next
+    
