@@ -13,23 +13,34 @@ Run `make dev`
 To clean everything up. Run `make clean`
 
 ### EITHER 👩‍💻 Running locally with VSCode tasks (preferred) 
-In VScode, run task `dev`  ( ⇧⌘B workbench.action.tasks.runTask). 
+In VScode, run task `dev`  ( ⇧⌘B workbench.action.tasks.runTask).  
 
 This will fire up all projects in watch mode so you can develop and experience imdiate results (hopefully across pacakges).
 The graph takes some time to start. Once it is started it will keep running in docker as long as your captable contracts terminal is running.
 ![terminal_tabs](screenshot/terminal_tabs.png)
-### OR 💻 Running locally with shells.
 
-To run all services locally we need multiple services running. Take each commandline below and run it in its own shell. Start at the top and follow the order.
-```bash
-pnpm --filter @brok/captable start:contracts
-pnpm --filter @brok/captable start:lib
-pnpm ceramic daemon --debug --network inmemory
-pnpm --filter @brok/sdk start
-pnpm --filter @brok/demo-server start:dev
-pnpm --filter @brok/demo-frontend start
-make graph-stop && make graph-start
+
+# Deployments
+## Release packages of SDK and CapTable
 ```
+pnpm changeset
+pnpn changeset version
+pnpm install
+# commit the changes
+pnpm publish -r
+```
+
+## Deploy TheGraphCapTable service
+
+Make sure @brok/graph package is useing desired @brok/captable version in package.json
+
+```bash
+pnpm --filter @brok/graph deploy:brokDev # deploy:brokLocal deploy:brokStage deploy:brokProd
+```
+
+## Deploy frontends and servers
+
+Will deploy by instructions of render.yaml file. 
 
 ## Getting started - Remote development
 
@@ -56,37 +67,6 @@ make graph-stop && make graph-start
 So SDK and Captable are NPM packages that needs to be published for changes to propegate. 
 Graph, demo-server and demo-frontend needs to be deployed to their enviroments to progegate changes.
 
-```bash
-build:captable
-build                           - builds everything
-build:sdk
-deploy
-deploy:destroy [env]            - Fulle destroys all deployed heroku apps for env
-deploy:destroy:frontend
-deploy:destroy:server
-deploy:frontend [env]           - Deploys frontend to Heroku
-deploy:graph [env]              - Deploys graph to Graph hosted services
-deploy:logs:frontned
-deploy:logs:server
-deploy:server [env]             - Deploys server to Heroku
-publish                         - publish packages with changes
-```
-
-### Examples
-`pnpm task help` show available commands.
-
-`pnpm task deploy:frontend dev` will create demo-frontend for enviroment dev
-
-`pnpm task deploy:update:server dev` will update demo-server for enviroment dev
-
-`pnpm task deploy:graph dev` will update captable graph for enviroment dev
-
-`pnpm task publish` will create a new version for each package.
-
-`pnpm task publish:commit` will publish all new versions of packages to npm.
-
-
-To be able to deploy to Heroku, NPN og The Ghrap hosted service you must have access. Request from admin.
 
 ## Environment variables
 
@@ -107,7 +87,7 @@ SDK will look for environment variable BROK_ENVIRONMENT to determine which contr
 - local brokLocal - Will use local blockchain
 - dev brokDev - Will use Arbitrum Rinkeby
 - stage brokStage - Will use Arbitrum Rinkeby
-- prod brokProd - Will use Arbitrum mainnet
+- prod brokProd - Will use Arbitrum mainnet (not currently)
 
 To create an approved CapTable, the wallet for fagsystem must first be authorized by BRREG. Contact us.
 ## Ugly hacks

@@ -48,7 +48,7 @@
                 "background": {
                     "activeOnStart": true,
                     "beginsPattern": "change detected",
-                    "endsPattern": "EthereumDIDRegistry deployed"
+                    "endsPattern": "CapTableRegistry deployed"
                 }
             }
         },
