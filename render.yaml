@@ -1,7 +1,7 @@
 services:
   # DEV SERVER
   - type: web
-    name: demo-frontend2-dev
+    name: demo-site-dev
     env: node
     repo: https://github.com/BROKLab/brok-monorepo
     branch: robertosnap/sym-31-demo-side
