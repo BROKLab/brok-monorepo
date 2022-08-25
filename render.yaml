@@ -4,7 +4,7 @@ services:
     name: demo-site-dev
     env: node
     repo: https://github.com/BROKLab/brok-monorepo
-    branch: robertosnap/sym-31-demo-side
+    branch: dev
     region: frankfurt
     buildCommand: 'pnpm i; pnpm unlink @brok/sdk; pnpm i --frozen-lockfile; pnpm build'
     startCommand: 'pnpm start'
