@@ -19,9 +19,11 @@ export default function handler(
       const json = readFileSync( file, "utf8");
       const data = JSON.parse(json ) as Organisasjon[]
       let orgs : Organisasjon[]= [];
-      for(let i = 0; i < amount; i++) {
+      while(orgs.length < amount) {
         const random = Math.floor(Math.random() * (data.length + 1) + 0)
-        orgs.push(data[random])
+        if(data[random].navn.includes("AS")){
+          orgs.push(data[random])
+        }
       }
       res.status(200).json({
         data: orgs

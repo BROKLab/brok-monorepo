@@ -1,15 +1,15 @@
 import { SDK } from "@brok/sdk";
-import { Button, Container, Grid, Spacer, Text, Table } from '@nextui-org/react';
+import { Button, Container, Grid, Spacer, Table, Text } from '@nextui-org/react';
+import { ethers } from "ethers";
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Key, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ToastContainer } from 'react-toastify';
+import { formatBN } from "../src/components/utils/Formatters";
 import NoSSR from "../src/components/utils/NoSSR";
 import { Footer } from '../src/ui/Footer';
-import { NavBar } from '../src/ui/NavBar';
-import { ethers } from "ethers"
-import { formatBN, formatCurrency } from "../src/components/utils/Formatters";
+import { NavBarAvisenNo } from "../src/ui/NavBarAvisen";
 
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -61,7 +61,7 @@ const Search: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
         <link rel="shortcut icon" href="/favicon.ico" />
       </Head>
-      <NavBar></NavBar>
+      <NavBarAvisenNo></NavBarAvisenNo>
       <Container
         as="main"
         display="flex"
@@ -81,7 +81,8 @@ const Search: NextPage = () => {
                 hoverable
                 onSelectionChange={(keys) => onSelect(Object.values(keys)[1])}
                 selectionMode="single"
-
+                lined
+                headerLined
                 css={{
                   height: "auto",
                   minWidth: "100%",
