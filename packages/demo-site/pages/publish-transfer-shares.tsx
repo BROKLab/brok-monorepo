@@ -29,11 +29,15 @@ const Home: NextPage = () => {
           const capTable = await getCapTable(graphQLCapTable.id);
           if (subscribed && res.length > 0) {
             const randomNewShareholder = await getRandomShareholders(1);
-            const transfers: TransferInput[] = capTable.shareholders.map((s, i, arr) => {
+            const transfers: TransferInput[] = [];
+            let i = 0;
+            let max = 2
+            for (const s of capTable.shareholders) {
+              if (i === 2) break;
               if (i === 0 && randomNewShareholder.length > 0) {
                 // new shareholder transfer 
                 const newS = randomNewShareholder[0]
-                return {
+                transfers.push({
                   name: newS.visningnavn,
                   birthDate: newS.foedselsdato,
                   postalcode: newS.postalCode,
@@ -41,18 +45,18 @@ const Home: NextPage = () => {
                   partition: "ordinære",
                   amount: randomAmountInThousands(100_000).toString(),
                   from: s.ethAddress
-                }
+                })
               } else {
                 const balance = parseInt(ethers.utils.formatUnits(s.balances.reduce((prev, b) => prev.add(ethers.BigNumber.from(b.amount)), ethers.constants.Zero)))
-                return {
+                transfers.push({
                   from: s.ethAddress,
-                  to: arr[0].ethAddress,
+                  to: capTable.shareholders[i].ethAddress,
                   partition: "ordinære",
                   amount: randomAmountInThousands(balance).toString(),
-                }
+                })
               }
-
-            })
+              i++;
+            }
             setCapTable(capTable)
             setTransfers(transfers)
           }
@@ -113,15 +117,14 @@ const Home: NextPage = () => {
           <Grid>
             <Text h3>{`Requested transfers for company ${capTable ? capTable.name : "..."}`}</Text>
             <Spacer y={2}></Spacer>
-            <Text >Publish transfers</Text>
-            <Spacer y={2}></Spacer>
+            {!capTable && <Loading></Loading>}
             <Grid.Container gap={1}>
 
               {transfers.map(transfer => (
                 <Grid xs={12} sm={6} key={`${transfer.amount}-${transfer.from}`}>
                   <Card>
                     <Card.Header>
-                      <Text h4>{`Transfer ${transfer.amount} (${transfer.partition})`}</Text>
+                      <Text h4>{`Transfer ${transfer.amount}`}</Text>
                     </Card.Header>
                     <Card.Body>
                       <Grid.Container gap={1}>
@@ -129,6 +132,10 @@ const Home: NextPage = () => {
                         <Grid xs={6}>{getNameForEthAddress(transfer.from)}</Grid>
                         <Grid xs={6}>To:</Grid>
                         <Grid xs={6}>{"to" in transfer ? getNameForEthAddress(transfer.to) : transfer.name}</Grid>
+                        <Grid xs={6}>Amount</Grid>
+                        <Grid xs={6}>{transfer.amount}</Grid>
+                        <Grid xs={6}>Partition</Grid>
+                        <Grid xs={6}>{transfer.partition}</Grid>
                         <Grid xs={6}>New shareholder</Grid>
                         <Grid xs={6}>{"to" in transfer ? "Yes" : "No"}</Grid>
                       </Grid.Container>
