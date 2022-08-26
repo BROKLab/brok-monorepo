@@ -21,7 +21,7 @@ The graph takes some time to start. Once it is started it will keep running in d
 
 
 # Deployments
-## Release packages of SDK and CapTable
+## Release packages of SDK and CapTable (you can choose what to publish update on with changeset)
 ```
 pnpm changeset
 pnpm changeset version
