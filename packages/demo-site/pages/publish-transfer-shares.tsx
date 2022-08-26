@@ -141,7 +141,7 @@ const Home: NextPage = () => {
                         <Grid xs={6}>Partition</Grid>
                         <Grid xs={6}>{transfer.partition}</Grid>
                         <Grid xs={6}>New shareholder</Grid>
-                        <Grid xs={6}>{"to" in transfer ? "Yes" : "No"}</Grid>
+                        <Grid xs={6}>{"to" in transfer ? "No" : "Yes"}</Grid>
                       </Grid.Container>
                     </Card.Body>
                     <Card.Footer>
