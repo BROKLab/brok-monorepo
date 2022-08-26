@@ -34,6 +34,7 @@ const Home: NextPage = () => {
             let max = 2
             for (const s of capTable.shareholders) {
               if (i === 2) break;
+              const transferBalance = parseInt(ethers.utils.formatUnits(s.balances.reduce((prev, b) => prev.add(ethers.BigNumber.from(b.amount)), ethers.constants.Zero).div(3)))
               if (i === 0 && randomNewShareholder.length > 0) {
                 // new shareholder transfer 
                 const newS = randomNewShareholder[0]
@@ -43,16 +44,16 @@ const Home: NextPage = () => {
                   postalcode: newS.postalCode,
                   countryCode: "NO",
                   partition: "ordinære",
-                  amount: randomAmountInThousands(100_000).toString(),
+                  amount: randomAmountInThousands(transferBalance / 2).toString(),
                   from: s.ethAddress
                 })
               } else {
-                const balance = parseInt(ethers.utils.formatUnits(s.balances.reduce((prev, b) => prev.add(ethers.BigNumber.from(b.amount)), ethers.constants.Zero).div(3)))
+
                 transfers.push({
                   from: s.ethAddress,
-                  to: capTable.shareholders[i].ethAddress,
+                  to: capTable.shareholders[i + 1].ethAddress,
                   partition: "ordinære",
-                  amount: randomAmountInThousands(balance).toString(),
+                  amount: randomAmountInThousands(transferBalance / 3).toString(),
                 })
               }
               i++;
@@ -76,7 +77,10 @@ const Home: NextPage = () => {
     if (!capTable) throw "Must have CapTable"
 
     try {
-      await transferSDK(capTable.ethAddress, [transfer]);
+      const tr = await transferSDK(capTable.ethAddress, [transfer]);
+      if (!tr[0].success) {
+        throw new Error(tr[0].message)
+      }
       toast((t) => <Container>
         <Grid.Container>
           <Grid>

@@ -26,5 +26,5 @@ export const getRandomOrgs = async (amount: number) => {
   export const randomAmountInThousands = ( max: number) => {
     const amount = Math.random() * (max - 100) + 100;
     const amountRounded = Math.round(amount / 1000) * 1000
-    return amountRounded
+    return Math.max(amountRounded, Math.floor(Math.random() * 1000 + 1))
   }
