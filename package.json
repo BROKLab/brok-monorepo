@@ -18,7 +18,9 @@
   },
   "scripts": {
     "task": "ts-node ./ops/task/tasksfile.ts",
-    "publish:sdk": "pnpm --filter @brok/sdk publish --no-git-check"
+    "publish:sdk": "pnpm --filter @brok/sdk publish --no-git-check",
+    "publish:captable": "pnpm --filter @brok/captable publish --no-git-check",
+    "publish:graph": "pnpm --filter @brok/graph deploy:brokDev && pnpm --filter @brok/graph deploy:brokStage && pnpm --filter @brok/graph deploy:brokProd"
   },
   "repository": {
     "type": "git",
