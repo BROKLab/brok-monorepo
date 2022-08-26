@@ -5,6 +5,7 @@ export type CreateCapTableInput = Organisation & {
 };
 
 export type CapTable = Organisation &
+  EthereumIdentifier &
   CeramicIdentifier & {
     totalShares: string;
     shareholders: (ShareholderIndetifier &
@@ -84,3 +85,6 @@ export type CeramicID = string;
 export type CapTableCeramic = Organisation & {
   shareholderEthToCeramic: Record<EthereumAddress, CeramicID>;
 };
+
+// GraphQL types
+export * from './utils/CapTableGraphQL.utils.js';

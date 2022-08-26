@@ -156,6 +156,7 @@ export async function _getCapTable(this: SDK, capTableAddress: EthereumAddress):
     });
     const shareholders = await Promise.all(shareholderPromises);
     const capTable: CapTable = {
+      ethAddress: capTableAddress,
       name: capTableCeramicData.value.name,
       orgnr: capTableCeramicData.value.orgnr,
       ceramicID: capTableCeramicData.value.ceramicID,

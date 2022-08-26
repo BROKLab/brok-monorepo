@@ -1,7 +1,12 @@
 {
   "eslint.workingDirectories": [
-  "packages/captable", "packages/demo-frontend", "packages/demo-server", "packages/sdk", "packages/graph", "packages/demo-site"
-],
+    "packages/captable",
+    "packages/demo-frontend",
+    "packages/demo-server",
+    "packages/sdk",
+    "packages/graph",
+    "packages/demo-site"
+  ],
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
   },
