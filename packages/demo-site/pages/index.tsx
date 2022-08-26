@@ -28,10 +28,8 @@ const Home: NextPage = () => {
         display="flex"
         direction="column"
         justify="center"
-        style={{ height: '80vh' }}
+        style={{ minHeight: '80vh' }}
       >
-
-
         <Grid.Container gap={4} >
           <Grid sm></Grid>
 
@@ -123,7 +121,7 @@ const Home: NextPage = () => {
         </Grid.Container>
 
       </Container>
-      <Footer></Footer>
+      {/* <Footer></Footer> */}
 
 
     </Container >

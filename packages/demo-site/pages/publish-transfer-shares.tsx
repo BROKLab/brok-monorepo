@@ -47,7 +47,7 @@ const Home: NextPage = () => {
                   from: s.ethAddress
                 })
               } else {
-                const balance = parseInt(ethers.utils.formatUnits(s.balances.reduce((prev, b) => prev.add(ethers.BigNumber.from(b.amount)), ethers.constants.Zero)))
+                const balance = parseInt(ethers.utils.formatUnits(s.balances.reduce((prev, b) => prev.add(ethers.BigNumber.from(b.amount)), ethers.constants.Zero).div(3)))
                 transfers.push({
                   from: s.ethAddress,
                   to: capTable.shareholders[i].ethAddress,
