@@ -9,6 +9,7 @@ services:
     buildCommand: 'pnpm i; pnpm unlink @brok/sdk; pnpm i --frozen-lockfile; pnpm build'
     startCommand: 'pnpm start'
     plan: Starter
+    pullRequestPreviewsEnabled: true
     rootDir: packages/demo-site
     envVars:
       - fromGroup: brokDev-next
