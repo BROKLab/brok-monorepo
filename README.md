@@ -26,7 +26,7 @@ The graph takes some time to start. Once it is started it will keep running in d
 pnpm changeset
 pnpm changeset version
 pnpm install
-# commit the changes
+# commit the changes, need to update lockfiles.
 pnpm publish -r
 ```
 
