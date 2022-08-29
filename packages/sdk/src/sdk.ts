@@ -28,6 +28,8 @@ import {
   _transferInputsToRequest,
   _kapitalforhoyselseNyeAksjer,
   _issueInputsToRequest,
+  _processIssueRequest,
+  _splitt,
 } from './capTable.js';
 
 export class SDK {
@@ -40,6 +42,8 @@ export class SDK {
   // utils
   protected _transferInputsToRequest = _transferInputsToRequest;
   protected _issueInputsToRequest = _issueInputsToRequest;
+  protected _processIssueRequest = _processIssueRequest;
+  protected _splitt = _splitt;
 
   private constructor(protected blockchain: BlockchainSDK, protected ceramic: CeramicSDK) {}
 
@@ -120,6 +124,13 @@ export class SDK {
 
   async kapitalforhoyselseNyeAksjer(capTableAddress: CapTableEthereumId, transfers: IssueInput[]): Promise<(OperationResult & IssueRequest)[]> {
     const res = await this._kapitalforhoyselseNyeAksjer(capTableAddress, transfers);
+    if (res.isErr()) {
+      throw Error(res.error);
+    }
+    return res.value;
+  }
+  async splitt(capTableAddress: CapTableEthereumId, issues: IssueRequest[]): Promise<(OperationResult & IssueRequest)[]> {
+    const res = await this._splitt(capTableAddress, issues);
     if (res.isErr()) {
       throw Error(res.error);
     }

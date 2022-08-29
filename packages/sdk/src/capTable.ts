@@ -286,61 +286,37 @@ export async function _kapitalforhoyselseNyeAksjer(
   try {
     log('Start kapitalforhoyselseNyeAksjer with inputs', {
       capTableAddress,
-      transferInputs: issueInputs,
+      issueInputs,
     });
     // Prepare possible ceramic updates
     const shareholderEthToCeramic: Record<EthereumAddress, CeramicID> = {};
-    let operationResult: (OperationResult & IssueRequest)[] = [];
 
-    const transferRequestsRes = await this._issueInputsToRequest(shareholderEthToCeramic, issueInputs);
-    if (transferRequestsRes.isErr()) {
-      return err(transferRequestsRes.error);
+    const issueRequestsRes = await this._issueInputsToRequest(shareholderEthToCeramic, issueInputs);
+    if (issueRequestsRes.isErr()) {
+      return err(issueRequestsRes.error);
     }
-    const transferRequests = transferRequestsRes.value;
 
-    // const capTableGraphData = await getCapTableGraph(this.blockchain.theGraphUrl, capTableAddress);
-    // if (capTableGraphData.isErr()) {
-    //   return err(capTableGraphData.error);
-    // }
+    return this._processIssueRequest(capTableAddress, issueRequestsRes.value, shareholderEthToCeramic);
+  } catch (error) {
+    log(error);
+    return err('Something unknown went wrong when transfering shares. See logs or contact administrator.');
+  }
+}
 
-    try {
-      const res = await this.blockchain.capTableContract(capTableAddress).kapitalforhoyselse_nye_aksjer(
-        transferRequests.map((tr) => ethers.utils.formatBytes32String(tr.partition)),
-        transferRequests.map((tr) => tr.to),
-        transferRequests.map((tr) => ethers.utils.parseEther(tr.amount)),
-        '0x11',
-      );
-      await res.wait();
-      operationResult = transferRequests.map((tr) => ({ ...tr, success: true, message: 'Deployed to blockchain.' }));
-    } catch (error) {
-      log('error from operatorTransfer', error);
-      operationResult = transferRequests.map((tr) => ({ ...tr, success: false, message: 'Error deploying to blockchain.' }));
-    }
-    // TODO : Remove possible keys where blockhain transaction was not success
-    // Do updates to Ceramic
-    if (Object.keys(shareholderEthToCeramic).length > 0) {
-      const ceramicCapTableRes = await this.ceramic.updateCapTable({
-        data: {
-          shareholderEthToCeramic,
-        },
-        capTableAddress: capTableAddress,
-        capTableRegistryAddress: this.blockchain.capTableRegistryContract().address,
-      });
-      if (ceramicCapTableRes.isErr()) {
-        log('Could not update transfers in ceramic. Changed values: ', shareholderEthToCeramic);
-        // REVIEW - Unsound, if not sync.
-        Object.keys(shareholderEthToCeramic).forEach((ethAddress) => {
-          operationResult = operationResult.map((or) => {
-            if (or.to === ethAddress) {
-              return { ...or, message: 'Could not update Ceramic data.', success: false };
-            }
-            return or;
-          });
-        });
-      }
-    }
-    log('End transferring with result', operationResult);
-    return ok(operationResult);
+export async function _splitt(
+  this: SDK,
+  capTableAddress: CapTableEthereumId,
+  issueRequest: IssueRequest[],
+): Promise<Result<(OperationResult & IssueRequest)[], string>> {
+  try {
+    log('Start kapitalforhoyselseNyeAksjer with inputs', {
+      capTableAddress,
+      issueRequest,
+    });
+    // Prepare possible ceramic updates
+    const shareholderEthToCeramic: Record<EthereumAddress, CeramicID> = {};
+
+    return this._processIssueRequest(capTableAddress, issueRequest, shareholderEthToCeramic);
   } catch (error) {
     log(error);
     return err('Something unknown went wrong when transfering shares. See logs or contact administrator.');
@@ -468,7 +444,7 @@ export async function _transferInputsToRequest(
 
 export async function _issueInputsToRequest(
   this: SDK,
-  shareholderEthToCeramic: Record<string, string>,
+  shareholderEthToCeramic: Record<EthereumAddress, CeramicID>,
   transferInputs: IssueInput[],
 ): Promise<Result<IssueRequest[], string>> {
   let issueRequests: IssueRequest[] = [];
@@ -493,4 +469,51 @@ export async function _issueInputsToRequest(
     }
   }
   return ok(issueRequests);
+}
+
+export async function _processIssueRequest(
+  this: SDK,
+  capTableAddress: string,
+  issueRequests: IssueRequest[],
+  shareholderEthToCeramic: Record<EthereumAddress, CeramicID>,
+): Promise<Result<(OperationResult & IssueRequest)[], string>> {
+  let operationResult: (OperationResult & IssueRequest)[] = [];
+  try {
+    const res = await this.blockchain.capTableContract(capTableAddress).kapitalforhoyselse_nye_aksjer(
+      issueRequests.map((tr) => ethers.utils.formatBytes32String(tr.partition)),
+      issueRequests.map((tr) => tr.to),
+      issueRequests.map((tr) => ethers.utils.parseEther(tr.amount)),
+      '0x11',
+    );
+    await res.wait();
+    operationResult = issueRequests.map((tr) => ({ ...tr, success: true, message: 'Deployed to blockchain.' }));
+  } catch (error) {
+    log('error from operatorTransfer', error);
+    operationResult = issueRequests.map((tr) => ({ ...tr, success: false, message: 'Error deploying to blockchain.' }));
+  }
+  // TODO : Remove possible keys where blockhain transaction was not success
+  // Do updates to Ceramic
+  if (Object.keys(shareholderEthToCeramic).length > 0) {
+    const ceramicCapTableRes = await this.ceramic.updateCapTable({
+      data: {
+        shareholderEthToCeramic,
+      },
+      capTableAddress: capTableAddress,
+      capTableRegistryAddress: this.blockchain.capTableRegistryContract().address,
+    });
+    if (ceramicCapTableRes.isErr()) {
+      log('Could not update transfers in ceramic. Changed values: ', shareholderEthToCeramic);
+      // REVIEW - Unsound, if not sync.
+      Object.keys(shareholderEthToCeramic).forEach((ethAddress) => {
+        operationResult = operationResult.map((or) => {
+          if (or.to === ethAddress) {
+            return { ...or, message: 'Could not update Ceramic data.', success: false };
+          }
+          return or;
+        });
+      });
+    }
+  }
+  log('End transferring with result', operationResult);
+  return ok(operationResult);
 }

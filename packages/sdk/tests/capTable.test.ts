@@ -187,6 +187,45 @@ test('kapitalforhoyselseNyeAksjer', async (t) => {
   t.assert(shareholder, 'Found the new shareholder');
 });
 
+test('splitt', async (t) => {
+  const capTable = await t.context.sdk.getCapTable(t.context.capTableAddress);
+  const shareholderToUpdate = capTable.shareholders.map((s) => {
+    return {
+      to: s.ethAddress,
+      partition: 'ordinære',
+      amount: '5000',
+    };
+  });
+  const issueResult = await t.context.sdk.splitt(t.context.capTableAddress, shareholderToUpdate);
+  if (issueResult.length !== 2 || !Array.isArray(issueResult)) {
+    t.log(issueResult);
+  }
+  t.truthy(Array.isArray(issueResult), 'issueResult is an array');
+  t.is(issueResult.length, capTable.shareholders.length, 'issueResult has one element');
+  issueResult.map((tr) => {
+    t.is(tr.success, true, 'issueResult is success');
+    if (!tr.success) {
+      t.log(tr);
+    }
+    t.is(typeof tr.message, 'string', 'issueResult has a message');
+  });
+  // dont do this because it takes to long for TheGraph to update.
+  // const sleep = (ms: number) => {
+  //   return new Promise((resolve) => setTimeout(resolve, ms));
+  // };
+  // await sleep(2000);
+  // const capTableUpdated = await t.context.sdk.getCapTable(t.context.capTableAddress);
+  // capTableUpdated.shareholders.forEach((s) => {
+  //   const oldS = capTable.shareholders.find((oldS) => oldS.ethAddress === s.ethAddress);
+  //   if (!oldS) {
+  //     t.log('proevious captable', capTable);
+  //     t.log('updated captable', capTableUpdated);
+  //     return t.fail('Couldt not find previous shareholder for the updated one');
+  //   }
+  //   t.not(s.balances[0].amount, oldS.balances[0].amount, 'shareholder balance should be adjusted');
+  // });
+});
+
 test('delete', async (t) => {
   const isDeleted = await t.context.sdk.deleteCapTable(t.context.capTableAddress);
   t.truthy(isDeleted, 'should return true on delete');
