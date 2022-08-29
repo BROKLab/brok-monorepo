@@ -17,6 +17,8 @@ export type CapTable = Organisation &
 
 export type TransferInput = FromShareholder & PartitionAmount & (ExsistingShareholder | NewShareholder);
 export type TransferRequest = FromShareholder & PartitionAmount & ExsistingShareholder;
+export type IssueInput = PartitionAmount & (ExsistingShareholder | NewShareholder);
+export type IssueRequest = PartitionAmount & ExsistingShareholder;
 
 export type OperationResult = { success: boolean; message: string };
 

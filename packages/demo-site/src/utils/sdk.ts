@@ -22,6 +22,7 @@ export const updateShareholder = async (capTableAddress: string, shareholder: Pa
 
 
 
+
 export const initSDK = async (): Promise<SDK> => {
   if (!(process.env.NEXT_PUBLIC_BROK_ENVIRONMENT &&
     process.env.NEXT_PUBLIC_CERAMIC_URL &&

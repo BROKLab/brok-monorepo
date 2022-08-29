@@ -143,6 +143,50 @@ test('update shareholder', async (t) => {
   t.is(updatedShareholder.postalcode, shareholderToUpdate.postalcode, 'should NOT have updated postalcode');
 });
 
+test('kapitalforhoyselseNyeAksjer', async (t) => {
+  const capTable = await t.context.sdk.getCapTable(t.context.capTableAddress);
+  const shareholderToUpdate = capTable.shareholders.find((s) => s.name === 'Old Nordmann');
+  if (!shareholderToUpdate) {
+    t.log(capTable.shareholders);
+    return t.fail('Could not find shareholder to update');
+  }
+  const newShareholder = {
+    amount: '100',
+    partition: 'ordinære',
+    name: 'Fredrik Ljong',
+    birthDate: '01-01-1988',
+    countryCode: 'NO',
+    postalcode: '0655',
+  };
+  const issueResult = await t.context.sdk.kapitalforhoyselseNyeAksjer(t.context.capTableAddress, [
+    {
+      to: shareholderToUpdate.ethAddress,
+      amount: '100',
+      partition: 'ordinære',
+    },
+    newShareholder,
+  ]);
+  if (issueResult.length !== 2 || !Array.isArray(issueResult)) {
+    t.log(issueResult);
+  }
+  t.truthy(Array.isArray(issueResult), 'issueResult is an array');
+  t.is(issueResult.length, 2, 'issueResult has one element');
+  issueResult.map((tr) => {
+    t.is(tr.success, true, 'issueResult is success');
+    if (!tr.success) {
+      t.log(tr);
+    }
+    t.is(typeof tr.message, 'string', 'issueResult has a message');
+  });
+  const capTableUpdated = await t.context.sdk.getCapTable(t.context.capTableAddress);
+  const shareholder = capTableUpdated.shareholders.find((s) => s.name === newShareholder.name);
+  if (!shareholder) {
+    t.log('Could not find the new shareholder');
+    t.log(capTableUpdated.shareholders);
+  }
+  t.assert(shareholder, 'Found the new shareholder');
+});
+
 test('delete', async (t) => {
   const isDeleted = await t.context.sdk.deleteCapTable(t.context.capTableAddress);
   t.truthy(isDeleted, 'should return true on delete');

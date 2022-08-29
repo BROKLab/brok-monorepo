@@ -81,7 +81,6 @@ export class CeramicSDK extends CeramicClient {
       orgnr: input.data.orgnr ?? current.value.orgnr,
       shareholderEthToCeramic: { ...current.value.shareholderEthToCeramic, ...input.data.shareholderEthToCeramic },
     };
-    console.log('updated########', updated);
     return await this.creatDeterministic(updated, {
       family: 'capTable',
       tags: [input.capTableAddress.toLowerCase(), input.capTableRegistryAddress.toLowerCase()],
