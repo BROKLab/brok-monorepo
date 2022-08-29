@@ -11,6 +11,7 @@ import {
   IssueInput,
   IssueRequest,
   OperationResult,
+  RedeemRequest,
   Shareholder,
   TransferInput,
   TransferRequest,
@@ -30,6 +31,8 @@ import {
   _issueInputsToRequest,
   _processIssueRequest,
   _splitt,
+  _kapitalnedsettelseReduksjonAksjer,
+  _spleis,
 } from './capTable.js';
 
 export class SDK {
@@ -44,6 +47,8 @@ export class SDK {
   protected _issueInputsToRequest = _issueInputsToRequest;
   protected _processIssueRequest = _processIssueRequest;
   protected _splitt = _splitt;
+  protected _kapitalnedsettelseReduksjonAksjer = _kapitalnedsettelseReduksjonAksjer;
+  protected _spleis = _spleis;
 
   private constructor(protected blockchain: BlockchainSDK, protected ceramic: CeramicSDK) {}
 
@@ -129,8 +134,27 @@ export class SDK {
     }
     return res.value;
   }
+
   async splitt(capTableAddress: CapTableEthereumId, issues: IssueRequest[]): Promise<(OperationResult & IssueRequest)[]> {
     const res = await this._splitt(capTableAddress, issues);
+    if (res.isErr()) {
+      throw Error(res.error);
+    }
+    return res.value;
+  }
+
+  async kapitalnedsettelseReduksjonAksjer(
+    capTableAddress: CapTableEthereumId,
+    redeems: RedeemRequest[],
+  ): Promise<(OperationResult & RedeemRequest)[]> {
+    const res = await this._kapitalnedsettelseReduksjonAksjer(capTableAddress, redeems);
+    if (res.isErr()) {
+      throw Error(res.error);
+    }
+    return res.value;
+  }
+  async spleis(capTableAddress: CapTableEthereumId, redeems: RedeemRequest[]): Promise<(OperationResult & RedeemRequest)[]> {
+    const res = await this._spleis(capTableAddress, redeems);
     if (res.isErr()) {
       throw Error(res.error);
     }

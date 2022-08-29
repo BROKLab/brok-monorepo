@@ -12,6 +12,7 @@ import {
   IssueInput,
   IssueRequest,
   OperationResult,
+  RedeemRequest,
   Shareholder,
   TransferInput,
   TransferRequest,
@@ -309,7 +310,7 @@ export async function _splitt(
   issueRequest: IssueRequest[],
 ): Promise<Result<(OperationResult & IssueRequest)[], string>> {
   try {
-    log('Start kapitalforhoyselseNyeAksjer with inputs', {
+    log('Start _splitt with inputs', {
       capTableAddress,
       issueRequest,
     });
@@ -317,6 +318,79 @@ export async function _splitt(
     const shareholderEthToCeramic: Record<EthereumAddress, CeramicID> = {};
 
     return this._processIssueRequest(capTableAddress, issueRequest, shareholderEthToCeramic);
+  } catch (error) {
+    log(error);
+    return err('Something unknown went wrong when transfering shares. See logs or contact administrator.');
+  }
+}
+
+export async function _kapitalnedsettelseReduksjonAksjer(
+  this: SDK,
+  capTableAddress: CapTableEthereumId,
+  redeemRequest: RedeemRequest[],
+): Promise<Result<(OperationResult & RedeemRequest)[], string>> {
+  try {
+    log('Start _kapitalnedsettelseReduksjonAksjer with inputs', {
+      capTableAddress,
+      redeemRequest,
+    });
+    // Prepare possible ceramic updates
+    const shareholderEthToCeramic: Record<EthereumAddress, CeramicID> = {};
+    let operationResult: (OperationResult & RedeemRequest)[] = [];
+    try {
+      const res = await this.blockchain.capTableContract(capTableAddress).kapitalnedsettelse_reduksjon_aksjer(
+        redeemRequest.map((tr) => ethers.utils.formatBytes32String(tr.partition)),
+        redeemRequest.map((tr) => tr.from),
+        redeemRequest.map((tr) => ethers.utils.parseEther(tr.amount)),
+        '0x11',
+        '0x11',
+      );
+      await res.wait();
+      operationResult = redeemRequest.map((tr) => ({ ...tr, success: true, message: 'Deployed to blockchain.' }));
+    } catch (error) {
+      log('error from operatorTransfer', error);
+      operationResult = redeemRequest.map((tr) => ({ ...tr, success: false, message: 'Error deploying to blockchain.' }));
+    }
+    // TODO : Remove ceramic data if balance i 0
+
+    log('End transferring with result', operationResult);
+    return ok(operationResult);
+  } catch (error) {
+    log(error);
+    return err('Something unknown went wrong when transfering shares. See logs or contact administrator.');
+  }
+}
+export async function _spleis(
+  this: SDK,
+  capTableAddress: CapTableEthereumId,
+  redeemRequest: RedeemRequest[],
+): Promise<Result<(OperationResult & RedeemRequest)[], string>> {
+  try {
+    log('Start _spleis with inputs', {
+      capTableAddress,
+      redeemRequest,
+    });
+    // Prepare possible ceramic updates
+    const shareholderEthToCeramic: Record<EthereumAddress, CeramicID> = {};
+    let operationResult: (OperationResult & RedeemRequest)[] = [];
+    try {
+      const res = await this.blockchain.capTableContract(capTableAddress).spleis(
+        redeemRequest.map((tr) => ethers.utils.formatBytes32String(tr.partition)),
+        redeemRequest.map((tr) => tr.from),
+        redeemRequest.map((tr) => ethers.utils.parseEther(tr.amount)),
+        '0x11',
+        '0x11',
+      );
+      await res.wait();
+      operationResult = redeemRequest.map((tr) => ({ ...tr, success: true, message: 'Deployed to blockchain.' }));
+    } catch (error) {
+      log('error from operatorTransfer', error);
+      operationResult = redeemRequest.map((tr) => ({ ...tr, success: false, message: 'Error deploying to blockchain.' }));
+    }
+    // TODO : Remove ceramic data if balance i 0
+
+    log('End transferring with result', operationResult);
+    return ok(operationResult);
   } catch (error) {
     log(error);
     return err('Something unknown went wrong when transfering shares. See logs or contact administrator.');
