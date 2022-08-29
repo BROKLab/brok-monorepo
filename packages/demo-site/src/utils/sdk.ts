@@ -1,4 +1,4 @@
-import { SDK, CapTableGraphQL, CapTable, TransferInput, TransferRequest, OperationResult } from "@brok/sdk";
+import { SDK, CapTableGraphQL, CapTable, TransferInput, TransferRequest, OperationResult, Shareholder } from "@brok/sdk";
 
 export const getCapTables = async (skip?: number, limit?: number): Promise<CapTableGraphQL[]> => {
   const sdk = await initSDK();
@@ -14,6 +14,12 @@ export const transfer = async (capTableAddress: string, transfer: TransferInput[
   const sdk = await initSDK();
   return await sdk.transfer(capTableAddress, transfer);
 }
+
+export const updateShareholder = async (capTableAddress: string, shareholder: Partial<Shareholder>): Promise<Shareholder> => {
+  const sdk = await initSDK();
+  return await sdk.updateShareholder(capTableAddress,shareholder);
+}
+
 
 
 export const initSDK = async (): Promise<SDK> => {

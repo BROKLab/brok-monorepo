@@ -76,7 +76,7 @@ const Home: NextPage = () => {
               </Card>
               <Spacer y={1}></Spacer>
 
-              <Card isHoverable isPressable css={{ p: "$xs", maxWidth: "400px" }} onClick={() => router.push('/publish')}>
+              <Card isHoverable isPressable css={{ p: "$xs", maxWidth: "400px" }} onClick={() => router.push('/publish-shareholder-change')}>
                 <Card.Header >
                   <User></User>
                   <Grid.Container css={{ pl: "$6" }} gap={1}>
