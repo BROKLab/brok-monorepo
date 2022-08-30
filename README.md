@@ -2,9 +2,9 @@
 
 - [docker](https://docs.docker.com/get-docker/)
 - [pnpm](https://pnpm.io/installation) 
-- [make](https://opensource.com/article/18/8/what-how-makefile) (get started with makefile [mac](https://formulae.brew.sh/formula/make), [win](https://stackoverflow.com/questions/32127524/how-to-install-and-use-make-in-windows) )
 - [Docker Compose](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-ubuntu-20-04)
 - [Node](https://nodejs.org/en/blog/release/v16.14.2/)
+- [make](https://opensource.com/article/18/8/what-how-makefile) (get started with makefile [mac](https://formulae.brew.sh/formula/make), [win](https://stackoverflow.com/questions/32127524/how-to-install-and-use-make-in-windows) ) (Optional)
 
 ## Getting started - Local development
 
@@ -21,12 +21,12 @@ The graph takes some time to start. Once it is started it will keep running in d
 
 
 # Deployments
-## Release packages of SDK and CapTable
+## Release packages of SDK and CapTable (you can choose what to publish update on with changeset)
 ```
 pnpm changeset
 pnpm changeset version
 pnpm install
-# commit the changes
+# commit the changes, need to update lockfiles.
 pnpm publish -r
 ```
 
@@ -44,25 +44,20 @@ Will deploy by instructions of render.yaml file.
 
 ## Getting started - Remote development
 
-1. Install requirements (docker, docker-compose, pnpm, make, node)
+1. Install requirements (docker, docker-compose, pnpm, node)
 2. Get yourself an Ethereum RPC endpoint (free: [alchemy](https://www.alchemy.com/) [infura](https://infura.io/) )
 3. Get yourself wallets for all enviroments (can create a wallet which contains a seed with `pnpm task utils:seed`)
 4. Update .evn varibles in all packages with your endpoints and seeds.
 5. Fund wallets on blockchain you are targeting.
---- Make code changes
-1. Create new version of @brok/sdk & @brok/captable with `pnpm task publish`
-2. Publish new version of @brok/sdk & @brok/captable with `pnpm task publish:commit`
-3. Deploy new version of theGraph `pnpm deploy:graph [ENV]`
-4. Deploy new version of demo-server `deploy:update:server [ENV]` 
-5. Deploy new version of demo-frontend `deploy:update:frontend [ENV]` 
+
 
 
 ## Deployment
 - SDK [NPM](https://www.npmjs.com/package/@brok/sdk)
 - Captable [NPM](https://www.npmjs.com/package/@brok/captable)
-- Graph [HostedService](https://thegraph.com/hosted-service/dashboard) (connected to robertosnap account)
+<!-- - Graph [HostedService](https://thegraph.com/hosted-service/dashboard) (connected to robertosnap account)
 - demo-server [Heroku DEV](https://brok-demo-server-dev.herokuapp.com) [Heroku STAGE](https://brok-demo-server-stage.herokuapp.com) 
-- demo-frontend [Heroku DEV](https://brok-demo-frontend-dev.herokuapp.com/) [Heroku STAGE](https://brok-demo-frontend-stage.herokuapp.com/)
+- demo-frontend [Heroku DEV](https://brok-demo-frontend-dev.herokuapp.com/) [Heroku STAGE](https://brok-demo-frontend-stage.herokuapp.com/) -->
 
 So SDK and Captable are NPM packages that needs to be published for changes to propegate. 
 Graph, demo-server and demo-frontend needs to be deployed to their enviroments to progegate changes.

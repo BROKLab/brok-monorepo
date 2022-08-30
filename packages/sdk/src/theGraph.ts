@@ -20,38 +20,31 @@ export async function getCapTableGraph(url: string, capTableAddress: string): Pr
           }),
           headers: { 'Content-Type': 'application/json' },
         });
-        return await res.json();
+        const json = await res.json();
+        if (json.data && 'capTable' in json.data && json.data.capTable !== null && json.data.capTable.status === 'APPROVED') {
+          return json.data.capTable;
+        }
+        log('No valid json data from theGraph', json);
+        return undefined;
       };
       let json = await getJson();
-      if (json.data && 'capTable' in json.data && json.data.capTable.status === 'APPROVED') {
-        return json as { data: CapTableQuery };
+      let time = 0;
+      while (time < 30000 && !json) {
+        debug('CapTable status NOT approved, sleeping 2 seconds and will try again');
+        await sleep(2000);
+        time += 2000;
+        json = await getJson();
       }
-      log('json.data', json.data);
-      await sleep(2000);
-      debug('CapTable status NOT approved, sleeping 2 seconds and will try again');
-      json = await getJson();
-      if (json.data && 'capTable' in json.data && json.data.capTable.status === 'APPROVED') {
-        return json as { data: CapTableQuery };
+      if (json) {
+        return json;
       }
-      log('json.data', json.data);
-      await sleep(3000);
-      debug('CapTable status NOT approved, sleeping 3 seconds and will try again');
-      json = await getJson();
-      if (json.data && 'capTable' in json.data && json.data.capTable.status === 'APPROVED') {
-        return json as { data: CapTableQuery };
-      }
-      log('json.data', json.data);
-      if (json.data && 'capTable' in json.data && json.data.capTable.status) {
-        throw new Error('CapTable is not approved on the graph, status is ' + json.data.capTable.status);
-      }
-      log('json.data', json.data);
       throw new Error('Could not find cap table data on the graph');
     };
 
     const data = await getData();
-    log('got data', data);
-    if ('data' in data && 'capTable' in data.data) {
-      return ok(data.data.capTable);
+    log('got graphwl', data);
+    if (data) {
+      return ok(data);
     }
     debug('brok:sdk:thegraph')('invalid data from theGraph', data);
     return err(`Could not get capTable with address: ${capTableAddress} from theGraph`);

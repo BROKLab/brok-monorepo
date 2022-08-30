@@ -146,16 +146,32 @@ export async function _getCapTable(this: SDK, capTableAddress: EthereumAddress):
       log('Got shareholder', shareholder.value);
       const graphData = capTableGraphData.value.tokenHolders.find((tokenHolder) => tokenHolder.address === ethAddress);
       if (!graphData) {
-        throw new Error(`Could not find shareholder ${ethAddress} in graph data`);
+        return null;
+        // throw new Error(`Could not find shareholder ${ethAddress} in graph data`);
       }
-      return {
+      return;
+    });
+    const shareholders = [];
+    for await (const [ethAddress, ceramicId] of Object.entries(capTableCeramicData.value.shareholderEthToCeramic)) {
+      const shareholder = await this.ceramic.getShareholder(ceramicId);
+      if (shareholder.isErr()) {
+        throw new Error(`Could not get shareholder ${ethAddress} and ${ceramicId}`);
+      }
+      log('Got shareholder', shareholder.value);
+      const graphData = capTableGraphData.value.tokenHolders.find((tokenHolder) => tokenHolder.address === ethAddress);
+      if (!graphData) {
+        continue;
+        // throw new Error(`Could not find shareholder ${ethAddress} in graph data`);
+      }
+      shareholders.push({
         ...shareholder.value,
         ...graphData,
         ethAddress,
-      };
-    });
-    const shareholders = await Promise.all(shareholderPromises);
+      });
+    }
+    // const shareholders = (await Promise.all(shareholderPromises)).filter((s) => s !== null);
     const capTable: CapTable = {
+      ethAddress: capTableAddress,
       name: capTableCeramicData.value.name,
       orgnr: capTableCeramicData.value.orgnr,
       ceramicID: capTableCeramicData.value.ceramicID,

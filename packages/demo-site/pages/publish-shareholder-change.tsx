@@ -1,4 +1,4 @@
-import { CapTable, TransferInput } from "@brok/sdk";
+import { CapTable, Shareholder, TransferInput } from "@brok/sdk";
 import { Button, Card, Container, Grid, Loading, Spacer, Text } from '@nextui-org/react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
@@ -8,7 +8,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import { Footer } from '../src/ui/Footer';
 import { NavBar } from '../src/ui/NavBar';
 import { getRandomShareholders, randomAmountInThousands } from '../src/utils/random-data';
-import { getCapTable, getCapTables, transfer as transferSDK } from '../src/utils/sdk';
+import { getCapTable, getCapTables, transfer as transferSDK, updateShareholder } from '../src/utils/sdk';
 import { ethers } from "ethers"
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -16,7 +16,8 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 const Home: NextPage = () => {
   const router = useRouter()
   const [capTable, setCapTable] = useState<CapTable>();
-  const [transfers, setTransfers] = useState<TransferInput[]>([]);
+  const [oldShareholder, setOldShareholder] = useState<Shareholder>();
+  const [newShareholder, setNewShareholder] = useState<Shareholder>();
   const [publishing, setPublishing] = useState(false);
 
   useEffect(() => {
@@ -28,38 +29,19 @@ const Home: NextPage = () => {
         if (subscribed && res.length > 0) {
           const capTable = await getCapTable(graphQLCapTable.id);
           if (subscribed && res.length > 0) {
-            const randomNewShareholder = await getRandomShareholders(1);
-            const transfers: TransferInput[] = [];
-            let i = 0;
-            let max = 2
-            for (const s of capTable.shareholders) {
-              if (i === 2) break;
-              const transferBalance = parseInt(ethers.utils.formatUnits(s.balances.reduce((prev, b) => prev.add(ethers.BigNumber.from(b.amount)), ethers.constants.Zero).div(3)))
-              if (i === 0 && randomNewShareholder.length > 0) {
-                // new shareholder transfer 
-                const newS = randomNewShareholder[0]
-                transfers.push({
-                  name: newS.visningnavn,
-                  birthDate: newS.foedselsdato,
-                  postalcode: newS.postalCode,
-                  countryCode: "NO",
-                  partition: "ordinære",
-                  amount: randomAmountInThousands(transferBalance / 2).toString(),
-                  from: s.ethAddress
-                })
-              } else {
-
-                transfers.push({
-                  from: s.ethAddress,
-                  to: capTable.shareholders[i + 1].ethAddress,
-                  partition: "ordinære",
-                  amount: randomAmountInThousands(transferBalance / 3).toString(),
-                })
-              }
-              i++;
-            }
+            const random = Math.floor(Math.random() * ((capTable.shareholders.length - 1) - 0 + 1)) + 0;
+            console.log(capTable.shareholders.length)
+            console.log(random, random)
+            const _oldShareholder = capTable.shareholders[random]
+            console.log("capTable", capTable)
             setCapTable(capTable)
-            setTransfers(transfers)
+            console.log("_oldShareholder", _oldShareholder)
+            setOldShareholder(_oldShareholder)
+            setNewShareholder({
+              ..._oldShareholder,
+              name: random > 1 ? "Kari Nordmann" : "Ola Nordmann"
+            })
+
           }
         }
       }
@@ -68,23 +50,17 @@ const Home: NextPage = () => {
     return () => { subscribed = false }
   }, [capTable])
 
-  const getNameForEthAddress = (address: string): string => {
-    const maybeShareholder = capTable?.shareholders.find(s => s.ethAddress === address)
-    return maybeShareholder ? maybeShareholder.name : `${address.slice(0, 3)} .. ${address.slice(-1, -3)}`
-  }
-
-  const publishTransfer = async (transfer: TransferInput) => {
+  const handleUpdate = async (newShareholder: Shareholder) => {
     if (!capTable) throw "Must have CapTable"
 
     try {
-      const tr = await transferSDK(capTable.ethAddress, [transfer]);
-      if (!tr[0].success) {
-        throw new Error(tr[0].message)
-      }
+      if (!newShareholder) throw "Must have new shareholder"
+      setPublishing(true)
+      const tr = await updateShareholder(capTable.ethAddress, newShareholder);
       toast((t) => <Container>
         <Grid.Container>
           <Grid>
-            <Text>{`Published transfer`}</Text>
+            <Text>{`Update shareholder`}</Text>
           </Grid>
           <Grid>
             <Button as='a' target="_blank" onPress={() => router.push(`/cap-table/${capTable.ethAddress}`)}>View cap table</Button>
@@ -97,6 +73,7 @@ const Home: NextPage = () => {
         toast(e.message, { type: "error" })
       }
     }
+    setPublishing(false)
   }
 
 
@@ -119,37 +96,31 @@ const Home: NextPage = () => {
         <Spacer y={4}></Spacer>
         <Grid.Container gap={2} css={{ p: '$sm' }} justify="center" >
           <Grid>
-            <Text h3>{`Requested transfers for company ${capTable ? capTable.name : "..."}`}</Text>
+            <Text h3>{`Requested shareholder updates for company ${capTable ? capTable.name : "..."}`}</Text>
             <Spacer y={2}></Spacer>
             {!capTable && <Loading></Loading>}
             <Grid.Container gap={1}>
 
-              {transfers.map(transfer => (
-                <Grid xs={12} sm={6} key={`${transfer.amount}-${transfer.from}`}>
+              {newShareholder && oldShareholder &&
+                <Grid xs={12} sm={6}>
                   <Card>
                     <Card.Header>
-                      <Text h4>{`Transfer ${transfer.amount}`}</Text>
+                      <Text h4>{`Update name`}</Text>
                     </Card.Header>
                     <Card.Body>
                       <Grid.Container gap={1}>
                         <Grid xs={6}>From:</Grid>
-                        <Grid xs={6}>{getNameForEthAddress(transfer.from)}</Grid>
+                        <Grid xs={6}>{oldShareholder.name}</Grid>
                         <Grid xs={6}>To:</Grid>
-                        <Grid xs={6}>{"to" in transfer ? getNameForEthAddress(transfer.to) : transfer.name}</Grid>
-                        <Grid xs={6}>Amount</Grid>
-                        <Grid xs={6}>{transfer.amount}</Grid>
-                        <Grid xs={6}>Partition</Grid>
-                        <Grid xs={6}>{transfer.partition}</Grid>
-                        <Grid xs={6}>New shareholder</Grid>
-                        <Grid xs={6}>{"to" in transfer ? "No" : "Yes"}</Grid>
+                        <Grid xs={6}>{newShareholder.name}</Grid>
                       </Grid.Container>
                     </Card.Body>
                     <Card.Footer>
-                      <Button flat size={"sm"} disabled={publishing} onPress={() => publishTransfer(transfer)}>{publishing ? <Loading style={{ margin: 5 }}></Loading> : "Publish"}</Button>
+                      <Button flat size={"sm"} disabled={publishing} onPress={() => handleUpdate(newShareholder)}>{publishing ? <Loading style={{ margin: 5 }}></Loading> : "Publish"}</Button>
                     </Card.Footer>
                   </Card>
                 </Grid>
-              ))}
+              }
             </Grid.Container>
           </Grid>
         </Grid.Container>

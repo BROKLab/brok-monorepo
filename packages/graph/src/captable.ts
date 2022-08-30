@@ -42,6 +42,10 @@ export function handleIssuedByPartition(event: IssuedByPartition): void {
     let _controllers = contract.controllers().map<Bytes>((a) => a as Bytes);
     capTable.controllers = _controllers;
     capTable.save();
+  }else {
+    let contract = CapTable.bind(event.address);
+    capTable.totalSupply = contract.totalSupply();
+    capTable.save();
   }
 
   // Token holder
@@ -140,6 +144,17 @@ export function handleTransferByPartition(event: TransferByPartition): void {
     toBalance.capTable = event.address.toHexString();
     toBalance.save();
   }
+    // Update total supply
+  let capTable = CapTableSchema.load(event.address.toHexString());
+  if(capTable == null) {
+    log.critical('LOGICAL SMART CONTRACT ERROR {}', [
+      'fromBalance in handleRedeemByPartition should always exist. ',
+    ]);
+    return;
+  }
+  let contract = CapTable.bind(event.address);
+  capTable.totalSupply = contract.totalSupply();
+  capTable.save();
 }
 
 export function handleRedeemByPartition(event: RedeemedByPartition): void {
@@ -159,4 +174,16 @@ export function handleRedeemByPartition(event: RedeemedByPartition): void {
   }
   fromBalance.amount = fromBalance.amount.minus(event.params.value);
   fromBalance.save();
+
+  // Update total supply
+  let capTable = CapTableSchema.load(event.address.toHexString());
+  if(capTable == null) {
+    log.critical('LOGICAL SMART CONTRACT ERROR {}', [
+      'fromBalance in handleRedeemByPartition should always exist. ',
+    ]);
+    return;
+  }
+  let contract = CapTable.bind(event.address);
+  capTable.totalSupply = contract.totalSupply();
+  capTable.save();
 }

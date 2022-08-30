@@ -1,5 +1,3 @@
-import { sh } from "tasksfile"
-import { frontendApp, serverApp } from "./deploy"
 import { Wallet } from "ethers"
 import { writeFileSync, readFileSync } from "fs"
 import { DID } from "dids";

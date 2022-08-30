@@ -10,6 +10,7 @@ import { SDK } from "@brok/sdk";
 import { toast, ToastContainer } from 'react-toastify';
 import { ethers } from "ethers"
 import { useEffect, useState } from 'react';
+import { getRandomOrgs, getRandomShareholders, randomAmountInThousands } from '../src/utils/random-data';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -18,26 +19,6 @@ const Home: NextPage = () => {
   const [randomOrgs, setRandomOrgs] = useState<Organisasjon[]>([]);
   const [publishing, setPublishing] = useState(false);
 
-  const getRandomOrgs = async (amount: number) => {
-    const company = await fetch(`/api/random-org?${new URLSearchParams({
-      amount: amount.toString(),
-    })}`)
-    const json = await company.json()
-    if ("data" in json) {
-      return json.data as Organisasjon[]
-    }
-    throw "No data in response"
-  }
-  const getRandomShareholders = async (amount: number) => {
-    const company = await fetch(`/api/random-shareholder?${new URLSearchParams({
-      amount: amount.toString(),
-    })}`)
-    const json = await company.json()
-    if ("data" in json) {
-      return json.data as RandomShareholder[]
-    }
-    throw "No data in response"
-  }
 
   const publishOrg = async (org: Organisasjon) => {
     try {
@@ -54,7 +35,7 @@ const Home: NextPage = () => {
         ceramicUrl: process.env.NEXT_PUBLIC_CERAMIC_URL, ethereumRpc: process.env.NEXT_PUBLIC_ETHEREUM_RPC,
         secret: process.env.NEXT_PUBLIC_SECRET, theGraphUrl: process.env.NEXT_PUBLIC_THE_GRAPH_URL, env: process.env.NEXT_PUBLIC_BROK_ENVIRONMENT
       });
-      const amountShareholders = Math.floor(Math.random() * (6 - 3 + 1) + 3)
+      const amountShareholders = Math.floor(Math.random() * (2) + 3)
       console.log("amountShareholders", amountShareholders)
       const shareholders = await getRandomShareholders(amountShareholders)
       const issueShareholders = shareholders.slice(0, -1)
@@ -67,15 +48,13 @@ const Home: NextPage = () => {
         orgnr: org.organisasjonsnummer,
         // Skip last
         shareholders: issueShareholders.map((s, i, arr) => {
-          const amount = Math.random() * 100_000 | 10;
-          const amountRounded = Math.round(amount / 1000) * 1000
           return {
             name: s.visningnavn,
             birthDate: s.foedselsdato,
             postalcode: s.postalCode,
             countryCode: "NO",
             partition: "ordinære",
-            amount: amountRounded.toString()
+            amount: randomAmountInThousands(100_000).toString()
           }
         })
       })
