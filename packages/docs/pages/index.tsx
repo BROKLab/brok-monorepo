@@ -48,33 +48,41 @@ const Home: NextPage = () => {
         as="main"
         display="flex"
         direction="column"
-        justify="flex-start"
-        style={{ minHeight: '100vh' }}
+      // justify="center"
+      // style={{ minHeight: '100vh' }}
       >
-
-
         {/* HERO */}
         <Grid.Container  >
           <Spacer y={5}></Spacer>
           <Grid xs={12} justify="center">
             <Text h2>Base layer Cap table solution</Text>
-
           </Grid>
           <Spacer y={2}></Spacer>
           <Grid xs={12} justify="center">
             <Button>Getting started</Button>
-
           </Grid>
           <Spacer y={5}></Spacer>
         </Grid.Container>
 
         {/* FIRST */}
-        <Grid.Container>
-          <Grid xs={6}>
-            <Text h3>Install</Text>
+        <Grid.Container alignContent='center'>
+          <Grid xs={6} >
+            <Container gap={3} justify="flex-end">
+              <Col>
+                <Text h3>Run it</Text>
+                <Button as={Link} href="https://stackblitz.com/edit/nextjs-j6bqhx?file=pages%2Findex.js">Sandbox browser(NextJS)</Button>
+                <Spacer></Spacer>
+                <Button as={Link} href="https://stackblitz.com/edit/node-bzd6sj?file=index.js">Sandbox server(NodeJS)</Button>
+              </Col>
+            </Container>
           </Grid>
-          <Grid xs={6}>
-            <Text h3>Install</Text>
+          <Grid xs={6}  >
+            <Col>
+              <Text h3>Install</Text>
+              <Text>npm i @brok/sdk</Text>
+              <Text>pnpm i @brok/sdk</Text>
+              <Text>yarn i @brok/sdk</Text>
+            </Col>
           </Grid>
         </Grid.Container>
 
