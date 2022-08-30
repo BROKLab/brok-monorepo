@@ -275,6 +275,58 @@ test('kapitalnedsettelseReduksjonAksjer', async (t) => {
   // t.assert(ethers.BigNumber.from(updatedShareholder.balances[0].amount).lt(oldBalance), 'shareholder balance should be adjusted down');
 });
 
+test('spleis', async (t) => {
+  const capTable = await t.context.sdk.getCapTable(t.context.capTableAddress);
+  const shareholderToUpdate = capTable.shareholders[0];
+  if (!shareholderToUpdate) {
+    t.log('balances', capTable.shareholders.map((s) => s.balances.map((b) => b.amount)).join(', '));
+    t.log('shareholders', capTable.shareholders);
+    return t.fail('Could not find shareholder to update');
+  }
+  const redeemResult = await t.context.sdk.spleis(
+    t.context.capTableAddress,
+    capTable.shareholders.map((s) => {
+      return {
+        from: s.ethAddress,
+        amount: '11',
+        partition: 'ordinære',
+      };
+    }),
+  );
+  if (!Array.isArray(redeemResult)) {
+    t.log(redeemResult);
+  }
+  t.truthy(Array.isArray(redeemResult), 'redeemResult is an array');
+  t.assert(redeemResult.length > 0, 'redeemResult has one element');
+  redeemResult.map((tr) => {
+    t.is(tr.success, true, 'redeemResult is success');
+    if (!tr.success) {
+      t.log(tr);
+    }
+    t.is(typeof tr.message, 'string', 'redeemResult has a message');
+  });
+  // dont do this because it takes to long for TheGraph to update.
+  // const sleep = (ms: number) => {
+  //   return new Promise((resolve) => setTimeout(resolve, ms));
+  // };
+  // await sleep(3000);
+  // const capTableUpdated = await t.context.sdk.getCapTable(t.context.capTableAddress);
+  // t.log(capTableUpdated.shareholders.map((s) => s.balances.map((b) => b.amount)).join(', '));
+  // const updatedShareholder = capTableUpdated.shareholders.find((s) => s.name === shareholderToUpdate.name);
+  // if (!updatedShareholder) {
+  //   t.log('Could not find the new shareholder');
+  //   t.log('shareholders', capTableUpdated.shareholders);
+  //   t.log('balances', capTable.shareholders.map((s) => s.balances.map((b) => b.amount)).join(', '));
+  //   return t.fail('Could not find the updated shareholder');
+  // }
+  // t.assert(updatedShareholder, 'Found the new shareholder');
+  // if (!ethers.BigNumber.from(updatedShareholder.balances[0].amount).lt(oldBalance)) {
+  //   t.log('old balance', oldBalance.toString());
+  //   t.log('new balance', updatedShareholder.balances[0].amount);
+  // }
+  // t.assert(ethers.BigNumber.from(updatedShareholder.balances[0].amount).lt(oldBalance), 'shareholder balance should be adjusted down');
+});
+
 test('delete', async (t) => {
   const isDeleted = await t.context.sdk.deleteCapTable(t.context.capTableAddress);
   t.truthy(isDeleted, 'should return true on delete');
