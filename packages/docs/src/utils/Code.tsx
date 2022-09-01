@@ -15,7 +15,7 @@ enum CopyResult {
     ERROR
 }
 
-export const TSCode: React.FC<Props> = ({ ...props }) => {
+export const Code: React.FC<Props> = ({ ...props }) => {
     const [copyResult, setCopyResult] = useState<CopyResult>(CopyResult.DEFAULT);
 
 

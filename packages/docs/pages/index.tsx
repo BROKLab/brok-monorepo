@@ -1,11 +1,9 @@
-import { Card, Container, Grid, styled, Text, Navbar, Dropdown, Button, Link, Avatar, Spacer, Col, Row, Image } from '@nextui-org/react';
+import { Button, Col, Container, Grid, Image, Link, Row, Spacer, Text } from '@nextui-org/react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
-import { BankFinancial } from 'react-basicons'
-import NoSSR from '../src/NoSSR';
-import { TSCode } from '../src/utils/Code';
+import { NavBar } from '../src/ui/NavBar';
+import { Code } from '../src/utils/Code';
 
 
 
@@ -30,30 +28,7 @@ const Home: NextPage = () => {
       {/* NAVBAR */}
 
 
-      <Navbar variant="static" maxWidth={"fluid"}>
-        <Navbar.Brand>
-          <Text h1 >BRØK docs</Text>
-        </Navbar.Brand>
-        <Navbar.Content
-          enableCursorHighlight
-          activeColor="secondary"
-          hideIn="xs"
-          variant="underline"
-        >
-
-          <Navbar.Link isActive href="#">
-            Getting stared
-          </Navbar.Link>
-          <Navbar.Link href="#">SDK</Navbar.Link>
-          <Navbar.Link href="#">Contact</Navbar.Link>
-        </Navbar.Content>
-        <Navbar.Content>
-
-          <Navbar.Item>
-            <Avatar></Avatar>
-          </Navbar.Item>
-        </Navbar.Content>
-      </Navbar>
+      <NavBar></NavBar>
       <Container
         as="main"
         display="flex"
@@ -79,17 +54,7 @@ const Home: NextPage = () => {
         <Spacer y={12}></Spacer>
 
         {/* FIRST */}
-        <Grid.Container>
-          <Grid xs={12} >
-            <Container justify='center' style={{ maxWidth: "50rem" }}>
-              <Row >
-                <Text h2>BRØK is the foundation of a truly transparent and accessible business registry. From now on, anyone can be sure who owns what and when.</Text>
-              </Row>
-            </Container>
-          </Grid>
-        </Grid.Container>
 
-        <Spacer y={12}></Spacer>
 
         <Grid.Container>
           <Grid xs={12} sm={6} >
@@ -110,15 +75,15 @@ const Home: NextPage = () => {
               <Text h3>Install</Text>
               <Row align='center' >
                 <Image height={50} width={50} alt='NPM' src="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/npm-icon.svg"></Image>
-                <TSCode code={`npm i @brok/sdk  `} lang="bash"></TSCode>
+                <Code code={`npm i @brok/sdk  `} lang="bash"></Code>
               </Row>
               <Row align='center'>
                 <Image height={50} width={50} alt='Yarn' src="https://iconape.com/wp-content/files/ub/352181/svg/yarn-seeklogo.com.svg"></Image>
-                <TSCode code={`yarn add @brok/sdk`} lang="bash"></TSCode>
+                <Code code={`yarn add @brok/sdk`} lang="bash"></Code>
               </Row>
               <Row align='center'>
                 <Image height={50} width={50} alt='PNPM' src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACgCAMAAAC8EZcfAAAAUVBMVEX5rQBOTk7////6wUB6enr7xUz/+ey9vb22trb//fj94KD93ZfS0tL+6r+mpqb81n+CgoLy8vL80XD+6Lj95rH81Hn+8dLe3t6bm5vJycn19fUy73DjAAABGklEQVR4nO3ay05CQRBFUQR8gIriC/H/P9S0A05N697E3JC15ye9RjXq1XrhrXarZpsx23dXj2N1213dAV4CTIAlwASYAEuACTABlgATYAIsASbABFgCTIAJsASYABNgCTABJsASYAJMgCXANB243jR7G0+9d1cfY/XZXf0BFx7g3K4VeHxqdhyrr+dm04H3N80exmramQEEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEXA7wdGh2Gqv9S7Pd9X4J+L8A57Zab5t9j9m5uzqP1aG7+hnA7sHYjqemnZnX7uoIeAkwAZYAE2ACLAEmwARYAkyACbAEmAATYAkwASbAEmACTIAlwASYAEuACTABlgDTDODCA5zbLxcHeK53Gj6hAAAAAElFTkSuQmCC"></Image>
-                <TSCode code={`pnpm i @brok/sdk`} lang="bash"></TSCode>
+                <Code code={`pnpm i @brok/sdk`} lang="bash"></Code>
               </Row>
             </Container>
           </Grid>
@@ -140,8 +105,8 @@ const Home: NextPage = () => {
           <Grid xs={12} sm={6} >
             <Container >
 
-              <TSCode code={`
-const capTable = await sdk.getCapTable(idnentifier);
+              <Code code={`
+const capTable = await sdk.getCapTable(indentifier);
 // returns 
 CapTable {
   ethAddress: '0x2c8ba63f2e2f42f7c897d8ebeebb5d04acc0725b',
@@ -162,10 +127,23 @@ CapTable {
     ...
   ]
 }
-`} lang="typescript"></TSCode>
+`} lang="typescript"></Code>
             </Container>
           </Grid>
         </Grid.Container>
+
+        <Spacer y={5}></Spacer>
+
+        <Grid.Container>
+          <Grid xs={12} >
+            <Container justify='center' style={{ maxWidth: "50rem" }}>
+              <Row >
+                <Text h2>BRØK is the foundation of a truly transparent and accessible business registry. From now on, anyone can be sure who owns what and when.</Text>
+              </Row>
+            </Container>
+          </Grid>
+        </Grid.Container>
+
 
         <Spacer y={5}></Spacer>
 
@@ -178,21 +156,23 @@ CapTable {
           </Grid>
           <Grid xs={12} sm={6} >
             <Container >
-              <TSCode code={`
+              <Code code={`
   const indentifier = await sdk.createCapTable({
     name: "Hoved orginisasjonen AS",
     orgnr: "123 123 123",
     shareholders : [
-      name: 'Fiske AS',
-      organizationIdentifier: '123456789',
-      organizationIdentifierType: 'EUID',
-      amount: '500',
-      countryCode: 'NO',
-      postalcode: '05555',
-      partition: 'ordinære',
+      {
+          name: 'Fiske AS',
+          organizationIdentifier: '123456789',
+          organizationIdentifierType: 'EUID',
+          amount: '500',
+          countryCode: 'NO',
+          postalcode: '05555',
+          partition: 'ordinære',
+      }
     ],
   });
-`} lang="typescript"></TSCode>
+`} lang="typescript"></Code>
             </Container>
           </Grid>
         </Grid.Container>
@@ -208,7 +188,7 @@ CapTable {
           </Grid>
           <Grid xs={12} sm={6} >
             <Container >
-              <TSCode code={`
+              <Code code={`
   const indentifier = await sdk.createCapTable({
     name: "Hoved orginisasjonen AS",
     orgnr: "123 123 123",
@@ -222,16 +202,16 @@ CapTable {
       partition: 'ordinære',
     ],
   });
-`} lang="typescript"></TSCode>
+`} lang="typescript"></Code>
             </Container>
           </Grid>
         </Grid.Container>
 
         <Spacer y={5}></Spacer>
 
-        <Grid.Container justify='center' >
+        <Grid.Container justify='center' gap={2} >
           <Grid xs={12} sm={6} style={{ maxWidth: "25rem" }} justify='center'  >
-            <Button as={"a"} target="_blank" href={"https://www.npmjs.com/package/@brok/sdk"}>NPM</Button>
+            <Button target="_blank" href={"https://www.npmjs.com/package/@brok/sdk"}>NPM</Button>
           </Grid>
           <Grid xs={12} sm={6} style={{ maxWidth: "25rem" }} justify='center' >
             <Button onPress={() => router.push("/sdk-documentation")}>SDK documentation</Button>
