@@ -12,6 +12,16 @@ services:
     rootDir: packages/demo-site
     envVars:
       - fromGroup: brokDev-next
+  - type: web
+    name: demo-docs-site
+    env: node
+    repo: https://github.com/BROKLab/brok-monorepo
+    branch: dev
+    region: frankfurt
+    buildCommand: 'pnpm i; pnpm build'
+    startCommand: 'pnpm start'
+    plan: Free
+    rootDir: packages/docs
 
   # - type: web
   #   name: demo-frontend-dev
