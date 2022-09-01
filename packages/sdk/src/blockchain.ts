@@ -20,12 +20,12 @@ export class BlockchainSDK {
     return ethers.Wallet.createRandom();
   }
 
-  private captableContract(address: string) {
+  capTableContract(address: string) {
     return new CapTable__factory(this.signer).attach(address);
   }
   async operatorTransfer(capTableAddress: string, transferRequest: TransferRequest): Promise<Result<{ transactionHash: string }, string>> {
     try {
-      const balance = await this.captableContract(capTableAddress).balanceOfByPartition(
+      const balance = await this.capTableContract(capTableAddress).balanceOfByPartition(
         ethers.utils.formatBytes32String(transferRequest.partition),
         transferRequest.from,
       );
@@ -33,7 +33,7 @@ export class BlockchainSDK {
         return err(`Balance ${balance.toString()}for address ${transferRequest.from} is insufficient for transfer of ${transferRequest.amount}`);
       }
 
-      const operatorTransferTX = await this.captableContract(capTableAddress).operatorTransferByPartition(
+      const operatorTransferTX = await this.capTableContract(capTableAddress).operatorTransferByPartition(
         ethers.utils.formatBytes32String(transferRequest.partition),
         transferRequest.from,
         transferRequest.to,

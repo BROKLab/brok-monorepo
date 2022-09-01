@@ -1,14 +1,17 @@
 import { ethers, providers, Wallet } from 'ethers';
 import { err, ok } from 'neverthrow';
 import { BlockchainSDK } from './blockchain.js';
-import { _createCapTable, _getCapTable, _transfer, _deleteCapTable, _updateShareholder } from './capTable.js';
+
 import { CeramicSDK } from './ceramic.js';
 import {
   CapTable,
   CapTableEthereumId,
   CreateCapTableInput,
   EthereumAddress,
+  IssueInput,
+  IssueRequest,
   OperationResult,
+  RedeemRequest,
   Shareholder,
   TransferInput,
   TransferRequest,
@@ -17,6 +20,20 @@ import { getDIDfromPrivateKey } from './utils/did.js';
 import debug from 'debug';
 import { getCapTableListGraph } from './theGraph.js';
 import { CapTableGraphQL } from './utils/CapTableGraphQL.utils.js';
+import {
+  _createCapTable,
+  _getCapTable,
+  _transfer,
+  _deleteCapTable,
+  _updateShareholder,
+  _transferInputsToRequest,
+  _kapitalforhoyselseNyeAksjer,
+  _issueInputsToRequest,
+  _processIssueRequest,
+  _splitt,
+  _kapitalnedsettelseReduksjonAksjer,
+  _spleis,
+} from './capTable.js';
 
 export class SDK {
   protected _createCapTable = _createCapTable;
@@ -24,6 +41,15 @@ export class SDK {
   protected _transfer = _transfer;
   protected _deleteCapTable = _deleteCapTable;
   protected _updateShareholder = _updateShareholder;
+  protected _kapitalforhoyselseNyeAksjer = _kapitalforhoyselseNyeAksjer;
+  // utils
+  protected _transferInputsToRequest = _transferInputsToRequest;
+  protected _issueInputsToRequest = _issueInputsToRequest;
+  protected _processIssueRequest = _processIssueRequest;
+  protected _splitt = _splitt;
+  protected _kapitalnedsettelseReduksjonAksjer = _kapitalnedsettelseReduksjonAksjer;
+  protected _spleis = _spleis;
+
   private constructor(protected blockchain: BlockchainSDK, protected ceramic: CeramicSDK) {}
 
   public static async init(config: { ceramicUrl: string; ethereumRpc: string; theGraphUrl: string; secret: string; env: string }): Promise<SDK> {
@@ -95,6 +121,40 @@ export class SDK {
   }
   async updateShareholder(capTableAddress: CapTableEthereumId, shareholder: Partial<Shareholder>): Promise<Shareholder> {
     const res = await this._updateShareholder(capTableAddress, shareholder);
+    if (res.isErr()) {
+      throw Error(res.error);
+    }
+    return res.value;
+  }
+
+  async kapitalforhoyselseNyeAksjer(capTableAddress: CapTableEthereumId, transfers: IssueInput[]): Promise<(OperationResult & IssueRequest)[]> {
+    const res = await this._kapitalforhoyselseNyeAksjer(capTableAddress, transfers);
+    if (res.isErr()) {
+      throw Error(res.error);
+    }
+    return res.value;
+  }
+
+  async splitt(capTableAddress: CapTableEthereumId, issues: IssueRequest[]): Promise<(OperationResult & IssueRequest)[]> {
+    const res = await this._splitt(capTableAddress, issues);
+    if (res.isErr()) {
+      throw Error(res.error);
+    }
+    return res.value;
+  }
+
+  async kapitalnedsettelseReduksjonAksjer(
+    capTableAddress: CapTableEthereumId,
+    redeems: RedeemRequest[],
+  ): Promise<(OperationResult & RedeemRequest)[]> {
+    const res = await this._kapitalnedsettelseReduksjonAksjer(capTableAddress, redeems);
+    if (res.isErr()) {
+      throw Error(res.error);
+    }
+    return res.value;
+  }
+  async spleis(capTableAddress: CapTableEthereumId, redeems: RedeemRequest[]): Promise<(OperationResult & RedeemRequest)[]> {
+    const res = await this._spleis(capTableAddress, redeems);
     if (res.isErr()) {
       throw Error(res.error);
     }

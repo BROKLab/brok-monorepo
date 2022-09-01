@@ -9,7 +9,10 @@ import {
   CeramicID,
   CreateCapTableInput,
   EthereumAddress,
+  IssueInput,
+  IssueRequest,
   OperationResult,
+  RedeemRequest,
   Shareholder,
   TransferInput,
   TransferRequest,
@@ -221,34 +224,12 @@ export async function _transfer(
     });
     // Prepare possible ceramic updates
     const shareholderEthToCeramic: Record<EthereumAddress, CeramicID> = {};
-    let transferRequests: TransferRequest[] = [];
     let operationResult: (OperationResult & TransferRequest)[] = [];
-    for await (const transferInput of transferInputs) {
-      // if transfer to exisisting, we dont need to do much.
-      if ('to' in transferInput) {
-        transferRequests = [
-          ...transferRequests,
-          { to: transferInput.to, amount: transferInput.amount, from: transferInput.from, partition: transferInput.partition },
-        ];
-      } else {
-        // is transfer to new shareholder, if so we need to create an address and update ceramic.
-        const shareholder = {
-          ethAddress: this.blockchain.createRandomWallet().address.toLowerCase(),
-          ...transferInput,
-        };
-        const ceramicId = await this.ceramic.createShareholder(shareholder);
-        if (ceramicId.isErr()) {
-          log(ceramicId.error);
-          // Return err here because we havent done any blockchain tx yet.
-          return err(`Could not create shareholder data for ${transferInput.name} in Ceramic. Shareholder data: ${JSON.stringify(shareholder)}`);
-        }
-        shareholderEthToCeramic[shareholder.ethAddress] = ceramicId.value;
-        transferRequests = [
-          ...transferRequests,
-          { to: shareholder.ethAddress, amount: transferInput.amount, from: transferInput.from, partition: transferInput.partition },
-        ];
-      }
+    const transferRequestsRes = await this._transferInputsToRequest(shareholderEthToCeramic, transferInputs);
+    if (transferRequestsRes.isErr()) {
+      return err(transferRequestsRes.error);
     }
+    const transferRequests = transferRequestsRes.value;
 
     const capTableGraphData = await getCapTableGraph(this.blockchain.theGraphUrl, capTableAddress);
     if (capTableGraphData.isErr()) {
@@ -290,6 +271,124 @@ export async function _transfer(
         });
       }
     }
+    log('End transferring with result', operationResult);
+    return ok(operationResult);
+  } catch (error) {
+    log(error);
+    return err('Something unknown went wrong when transfering shares. See logs or contact administrator.');
+  }
+}
+
+export async function _kapitalforhoyselseNyeAksjer(
+  this: SDK,
+  capTableAddress: CapTableEthereumId,
+  issueInputs: IssueInput[],
+): Promise<Result<(OperationResult & IssueRequest)[], string>> {
+  try {
+    log('Start kapitalforhoyselseNyeAksjer with inputs', {
+      capTableAddress,
+      issueInputs,
+    });
+    // Prepare possible ceramic updates
+    const shareholderEthToCeramic: Record<EthereumAddress, CeramicID> = {};
+
+    const issueRequestsRes = await this._issueInputsToRequest(shareholderEthToCeramic, issueInputs);
+    if (issueRequestsRes.isErr()) {
+      return err(issueRequestsRes.error);
+    }
+
+    return this._processIssueRequest(capTableAddress, issueRequestsRes.value, shareholderEthToCeramic);
+  } catch (error) {
+    log(error);
+    return err('Something unknown went wrong when transfering shares. See logs or contact administrator.');
+  }
+}
+
+export async function _splitt(
+  this: SDK,
+  capTableAddress: CapTableEthereumId,
+  issueRequest: IssueRequest[],
+): Promise<Result<(OperationResult & IssueRequest)[], string>> {
+  try {
+    log('Start _splitt with inputs', {
+      capTableAddress,
+      issueRequest,
+    });
+    // Prepare possible ceramic updates
+    const shareholderEthToCeramic: Record<EthereumAddress, CeramicID> = {};
+
+    return this._processIssueRequest(capTableAddress, issueRequest, shareholderEthToCeramic);
+  } catch (error) {
+    log(error);
+    return err('Something unknown went wrong when transfering shares. See logs or contact administrator.');
+  }
+}
+
+export async function _kapitalnedsettelseReduksjonAksjer(
+  this: SDK,
+  capTableAddress: CapTableEthereumId,
+  redeemRequest: RedeemRequest[],
+): Promise<Result<(OperationResult & RedeemRequest)[], string>> {
+  try {
+    log('Start _kapitalnedsettelseReduksjonAksjer with inputs', {
+      capTableAddress,
+      redeemRequest,
+    });
+    // Prepare possible ceramic updates
+    const shareholderEthToCeramic: Record<EthereumAddress, CeramicID> = {};
+    let operationResult: (OperationResult & RedeemRequest)[] = [];
+    try {
+      const res = await this.blockchain.capTableContract(capTableAddress).kapitalnedsettelse_reduksjon_aksjer(
+        redeemRequest.map((tr) => ethers.utils.formatBytes32String(tr.partition)),
+        redeemRequest.map((tr) => tr.from),
+        redeemRequest.map((tr) => ethers.utils.parseEther(tr.amount)),
+        '0x11',
+        '0x11',
+      );
+      await res.wait();
+      operationResult = redeemRequest.map((tr) => ({ ...tr, success: true, message: 'Deployed to blockchain.' }));
+    } catch (error) {
+      log('error from operatorTransfer', error);
+      operationResult = redeemRequest.map((tr) => ({ ...tr, success: false, message: 'Error deploying to blockchain.' }));
+    }
+    // TODO : Remove ceramic data if balance i 0
+
+    log('End transferring with result', operationResult);
+    return ok(operationResult);
+  } catch (error) {
+    log(error);
+    return err('Something unknown went wrong when transfering shares. See logs or contact administrator.');
+  }
+}
+export async function _spleis(
+  this: SDK,
+  capTableAddress: CapTableEthereumId,
+  redeemRequest: RedeemRequest[],
+): Promise<Result<(OperationResult & RedeemRequest)[], string>> {
+  try {
+    log('Start _spleis with inputs', {
+      capTableAddress,
+      redeemRequest,
+    });
+    // Prepare possible ceramic updates
+    const shareholderEthToCeramic: Record<EthereumAddress, CeramicID> = {};
+    let operationResult: (OperationResult & RedeemRequest)[] = [];
+    try {
+      const res = await this.blockchain.capTableContract(capTableAddress).spleis(
+        redeemRequest.map((tr) => ethers.utils.formatBytes32String(tr.partition)),
+        redeemRequest.map((tr) => tr.from),
+        redeemRequest.map((tr) => ethers.utils.parseEther(tr.amount)),
+        '0x11',
+        '0x11',
+      );
+      await res.wait();
+      operationResult = redeemRequest.map((tr) => ({ ...tr, success: true, message: 'Deployed to blockchain.' }));
+    } catch (error) {
+      log('error from operatorTransfer', error);
+      operationResult = redeemRequest.map((tr) => ({ ...tr, success: false, message: 'Error deploying to blockchain.' }));
+    }
+    // TODO : Remove ceramic data if balance i 0
+
     log('End transferring with result', operationResult);
     return ok(operationResult);
   } catch (error) {
@@ -380,4 +479,115 @@ export async function _updateShareholder(
     log(error);
     return err('Something unknown went wrong when deleting the cap table. See logs or contact administrator.');
   }
+}
+
+export async function _transferInputsToRequest(
+  this: SDK,
+  shareholderEthToCeramic: Record<string, string>,
+  transferInputs: TransferInput[],
+): Promise<Result<TransferRequest[], string>> {
+  let transferRequests: TransferRequest[] = [];
+  for await (const transferInput of transferInputs) {
+    // if transfer to exisisting, we dont need to do much.
+    if ('to' in transferInput) {
+      transferRequests = [
+        ...transferRequests,
+        { to: transferInput.to, amount: transferInput.amount, from: transferInput.from, partition: transferInput.partition },
+      ];
+    } else {
+      // is transfer to new shareholder, if so we need to create an address and update ceramic.
+      const shareholder = {
+        ethAddress: this.blockchain.createRandomWallet().address.toLowerCase(),
+        ...transferInput,
+      };
+      const ceramicId = await this.ceramic.createShareholder(shareholder);
+      if (ceramicId.isErr()) {
+        log(ceramicId.error);
+        // Return err here because we havent done any blockchain tx yet.
+        return err(`Could not create shareholder data for ${transferInput.name} in Ceramic. Shareholder data: ${JSON.stringify(shareholder)}`);
+      }
+      shareholderEthToCeramic[shareholder.ethAddress] = ceramicId.value;
+      transferRequests = [
+        ...transferRequests,
+        { to: shareholder.ethAddress, amount: transferInput.amount, from: transferInput.from, partition: transferInput.partition },
+      ];
+    }
+  }
+  return ok(transferRequests);
+}
+
+export async function _issueInputsToRequest(
+  this: SDK,
+  shareholderEthToCeramic: Record<EthereumAddress, CeramicID>,
+  transferInputs: IssueInput[],
+): Promise<Result<IssueRequest[], string>> {
+  let issueRequests: IssueRequest[] = [];
+  for await (const transferInput of transferInputs) {
+    // if transfer to exisisting, we dont need to do much.
+    if ('to' in transferInput) {
+      issueRequests = [...issueRequests, { to: transferInput.to, amount: transferInput.amount, partition: transferInput.partition }];
+    } else {
+      // is transfer to new shareholder, if so we need to create an address and update ceramic.
+      const shareholder = {
+        ethAddress: this.blockchain.createRandomWallet().address.toLowerCase(),
+        ...transferInput,
+      };
+      const ceramicId = await this.ceramic.createShareholder(shareholder);
+      if (ceramicId.isErr()) {
+        log(ceramicId.error);
+        // Return err here because we havent done any blockchain tx yet.
+        return err(`Could not create shareholder data for ${transferInput.name} in Ceramic. Shareholder data: ${JSON.stringify(shareholder)}`);
+      }
+      shareholderEthToCeramic[shareholder.ethAddress] = ceramicId.value;
+      issueRequests = [...issueRequests, { to: shareholder.ethAddress, amount: transferInput.amount, partition: transferInput.partition }];
+    }
+  }
+  return ok(issueRequests);
+}
+
+export async function _processIssueRequest(
+  this: SDK,
+  capTableAddress: string,
+  issueRequests: IssueRequest[],
+  shareholderEthToCeramic: Record<EthereumAddress, CeramicID>,
+): Promise<Result<(OperationResult & IssueRequest)[], string>> {
+  let operationResult: (OperationResult & IssueRequest)[] = [];
+  try {
+    const res = await this.blockchain.capTableContract(capTableAddress).kapitalforhoyselse_nye_aksjer(
+      issueRequests.map((tr) => ethers.utils.formatBytes32String(tr.partition)),
+      issueRequests.map((tr) => tr.to),
+      issueRequests.map((tr) => ethers.utils.parseEther(tr.amount)),
+      '0x11',
+    );
+    await res.wait();
+    operationResult = issueRequests.map((tr) => ({ ...tr, success: true, message: 'Deployed to blockchain.' }));
+  } catch (error) {
+    log('error from operatorTransfer', error);
+    operationResult = issueRequests.map((tr) => ({ ...tr, success: false, message: 'Error deploying to blockchain.' }));
+  }
+  // TODO : Remove possible keys where blockhain transaction was not success
+  // Do updates to Ceramic
+  if (Object.keys(shareholderEthToCeramic).length > 0) {
+    const ceramicCapTableRes = await this.ceramic.updateCapTable({
+      data: {
+        shareholderEthToCeramic,
+      },
+      capTableAddress: capTableAddress,
+      capTableRegistryAddress: this.blockchain.capTableRegistryContract().address,
+    });
+    if (ceramicCapTableRes.isErr()) {
+      log('Could not update transfers in ceramic. Changed values: ', shareholderEthToCeramic);
+      // REVIEW - Unsound, if not sync.
+      Object.keys(shareholderEthToCeramic).forEach((ethAddress) => {
+        operationResult = operationResult.map((or) => {
+          if (or.to === ethAddress) {
+            return { ...or, message: 'Could not update Ceramic data.', success: false };
+          }
+          return or;
+        });
+      });
+    }
+  }
+  log('End transferring with result', operationResult);
+  return ok(operationResult);
 }
