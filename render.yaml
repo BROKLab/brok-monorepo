@@ -20,7 +20,7 @@ services:
     region: frankfurt
     buildCommand: 'pnpm i; pnpm build'
     startCommand: 'pnpm start'
-    plan: Free
+    plan: Starter
     rootDir: packages/docs
 
   # - type: web
