@@ -46,49 +46,49 @@ const SDKDocumentation: NextPage = () => {
                             <Container>
                                 {/* Heading */}
                                 <Grid.Container>
-                                    <Grid xs={3}>
+                                    <Grid xs={0} sm={3}>
                                         <Text b></Text>
                                     </Grid>
-                                    <Grid xs={3}>
+                                    <Grid xs={0} sm={3}>
                                         <Text b>Test URL</Text>
                                     </Grid>
-                                    <Grid xs={3}>
+                                    <Grid xs={0} sm={3}>
                                         <Text b>More info</Text>
                                     </Grid>
-                                    <Grid xs={3}>
+                                    <Grid xs={0} sm={3}>
                                         <Text b>Links</Text>
                                     </Grid>
                                 </Grid.Container>
                                 <Spacer y={1}></Spacer>
                                 {/* Ceramic */}
                                 <Grid.Container>
-                                    <Grid xs={3}>
+                                    <Grid xs={12} sm={3} >
                                         <Image width={35} src='https://assets.website-files.com/609ab8eae6dd417c085cc925/609b2ba76d637745d781160e_logo-ceramic.png'></Image>
                                     </Grid>
-                                    <Grid xs={3}>
+                                    <Grid xs={12} sm={3} >
                                         <Copy>https://ceramic-clay.3boxlabs.com</Copy>
                                     </Grid>
-                                    <Grid xs={3}>
+                                    <Grid xs={12} sm={3} >
                                         <Text> Ceramic is used to save changeable and personal (not sensetive) information.
                                             agdgdg</Text>
                                     </Grid>
-                                    <Grid xs={3}>
+                                    <Grid xs={12} sm={3} >
                                         <Link href='https://ceramic.network' target={"_blank"}>https://ceramic.network</Link>
                                     </Grid>
                                 </Grid.Container>
                                 <Spacer y={1}></Spacer>
                                 {/* Ethereum RPC */}
                                 <Grid.Container>
-                                    <Grid xs={3}>
+                                    <Grid xs={12} sm={3} >
                                         <Image objectFit="contain" height={35} width={30} src='https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Ethereum_logo_2014.svg/1200px-Ethereum_logo_2014.svg.png'></Image>
                                     </Grid>
-                                    <Grid xs={3}>
+                                    <Grid xs={12} sm={3} >
                                         <Copy>https://rinkeby.arbitrum.io/rpc</Copy>
                                     </Grid>
-                                    <Grid xs={3}>
+                                    <Grid xs={12} sm={3} >
                                         <Text>Ethereum is used to hold information about all captables status and balances.</Text>
                                     </Grid>
-                                    <Grid xs={3}>
+                                    <Grid xs={12} sm={3} >
                                         <Col>
                                             <Link href='https://dashboard.alchemy.com/' target={"_blank"}>Alchemy</Link>
                                             <Link href='https://infura.ioa/' target={"_blank"}>Infura</Link>
@@ -98,19 +98,19 @@ const SDKDocumentation: NextPage = () => {
                                 <Spacer y={1}></Spacer>
                                 {/* TheGraph */}
                                 <Grid.Container>
-                                    <Grid xs={3}>
+                                    <Grid xs={12} sm={3} >
                                         <Image height={35} width={50} src='https://seeklogo.com/images/T/the-graph-grt-logo-B6802F6411-seeklogo.com.png'></Image>
                                     </Grid>
-                                    <Grid xs={3}>
+                                    <Grid xs={12} sm={3} >
                                         <Col>
                                             <Text b>brokDev</Text><Copy>https://api.thegraph.com/subgraphs/name/broklab/captable_dev_10</Copy>
                                             <Text b>brokStage</Text><Copy>https://api.thegraph.com/subgraphs/name/broklab/captable_stage_10</Copy>
                                         </Col>
                                     </Grid>
-                                    <Grid xs={3}>
+                                    <Grid xs={12} sm={3} >
                                         <Text>The Graph is used to index blockchain data to make it easy and efficient to query. It continously indexes the blockchain so expect real time data.</Text>
                                     </Grid>
-                                    <Grid xs={3}>
+                                    <Grid xs={12} sm={3} >
                                         <Col>
                                             <Link href='https://api.thegraph.com/subgraphs/name/broklab/captable_dev_10/graphql?query=%7B%0A++++++capTables%28first%3A5%29+%7B%0A++++++++++name%0A++++++++++id%0A++++++++++orgnr%0A++++++++++fagsystem%0A++++++++++symbol%0A++++++++++status%0A++++++++++partitions%0A++++++++++owner%0A++++++++++minter%0A++++++++++controllers%0A++++++++++totalSupply%0A++++++++++fagsystemDid%0A++++++++++tokenHolders+%7B%0A++++++++++++address%0A++++++++++++balances+%7B%0A++++++++++++++amount%0A++++++++++++++partition%0A++++++++++++%7D%0A++++++++++%7D%0A++++++++%7D%0A++++%7D' target={"_blank"}>CapTable playground</Link>
                                             <Link href='https://thegraph.com/en/' target={"_blank"}>The Graph</Link>
@@ -120,19 +120,19 @@ const SDKDocumentation: NextPage = () => {
                                 <Spacer y={1}></Spacer>
                                 {/* Wallet and DID */}
                                 <Grid.Container>
-                                    <Grid xs={3} justify="center">
+                                    <Grid xs={12} sm={3} justify="center">
                                         <Wallet></Wallet>
                                     </Grid>
-                                    <Grid xs={3} >
+                                    <Grid xs={12} sm={3}  >
                                         <Col>
                                             <Copy>test test test test test test test test test test test junk</Copy>
                                             <Copy>did:key:z6MkjCcGLsuHuaRDw7tESJKTyAZW7dWde33JxdpgLJjX2PFR</Copy>
                                         </Col>
                                     </Grid>
-                                    <Grid xs={3}>
+                                    <Grid xs={12} sm={3} >
                                         <Text>Your wallet is used as an identifier.</Text>
                                     </Grid>
-                                    <Grid xs={3}>
+                                    <Grid xs={12} sm={3} >
                                         <Col>
                                             <Link href='https://ethereum.org/en/wallets/find-wallet/' target={"_blank"}>Find a Wallet</Link>
                                         </Col>
