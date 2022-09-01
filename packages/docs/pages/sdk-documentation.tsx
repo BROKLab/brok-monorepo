@@ -1,4 +1,4 @@
-import { Card, Col, Container, Grid, Image, Link, Spacer, Text } from '@nextui-org/react';
+import { Button, Card, Col, Container, Grid, Image, Link, Row, Spacer, Text } from '@nextui-org/react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -202,6 +202,14 @@ const SDKDocumentation: NextPage = () => {
                                     </Text>
                                 </Card.Body>
                             </Card>
+                            <Text>You can test queries here: </Text>
+                            <Row justify='center'>
+                                <Button as={Link} href="https://stackblitz.com/edit/nextjs-j6bqhx?file=pages%2Findex.js">Sandbox browser(NextJS)</Button>
+                            </Row>
+                            <Spacer y={1}></Spacer>
+                            <Row justify='center'>
+                                <Button as={Link} href="https://stackblitz.com/edit/node-bzd6sj?file=index.js">Sandbox server(NodeJS)</Button>
+                            </Row>
                         </Col>
                     </Grid>
                     <Grid xs={12}>
