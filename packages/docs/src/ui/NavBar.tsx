@@ -17,7 +17,7 @@ export const NavBar: React.FC<Props> = ({ ...props }) => {
                 hideIn="xs"
                 variant="underline"
             >
-                <Navbar.Link isActive href="/">
+                <Navbar.Link href="/">
                     Home
                 </Navbar.Link>
                 <Navbar.Link href="/sdk-documentation">Documentation</Navbar.Link>
@@ -30,7 +30,7 @@ export const NavBar: React.FC<Props> = ({ ...props }) => {
                 </Navbar.Item>
                 <Navbar.Collapse >
                     <Container gap={3} justify="center">
-                        <Navbar.Link isActive href="/">
+                        <Navbar.Link href="/">
                             Home
                         </Navbar.Link>
                         <Navbar.Link href="/sdk-documentation">Documentation</Navbar.Link>

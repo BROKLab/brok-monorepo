@@ -443,6 +443,22 @@ updatedShareholder {
 
                     </Card.Body>
                 </Card>
+                <Spacer y={2}></Spacer>
+
+                <Card variant="flat" css={{ backgroundColor: '$yellow300' }}>
+                    <Card.Header >
+                        <AlertOctagonError></AlertOctagonError><Spacer x={1}></Spacer>
+                        <Text>Smart contracts</Text>
+                    </Card.Header>
+                    <Card.Body>
+                        <Text>
+                            Artifacts, interfaces and deployments can be gotten from <Link as={"a"} href="https://www.npmjs.com/package/@brok/captable" target={"_blank"}>@brok/captable</Link>
+                        </Text>
+                        <Text>You can see addresses for each enviroment <Link as={"a"} href="https://github.com/BROKLab/brok-monorepo/tree/dev/packages/captable/deployments" target={"_blank"} >here</Link></Text>
+                    </Card.Body>
+                </Card>
+
+
                 <Spacer y={5}></Spacer>
 
 

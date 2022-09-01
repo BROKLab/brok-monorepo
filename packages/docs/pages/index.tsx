@@ -97,7 +97,7 @@ const Home: NextPage = () => {
 
         <Grid.Container>
           <Grid xs={12} sm={6} >
-            <Container gap={2} style={{ maxWidth: "25rem" }} >
+            <Container gap={2} style={{ maxWidth: "25rem" }} alignItems="center">
               <Text h3>Unconstrained innovation</Text>
               <Text >Data that is public by law is also public for anyone that wants to build. Access cap table data, balances, and some personal information with one line.</Text>
             </Container>
@@ -109,20 +109,17 @@ const Home: NextPage = () => {
 const capTable = await sdk.getCapTable(indentifier);
 // returns 
 CapTable {
-  ethAddress: '0x2c8ba63f2e2f42f7c897d8ebeebb5d04acc0725b',
   name: 'GRUNN MUSIKALSK TIGER AS',
   orgnr: '310790834',
-  ceramicID: 'k2t6wyfsu4pfyq3yhkhlcpk0fyxkret5wc5wlml3yph6kgmk0zrp6bxzl17isg',
   totalShares: '80000.0',
+  ...
   shareholders: [
     {
-      balances: [Array],
-      ethAddress: '0x1d8639b7a2fccf2983cb52155d93049656646212',
       name: 'Ola Nordmann',
       countryCode: 'NO',
       postalcode: '8313',
       birthDate: '1942-04-21',
-      ceramicID: 'kjzl6cwe1jw145i19n2nw2rs2lzhg8bmsia3jd21ypjnm4si7uqn7l52m03nn0y'
+      ...
     },
     ...
   ]
@@ -182,26 +179,17 @@ CapTable {
         <Grid.Container>
           <Grid xs={12} sm={6} >
             <Container gap={2} style={{ maxWidth: "25rem" }} >
-              <Text h3>Transfer</Text>
-              <Text>BRØK ecosystem makes data ownership for organizations easier and gives people transperency. Ownership of the cap table data is defined by the data agreements that have been established between the shareholders of a company, while personal data (e.g., email, address or phone number) is stored on Ceramic with data agreements that define how it can be shared, persisted with trusted third parties. Publishing is just simple.</Text>
+              <Text h3>Composability</Text>
+              <Text>BRØK will provide a Composable cap table ecosystem where 3pt can compose their functionality on it.</Text>
             </Container>
           </Grid>
           <Grid xs={12} sm={6} >
             <Container >
               <Code code={`
-  const indentifier = await sdk.createCapTable({
-    name: "Hoved orginisasjonen AS",
-    orgnr: "123 123 123",
-    shareholders : [
-      name: 'Fiske AS',
-      organizationIdentifier: '123456789',
-      organizationIdentifierType: 'EUID',
-      amount: '500',
-      countryCode: 'NO',
-      postalcode: '05555',
-      partition: 'ordinære',
-    ],
-  });
+assert(balance.locked == 0, "no balance can be locked");
+if(balance.vested > limit){
+  // do 
+}
 `} lang="typescript"></Code>
             </Container>
           </Grid>
@@ -211,10 +199,10 @@ CapTable {
 
         <Grid.Container justify='center' gap={2} >
           <Grid xs={12} sm={6} style={{ maxWidth: "25rem" }} justify='center'  >
-            <Button target="_blank" href={"https://www.npmjs.com/package/@brok/sdk"}>NPM</Button>
+            <Button as="a" target="_blank" href={"https://www.npmjs.com/package/@brok/sdk"}>NPM</Button>
           </Grid>
           <Grid xs={12} sm={6} style={{ maxWidth: "25rem" }} justify='center' >
-            <Button onPress={() => router.push("/sdk-documentation")}>SDK documentation</Button>
+            <Button as="a" onPress={() => router.push("/sdk-documentation")}>SDK documentation</Button>
           </Grid>
           <Spacer y={10}></Spacer>
           <Grid xs={12} justify='center' >
