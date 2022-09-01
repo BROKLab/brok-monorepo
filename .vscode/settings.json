@@ -5,7 +5,8 @@
     "packages/demo-server",
     "packages/sdk",
     "packages/graph",
-    "packages/demo-site"
+    "packages/demo-site",
+    "packages/docs"
   ],
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
