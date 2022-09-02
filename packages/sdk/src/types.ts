@@ -42,7 +42,7 @@ export type ShareholderWithBalances = (ShareholderIndetifier &
   (ShareholderOrganization | ShareholderPerson) &
   ShareholderBalances)[];
 
-export type Shareholder = ShareholderIndetifier & EthereumIdentifier & (ShareholderOrganization | ShareholderPerson);
+export type Shareholder = ShareholderIndetifier & EthereumIdentifier & (ShareholderOrganization | ShareholderPerson) & Partial<EncumbranceIdentifier>;
 
 export type ShareholderIndetifier = {
   name: string; // Personens fulle navn eller selskapsnavn
@@ -91,3 +91,13 @@ export type CapTableCeramic = Organisation & {
 
 // GraphQL types
 export * from './utils/CapTableGraphQL.utils.js';
+
+// encumbrances
+export type CreatedDate = {
+  dateCreated: string;
+};
+export type EncumbranceHolder = ShareholderIndetifier & (ShareholderOrganization | ShareholderPerson);
+export type EncumbranceIdentifier = {
+  encumbrance: Encumbrance;
+};
+export type Encumbrance = CreatedDate & EncumbranceHolder & PartitionAmount;
