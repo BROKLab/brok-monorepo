@@ -135,7 +135,7 @@ CapTable {
           <Grid xs={12} >
             <Container justify='center' style={{ maxWidth: "50rem" }}>
               <Row >
-                <Text h2>BRØK is the foundation of a truly transparent and accessible business registry. From now on, anyone can be sure who owns what and when.</Text>
+                <Text h2>BRØK is the foundation of a truly transparent and accessible shareholder registry. From now on, anyone can be sure who owns what and when.</Text>
               </Row>
             </Container>
           </Grid>
@@ -206,7 +206,7 @@ if(balance.vested > limit){
           </Grid>
           <Spacer y={10}></Spacer>
           <Grid xs={12} justify='center' >
-            <Text h2>Filing property records has never been more efficient, straightforward, or accessible.</Text>
+            <Text h2>Publishing shareholder records has never been more efficient, straightforward, or accessible.</Text>
           </Grid>
         </Grid.Container>
 
