@@ -48,7 +48,7 @@ const SDKDocumentation: NextPage = () => {
                                         </Text>
                                     </Grid>
                                     <Grid xs={12}>
-                                        <Text css={{ color: "$accents8" }}>sverre (æt) brreg.no</Text>
+                                        <Text css={{ color: "$accents8" }}>syh (æt) brreg.no</Text>
                                     </Grid>
                                 </Grid.Container>
                             </Card.Header>
@@ -71,7 +71,7 @@ const SDKDocumentation: NextPage = () => {
                                         </Text>
                                     </Grid>
                                     <Grid xs={12}>
-                                        <Text css={{ color: "$accents8" }}>andreas (æt) brreg.no</Text>
+                                        <Text css={{ color: "$accents8" }}>oah (æt) brreg.no</Text>
                                     </Grid>
                                 </Grid.Container>
                             </Card.Header>
