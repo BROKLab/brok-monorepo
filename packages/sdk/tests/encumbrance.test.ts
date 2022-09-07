@@ -110,6 +110,7 @@ test('edit mortgage', async (t) => {
   }
   t.is(shareholderUpdated.encumbrance?.amount, '500');
   t.is(shareholderUpdated.encumbrance?.countryCode, 'NO');
+  t.is(shareholderUpdated.encumbrance?.name, 'DNK ASA');
 });
 
 test('delete', async (t) => {
