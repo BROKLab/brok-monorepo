@@ -6,7 +6,9 @@ import { CeramicSDK } from './ceramic.js';
 import {
   CapTable,
   CapTableEthereumId,
+  CeramicID,
   CreateCapTableInput,
+  Encumbrance,
   EthereumAddress,
   IssueInput,
   IssueRequest,
@@ -34,14 +36,22 @@ import {
   _kapitalnedsettelseReduksjonAksjer,
   _spleis,
 } from './capTable.js';
+import { _issueEcumbrance, _editEncumbrance, _deleteEncumbrance } from './encumbrance.js';
 
 export class SDK {
+  // captable
   protected _createCapTable = _createCapTable;
   protected _getCapTable = _getCapTable;
   protected _transfer = _transfer;
   protected _deleteCapTable = _deleteCapTable;
   protected _updateShareholder = _updateShareholder;
   protected _kapitalforhoyselseNyeAksjer = _kapitalforhoyselseNyeAksjer;
+
+  // encumbrance
+  protected _issueEcumbrance = _issueEcumbrance;
+  protected _editEncumbrance = _editEncumbrance;
+  protected _deleteEncumbrance = _deleteEncumbrance;
+
   // utils
   protected _transferInputsToRequest = _transferInputsToRequest;
   protected _issueInputsToRequest = _issueInputsToRequest;
@@ -155,6 +165,28 @@ export class SDK {
   }
   async spleis(capTableAddress: CapTableEthereumId, redeems: RedeemRequest[]): Promise<(OperationResult & RedeemRequest)[]> {
     const res = await this._spleis(capTableAddress, redeems);
+    if (res.isErr()) {
+      throw Error(res.error);
+    }
+    return res.value;
+  }
+
+  async issueEcumbrance(shareholderCeramicID: CeramicID, encumbrance: Encumbrance): Promise<Shareholder> {
+    const res = await this._issueEcumbrance(shareholderCeramicID, encumbrance);
+    if (res.isErr()) {
+      throw Error(res.error);
+    }
+    return res.value;
+  }
+  async editEcumbrance(shareholderCeramicID: CeramicID, encumbrance: Partial<Encumbrance>): Promise<Shareholder> {
+    const res = await this._editEncumbrance(shareholderCeramicID, encumbrance);
+    if (res.isErr()) {
+      throw Error(res.error);
+    }
+    return res.value;
+  }
+  async deleteEcumbrance(shareholderCeramicID: CeramicID): Promise<Shareholder> {
+    const res = await this._deleteEncumbrance(shareholderCeramicID);
     if (res.isErr()) {
       throw Error(res.error);
     }

@@ -41,6 +41,8 @@ export class CeramicSDK extends CeramicClient {
     if (res2.isErr()) {
       return err(res2.error);
     }
+    log('updatedShareholder expect', shareholder);
+    log('updatedShareholder assert', res2.value.content);
     if (res2.value && 'content' in res2.value) {
       return ok(res2.value.content);
     } else {
@@ -151,7 +153,7 @@ export class CeramicSDK extends CeramicClient {
     }
   }
 
-  private async creatDeterministic<T>(content: T, metadata: TileMetadataArgs): Promise<Result<TileDocument, string>> {
+  private async creatDeterministic<T>(content: T, metadata: TileMetadataArgs): Promise<Result<TileDocument<T>, string>> {
     try {
       // REVIEW: Dont know, aobut this delete metadata.schema, but il let it stand here and take a look at it later.
       // const schemaId = metadata.schema ? metadata.schema : undefined;
