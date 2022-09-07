@@ -153,7 +153,7 @@ export class CeramicSDK extends CeramicClient {
     }
   }
 
-  private async creatDeterministic<T>(content: T, metadata: TileMetadataArgs): Promise<Result<TileDocument, string>> {
+  private async creatDeterministic<T>(content: T, metadata: TileMetadataArgs): Promise<Result<TileDocument<T>, string>> {
     try {
       // REVIEW: Dont know, aobut this delete metadata.schema, but il let it stand here and take a look at it later.
       // const schemaId = metadata.schema ? metadata.schema : undefined;

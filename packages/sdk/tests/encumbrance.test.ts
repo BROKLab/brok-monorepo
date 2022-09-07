@@ -88,11 +88,7 @@ test('issue encumbrance', async (t) => {
   }
 });
 
-test('edit mortgage', async (t) => {
-  const sleep = (ms: number) => {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  };
-  await sleep(2000);
+test('edit encumbrance', async (t) => {
   const capTable = await t.context.sdk.getCapTable(t.context.capTableAddress);
   const shareholderWithEncumbrance = capTable.shareholders.find((shareholder) => shareholder.encumbrance);
   if (!shareholderWithEncumbrance) {
@@ -113,7 +109,17 @@ test('edit mortgage', async (t) => {
   t.is(shareholderUpdated.encumbrance?.name, 'DNK ASA');
 });
 
-test('delete', async (t) => {
-  const isDeleted = await t.context.sdk.deleteCapTable(t.context.capTableAddress);
-  t.truthy(isDeleted, 'should return true on delete');
+test('delete encumbrance', async (t) => {
+  const capTable = await t.context.sdk.getCapTable(t.context.capTableAddress);
+  const shareholderWithEncumbrance = capTable.shareholders.find((shareholder) => shareholder.encumbrance);
+  if (!shareholderWithEncumbrance) {
+    t.log(capTable);
+    return t.fail('no shareholder on captable with encumbrance');
+  }
+  const shareholderUpdated = await t.context.sdk.deleteEcumbrance(shareholderWithEncumbrance.ceramicID);
+  t.not(shareholderUpdated.encumbrance, 'encumbrance should be deleted');
+  if (shareholderUpdated.encumbrance) {
+    t.log(shareholderUpdated);
+    t.fail('encumbrance should be deleted');
+  }
 });
