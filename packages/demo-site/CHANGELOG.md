@@ -1,5 +1,12 @@
 # @brok/demo-site
 
+## 0.1.4
+
+### Patch Changes
+
+- Updated dependencies
+  - @brok/sdk@0.15.0
+
 ## 0.1.3
 
 ### Patch Changes
