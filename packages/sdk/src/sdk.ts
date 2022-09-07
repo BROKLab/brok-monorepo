@@ -36,7 +36,7 @@ import {
   _kapitalnedsettelseReduksjonAksjer,
   _spleis,
 } from './capTable.js';
-import { _issueEcumbrance } from './encumbrance.js';
+import { _issueEcumbrance, _editEncumbrance } from './encumbrance.js';
 
 export class SDK {
   // captable
@@ -49,6 +49,7 @@ export class SDK {
 
   // encumbrance
   protected _issueEcumbrance = _issueEcumbrance;
+  protected _editEncumbrance = _editEncumbrance;
 
   // utils
   protected _transferInputsToRequest = _transferInputsToRequest;
@@ -171,6 +172,13 @@ export class SDK {
 
   async issueEcumbrance(shareholderCeramicID: CeramicID, encumbrance: Encumbrance): Promise<Shareholder> {
     const res = await this._issueEcumbrance(shareholderCeramicID, encumbrance);
+    if (res.isErr()) {
+      throw Error(res.error);
+    }
+    return res.value;
+  }
+  async editEcumbrance(shareholderCeramicID: CeramicID, encumbrance: Partial<Encumbrance>): Promise<Shareholder> {
+    const res = await this._editEncumbrance(shareholderCeramicID, encumbrance);
     if (res.isErr()) {
       throw Error(res.error);
     }

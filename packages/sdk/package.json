@@ -30,7 +30,10 @@
 		"lint": "pnpm eslint ./src --ext .js,.jsx,.ts,.tsx",
 		"test": "pnpm ava --serial",
 		"test:debug": "DEBUG=brok* pnpm ava --serial",
-		"test:watch": "pnpm ava --watch --serial"
+		"test:watch": "pnpm ava --watch --serial",
+		"test:enc": "pnpm ava tests/encumbrance.test.ts --serial",
+		"test:debug:enc": "DEBUG=brok* pnpm ava tests/encumbrance.test.ts --serial",
+		"test:cap": "pnpm ava tests/captable.test.ts --serial --watch"
 	},
 	"dependencies": {
 		"@brok/captable": "^0.13.0",

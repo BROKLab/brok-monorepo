@@ -190,6 +190,7 @@ export async function _getCapTable(this: SDK, capTableAddress: EthereumAddress):
             postalcode: shareholder.postalcode,
             birthDate: shareholder.birthDate,
             ceramicID: shareholder.ceramicID,
+            encumbrance: shareholder.encumbrance,
           };
         } else {
           return {
@@ -201,6 +202,7 @@ export async function _getCapTable(this: SDK, capTableAddress: EthereumAddress):
             organizationIdentifier: shareholder.organizationIdentifier,
             organizationIdentifierType: shareholder.organizationIdentifierType,
             ceramicID: shareholder.ceramicID,
+            encumbrance: shareholder.encumbrance,
           };
         }
       }),

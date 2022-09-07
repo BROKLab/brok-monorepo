@@ -41,6 +41,8 @@ export class CeramicSDK extends CeramicClient {
     if (res2.isErr()) {
       return err(res2.error);
     }
+    log('updatedShareholder expect', shareholder);
+    log('updatedShareholder assert', res2.value.content);
     if (res2.value && 'content' in res2.value) {
       return ok(res2.value.content);
     } else {

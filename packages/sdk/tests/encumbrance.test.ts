@@ -64,9 +64,7 @@ test('create capTable', async (t) => {
 
 // TODO : Must happen after
 
-test('issue mortgage', async (t) => {
-  const shareholderToEcumbrance = t.context.shareholders[0];
-
+test('issue encumbrance', async (t) => {
   const shareholderUpdated = await t.context.sdk.issueEcumbrance(t.context.capTable.shareholders[0].ceramicID, {
     amount: '1000',
     postalcode: '1234',
@@ -77,8 +75,41 @@ test('issue mortgage', async (t) => {
     organizationIdentifierType: 'EUID',
     partition: 'ordinære',
   });
-  t.log(shareholderUpdated);
-  t.assert(shareholderUpdated.encumbrance, '');
+  t.assert(shareholderUpdated.encumbrance, 'encumbrance should be defined');
+  if (!shareholderUpdated.encumbrance) {
+    t.log(shareholderUpdated);
+  }
+
+  const capTable = await t.context.sdk.getCapTable(t.context.capTableAddress);
+  const shareholderWithEncumbrance = capTable.shareholders.find((shareholder) => shareholder.encumbrance);
+  t.assert(shareholderWithEncumbrance, 'Should have a shareholder with encumbrance');
+  if (!shareholderWithEncumbrance) {
+    t.log(capTable);
+  }
+});
+
+test('edit mortgage', async (t) => {
+  const sleep = (ms: number) => {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  };
+  await sleep(2000);
+  const capTable = await t.context.sdk.getCapTable(t.context.capTableAddress);
+  const shareholderWithEncumbrance = capTable.shareholders.find((shareholder) => shareholder.encumbrance);
+  if (!shareholderWithEncumbrance) {
+    t.log(capTable);
+    return t.fail('no shareholder on captable with encumbrance');
+  }
+  const shareholderUpdated = await t.context.sdk.editEcumbrance(shareholderWithEncumbrance.ceramicID, {
+    amount: '500',
+    postalcode: '1234',
+    name: 'DNK ASA',
+  });
+  t.assert(shareholderUpdated.encumbrance, 'encumbrance should be defined');
+  if (!shareholderUpdated.encumbrance) {
+    t.log(shareholderUpdated);
+  }
+  t.is(shareholderUpdated.encumbrance?.amount, '500');
+  t.is(shareholderUpdated.encumbrance?.countryCode, 'NO');
 });
 
 test('delete', async (t) => {

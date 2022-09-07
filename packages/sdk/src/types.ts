@@ -10,6 +10,7 @@ export type CapTable = Organisation &
     totalShares: string;
     shareholders: (ShareholderIndetifier &
       EthereumIdentifier &
+      Partial<EncumbranceIdentifier> &
       CeramicIdentifier &
       (ShareholderOrganization | ShareholderPerson) &
       ShareholderBalances)[];
