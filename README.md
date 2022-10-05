@@ -38,12 +38,21 @@ You can see examples here:
 - [browser example nextjs](https://stackblitz.com/edit/nextjs-j6bqhx?file=pages%2Findex.js)
 - [server example nodejs](https://stackblitz.com/edit/node-bzd6sj?file=index.js)
 
-# What is BRØK ecosystem
-An ecosystem of solutions 
+
+# Instances
+You can read current deployments from [npm captable](https://www.npmjs.com/package/@brok/captable)
+
+CapTableRegistry.sol
+
+- dev brokDEV: `0xaC7349fc43fEc778f1FA2475b3F850Ca17163557`
+- stage brokStage: `0x5f97A62c01FAe8280344ec7Eb505ADf8397D9a1C`
+- prod brokProd: `0x4e33Adb3A77B5685E351A61f6bFb20d9dfF71E76`
+
+Blockchain index [TheGraph](https://api.thegraph.com/subgraphs/name/broklab/captable_dev_10)
 
 
-
-## Development on SDK
+# Development on SDK
+Clone repo
 
 Run `pnpm i`
 
