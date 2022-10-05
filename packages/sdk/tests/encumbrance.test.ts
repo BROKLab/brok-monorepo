@@ -79,6 +79,7 @@ test('issue encumbrance', async (t) => {
   if (!shareholderUpdated.encumbrance) {
     t.log(shareholderUpdated);
   }
+  t.log(shareholderUpdated);
 
   const capTable = await t.context.sdk.getCapTable(t.context.capTableAddress);
   const shareholderWithEncumbrance = capTable.shareholders.find((shareholder) => shareholder.encumbrance);
@@ -109,7 +110,7 @@ test('edit encumbrance', async (t) => {
   t.is(shareholderUpdated.encumbrance?.name, 'DNK ASA');
 });
 
-test('delete encumbrance', async (t) => {
+test.skip('delete encumbrance', async (t) => {
   const capTable = await t.context.sdk.getCapTable(t.context.capTableAddress);
   const shareholderWithEncumbrance = capTable.shareholders.find((shareholder) => shareholder.encumbrance);
   if (!shareholderWithEncumbrance) {

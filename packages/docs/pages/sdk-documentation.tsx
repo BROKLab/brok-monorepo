@@ -188,6 +188,9 @@ const SDKDocumentation: NextPage = () => {
     splitt(capTableAddress: CapTableEthereumId, issues: IssueRequest[]): Promise<(OperationResult & IssueRequest)[]>;
     kapitalnedsettelseReduksjonAksjer(capTableAddress: CapTableEthereumId, redeems: RedeemRequest[]): Promise<(OperationResult & RedeemRequest)[]>;
     spleis(capTableAddress: CapTableEthereumId, redeems: RedeemRequest[]): Promise<(OperationResult & RedeemRequest)[]>;
+    issueEcumbrance(shareholderCeramicID: CeramicID, encumbrance: Encumbrance): Promise<Shareholder>;
+    editEcumbrance(shareholderCeramicID: CeramicID, encumbrance: Partial<Encumbrance>): Promise<Shareholder>
+    deleteEcumbrance(shareholderCeramicID: CeramicID): Promise<Shareholder>
 `} />
                             <Text>For more information about each type, see <Link as={"a"} target={"_blank"} href='https://github.com/BROKLab/brok-monorepo/blob/dev/packages/sdk/src/types.ts'>here</Link></Text>
                             <Card variant="flat" css={{ backgroundColor: '$yellow300' }}>
