@@ -1,5 +1,11 @@
 # @brok/sdk
 
+## 0.16.0
+
+### Minor Changes
+
+- Updated readme
+
 ## 0.15.0
 
 ### Minor Changes

@@ -1,7 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@brok/sdk': ^0.14.0
+  '@brok/sdk': ^0.15.0
   '@ceramicnetwork/common': 2.5.1-rc.0
   '@ceramicnetwork/core': 2.8.1-rc.0
   '@ceramicnetwork/http-client': 2.3.4-rc.0
@@ -33,7 +33,7 @@ specifiers:
   typescript: 4.7.4
 
 dependencies:
-  '@brok/sdk': 0.14.0_s73obqype6bnjbpxlf7ijzmciq
+  '@brok/sdk': 0.15.0_s73obqype6bnjbpxlf7ijzmciq
   '@ceramicnetwork/common': 2.5.1-rc.0_@opentelemetry+api@1.1.0
   '@ceramicnetwork/core': 2.8.1-rc.0_j6fg3uf7ogkbcg3cgoixqvecpa
   '@ceramicnetwork/http-client': 2.3.4-rc.0_@opentelemetry+api@1.1.0
@@ -101,8 +101,8 @@ packages:
       key-did-resolver: 1.4.4
     dev: false
 
-  /@brok/sdk/0.14.0_s73obqype6bnjbpxlf7ijzmciq:
-    resolution: {integrity: sha512-rqyvUfrIj6XwIUVjJFEsfE/9h0mJuGYpc8ubuLiDgkfVEH1Pv2PCGmiSUouJSFv/O1OqC8WBD1tBfocM/ZKS0A==}
+  /@brok/sdk/0.15.0_s73obqype6bnjbpxlf7ijzmciq:
+    resolution: {integrity: sha512-jVrhimhHDvjzbT5/Ta0dd8QkSJ6AYZwycRJ3uShcg0wBl0bdnYyg1N6HfpptWcVD3hbGT/QilyUSj6tsAcg/xQ==}
     peerDependencies:
       '@ceramicnetwork/3id-did-resolver': 2.1.5-rc.1
       '@ceramicnetwork/blockchain-utils-linking': ^1.5.5
