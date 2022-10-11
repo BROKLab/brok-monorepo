@@ -24,7 +24,7 @@ Then init the SDK
 ```ts
   const sdk = await SDK.init({
     ceramicUrl: 'https://ceramic-clay.3boxlabs.com',
-    ethereumRpc: 'https://rinkeby.arbitrum.io/rpc',
+    ethereumRpc: 'https://goerli-rollup.arbitrum.io/rpc',
     secret: 'test test test test test test test test test test test junk',
     theGraphUrl:
       'https://api.thegraph.com/subgraphs/name/broklab/captable_dev_11',

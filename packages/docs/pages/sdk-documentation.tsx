@@ -83,7 +83,7 @@ const SDKDocumentation: NextPage = () => {
                                         <Image objectFit="contain" height={35} width={30} src='https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Ethereum_logo_2014.svg/1200px-Ethereum_logo_2014.svg.png'></Image>
                                     </Grid>
                                     <Grid xs={12} sm={3} >
-                                        <Copy>https://rinkeby.arbitrum.io/rpc</Copy>
+                                        <Copy>https://goerli-rollup.arbitrum.io/rpc</Copy>
                                     </Grid>
                                     <Grid xs={12} sm={3} >
                                         <Text>Ethereum is used to hold information about all captables status and balances.</Text>
@@ -167,7 +167,7 @@ const SDKDocumentation: NextPage = () => {
                             <Code lang='typescript' code={`
   const sdk = await SDK.init({
     ceramicUrl: 'https://ceramic-clay.3boxlabs.com',
-    ethereumRpc: 'https://rinkeby.arbitrum.io/rpc',
+    ethereumRpc: 'https://goerli-rollup.arbitrum.io/rpc',
     secret: 'test test test test test test test test test test test junk',
     theGraphUrl:
       'https://api.thegraph.com/subgraphs/name/broklab/captable_dev_11',

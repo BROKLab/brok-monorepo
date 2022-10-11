@@ -157,7 +157,7 @@ const CapTable: NextPage = () => {
                 </Grid>
                 <Grid xs={6} >
                   <Button.Group size="xs">
-                    <Button as="a" target={"_blank"} href={`https://rinkeby-explorer.arbitrum.io/token/${address}`}>Blockchain</Button>
+                    <Button as="a" target={"_blank"} href={`https://goerli.arbiscan.io/token/${address}`}>Blockchain</Button>
                     <Button as="a" target={"_blank"} href={CAP_TABLE_QUERY(address)}>Graph</Button>
                     <Button as="a" target={"_blank"} href={`https://ceramic-clay.3boxlabs.com/api/v0/streams/${capTable.ceramicID}`}>Ceramic</Button>
                   </Button.Group>
@@ -208,7 +208,7 @@ const CapTable: NextPage = () => {
                         <Table.Cell>{(shareholder.balances.reduce((prev, b) => prev.add(ethers.BigNumber.from(b.amount)), ethers.constants.Zero).mul(ethers.BigNumber.from("100")).div(ethers.utils.parseEther(capTable.totalShares))).toString()} %</Table.Cell>
                         <Table.Cell>
                           <Button.Group size="xs">
-                            <Button as="a" target={"_blank"} href={`https://rinkeby-explorer.arbitrum.io/address/${shareholder.ethAddress}`}>Blockchain</Button>
+                            <Button as="a" target={"_blank"} href={`https://goerli.arbiscan.io/address/${shareholder.ethAddress}`}>Blockchain</Button>
                             <Button as="a" target={"_blank"} href={SHAERHOLDER_QUERY(shareholder.ethAddress)}>Graph</Button>
                             <Button as="a" target={"_blank"} href={`https://ceramic-clay.3boxlabs.com/api/v0/streams/${shareholder.ceramicID}`}>Ceramic</Button>
                           </Button.Group>

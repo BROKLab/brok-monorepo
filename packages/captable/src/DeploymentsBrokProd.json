@@ -1,9 +1,9 @@
 {
   "name": "brokProd",
-  "chainId": "421611",
+  "chainId": "421613",
   "contracts": {
     "CapTableRegistry": {
-      "address": "0x4e33Adb3A77B5685E351A61f6bFb20d9dfF71E76",
+      "address": "0x5DDcfC34F3B8C169A632C3977E00b951A20Ba768",
       "abi": [
         {
           "inputs": [
