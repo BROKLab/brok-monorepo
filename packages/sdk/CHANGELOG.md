@@ -1,5 +1,11 @@
 # @brok/sdk
 
+## 0.17.0
+
+### Minor Changes
+
+- Migrated goerli
+
 ## 0.16.1
 
 ### Patch Changes
