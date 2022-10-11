@@ -14,7 +14,7 @@ for (const dataSource of subgraphConfig.dataSources) {
     } 
     if (env === 'brokStage' || env === 'brokDev') {
         dataSource.source.startBlock =  
-        14045504;
+        588189;
     } 
     if( env === 'brokProd') {
         dataSource.source.startBlock =  10722028;
@@ -37,10 +37,10 @@ if(env === 'brokLocal'){
     }
 }else{
     for (const dataSource of subgraphConfig.dataSources) {
-        dataSource.network = "arbitrum-rinkeby";
+        dataSource.network = "arbitrum-goerli";
     }
     for (const template of subgraphConfig.templates) {
-        template.network = "arbitrum-rinkeby";
+        template.network = "arbitrum-goerli";
     }
 }
 

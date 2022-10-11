@@ -2,7 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@ava/typescript': ^3.0.1
-  '@brok/captable': ^0.13.0
+  '@brok/captable': ^0.14.0
   '@ceramicnetwork/3id-did-resolver': 2.1.5-rc.1
   '@ceramicnetwork/blockchain-utils-linking': ^1.5.5
   '@ceramicnetwork/common': 2.5.1-rc.0
@@ -41,7 +41,7 @@ dependencies:
   '@ceramicnetwork/3id-did-resolver': 2.1.5-rc.1_@opentelemetry+api@1.1.0
   '@ceramicnetwork/blockchain-utils-linking': 1.5.5
   '@ceramicnetwork/common': 2.5.1-rc.0_@opentelemetry+api@1.1.0
-  '@ceramicnetwork/core': 2.8.1-rc.0_tgbbllirwvno7ju6cpfkzvgmsa
+  '@ceramicnetwork/core': 2.8.1-rc.0_j6fg3uf7ogkbcg3cgoixqvecpa
   '@ceramicnetwork/http-client': 2.3.4-rc.0_@opentelemetry+api@1.1.0
   '@ceramicnetwork/stream-tile': 2.4.3-rc.0_@opentelemetry+api@1.1.0
   '@ceramicnetwork/stream-tile-handler': 2.2.7-rc.0_@opentelemetry+api@1.1.0
@@ -343,7 +343,7 @@ packages:
       - encoding
     dev: false
 
-  /@ceramicnetwork/blockchain-utils-validation/2.0.12-rc.0_3p577qjkxn6hv5rhxgfbfwslmm:
+  /@ceramicnetwork/blockchain-utils-validation/2.0.12-rc.0_64igtdi3dwu4hp36axe6nyddtq:
     resolution: {integrity: sha512-doVRrCLaqYged77tvpSSmju+yL6c7eofSDgYjpMjKBoxYTFBFXYcg51+TiWeYOwdUMf99yyvTQ6XAVD/Zj48Pw==}
     dependencies:
       '@ceramicnetwork/blockchain-utils-linking': 2.0.11-rc.0
@@ -351,7 +351,7 @@ packages:
       '@ethersproject/contracts': 5.7.0
       '@ethersproject/providers': 5.7.0
       '@ethersproject/wallet': 5.7.0
-      '@polkadot/util-crypto': 7.9.2
+      '@polkadot/util-crypto': 7.9.2_@polkadot+util@7.9.2
       '@smontero/eosio-signing-tools': 0.0.6
       '@stablelib/ed25519': 1.0.3
       '@taquito/utils': 11.2.0
@@ -363,6 +363,7 @@ packages:
       uint8arrays: 3.1.0
     transitivePeerDependencies:
       - '@opentelemetry/api'
+      - '@polkadot/util'
       - bufferutil
       - debug
       - encoding
@@ -417,7 +418,7 @@ packages:
       - encoding
     dev: false
 
-  /@ceramicnetwork/core/2.8.1-rc.0_tgbbllirwvno7ju6cpfkzvgmsa:
+  /@ceramicnetwork/core/2.8.1-rc.0_j6fg3uf7ogkbcg3cgoixqvecpa:
     resolution: {integrity: sha512-53frXHZRercWX7IhxlOddUu7JoVyscLTqCOYxCdQemTvaEWqCzhTgxRwK/Avc+Sm0t1LAd3IrymLTF6vIxgODw==}
     dependencies:
       '@ceramicnetwork/common': 2.5.1-rc.0_@opentelemetry+api@1.1.0
@@ -426,7 +427,7 @@ packages:
       '@ceramicnetwork/pinning-aggregation': 2.0.12-rc.0
       '@ceramicnetwork/pinning-ipfs-backend': 2.0.12-rc.0_node-fetch@3.2.10
       '@ceramicnetwork/stream-caip10-link': 2.2.3-rc.0_@opentelemetry+api@1.1.0
-      '@ceramicnetwork/stream-caip10-link-handler': 2.1.4-rc.0_3p577qjkxn6hv5rhxgfbfwslmm
+      '@ceramicnetwork/stream-caip10-link-handler': 2.1.4-rc.0_64igtdi3dwu4hp36axe6nyddtq
       '@ceramicnetwork/stream-model': 0.4.3-rc.0_@opentelemetry+api@1.1.0
       '@ceramicnetwork/stream-model-handler': 0.4.3-rc.0_@opentelemetry+api@1.1.0
       '@ceramicnetwork/stream-model-instance': 0.4.1-rc.0_@opentelemetry+api@1.1.0
@@ -440,7 +441,7 @@ packages:
       '@stablelib/random': 1.0.2
       '@stablelib/sha256': 1.0.1
       ajv: 8.11.0
-      ajv-formats: 2.1.1
+      ajv-formats: 2.1.1_ajv@8.11.0
       await-semaphore: 0.1.3
       dids: 3.2.0
       it-first: 1.0.7
@@ -457,6 +458,7 @@ packages:
       uint8arrays: 3.1.0
     transitivePeerDependencies:
       - '@opentelemetry/api'
+      - '@polkadot/util'
       - better-sqlite3
       - bluebird
       - bufferutil
@@ -526,14 +528,15 @@ packages:
       - supports-color
     dev: false
 
-  /@ceramicnetwork/stream-caip10-link-handler/2.1.4-rc.0_3p577qjkxn6hv5rhxgfbfwslmm:
+  /@ceramicnetwork/stream-caip10-link-handler/2.1.4-rc.0_64igtdi3dwu4hp36axe6nyddtq:
     resolution: {integrity: sha512-tG4f1oXsSqNOE4viHO6FqqvIBkTT4WtvqpVvZCw20oeQ6RtBc1C6JG/IbYWQktgU/Ah2A1dYQdP7pgpUPM+oaw==}
     dependencies:
-      '@ceramicnetwork/blockchain-utils-validation': 2.0.12-rc.0_3p577qjkxn6hv5rhxgfbfwslmm
+      '@ceramicnetwork/blockchain-utils-validation': 2.0.12-rc.0_64igtdi3dwu4hp36axe6nyddtq
       '@ceramicnetwork/common': 2.5.1-rc.0_@opentelemetry+api@1.1.0
       '@ceramicnetwork/stream-caip10-link': 2.2.3-rc.0_@opentelemetry+api@1.1.0
     transitivePeerDependencies:
       - '@opentelemetry/api'
+      - '@polkadot/util'
       - bufferutil
       - debug
       - encoding
@@ -560,7 +563,7 @@ packages:
       '@ceramicnetwork/stream-model': 0.4.3-rc.0_@opentelemetry+api@1.1.0
       '@ceramicnetwork/streamid': 2.3.3-rc.0
       ajv: 8.11.0
-      ajv-formats: 2.1.1
+      ajv-formats: 2.1.1_ajv@8.11.0
       fast-json-patch: 3.1.1
       lodash.clonedeep: 4.5.0
       uint8arrays: 3.1.0
@@ -576,7 +579,7 @@ packages:
       '@ceramicnetwork/stream-model-instance': 0.4.1-rc.0_@opentelemetry+api@1.1.0
       '@ceramicnetwork/streamid': 2.3.3-rc.0
       ajv: 8.11.0
-      ajv-formats: 2.1.1
+      ajv-formats: 2.1.1_ajv@8.11.0
       fast-json-patch: 3.1.1
       lodash.clonedeep: 4.5.0
       uint8arrays: 3.1.0
@@ -622,7 +625,7 @@ packages:
       '@ceramicnetwork/common': 2.5.1-rc.0_@opentelemetry+api@1.1.0
       '@ceramicnetwork/stream-tile': 2.4.3-rc.0_@opentelemetry+api@1.1.0
       ajv: 8.11.0
-      ajv-formats: 2.1.1
+      ajv-formats: 2.1.1_ajv@8.11.0
       fast-json-patch: 3.1.1
       lodash.clonedeep: 4.5.0
       uint8arrays: 3.1.0
@@ -1262,9 +1265,11 @@ packages:
       '@babel/runtime': 7.18.9
     dev: false
 
-  /@polkadot/util-crypto/7.9.2:
+  /@polkadot/util-crypto/7.9.2_@polkadot+util@7.9.2:
     resolution: {integrity: sha512-nNwqUwP44eCH9jKKcPie+IHLKkg9LMe6H7hXo91hy3AtoslnNrT51tP3uAm5yllhLvswJfnAgnlHq7ybCgqeFw==}
     engines: {node: '>=14.0.0'}
+    peerDependencies:
+      '@polkadot/util': 7.9.2
     dependencies:
       '@babel/runtime': 7.18.9
       '@polkadot/networks': 7.9.2
@@ -1879,8 +1884,10 @@ packages:
       indent-string: 5.0.0
     dev: true
 
-  /ajv-formats/2.1.1:
+  /ajv-formats/2.1.1_ajv@8.11.0:
     resolution: {integrity: sha512-Wx0Kx52hxE7C18hkMEggYlEifqWZtYaRgouJor+WMdPnQyEK13vgEWyVNup7SoeeoLMsr4kf5h6dOW11I15MUA==}
+    peerDependencies:
+      ajv: ^8.0.0
     peerDependenciesMeta:
       ajv:
         optional: true

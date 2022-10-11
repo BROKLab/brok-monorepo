@@ -27,7 +27,7 @@ Then init the SDK
     ethereumRpc: 'https://rinkeby.arbitrum.io/rpc',
     secret: 'test test test test test test test test test test test junk',
     theGraphUrl:
-      'https://api.thegraph.com/subgraphs/name/broklab/captable_dev_10',
+      'https://api.thegraph.com/subgraphs/name/broklab/captable_dev_11',
     env: 'brokDev',
   });
 ```
@@ -48,7 +48,7 @@ CapTableRegistry.sol
 - stage brokStage: `0x5f97A62c01FAe8280344ec7Eb505ADf8397D9a1C`
 - prod brokProd: `0x4e33Adb3A77B5685E351A61f6bFb20d9dfF71E76`
 
-Blockchain index [TheGraph](https://api.thegraph.com/subgraphs/name/broklab/captable_dev_10)
+Blockchain index [TheGraph](https://api.thegraph.com/subgraphs/name/broklab/captable_dev_11)
 
 
 # Development on SDK

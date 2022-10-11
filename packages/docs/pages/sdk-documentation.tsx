@@ -103,7 +103,7 @@ const SDKDocumentation: NextPage = () => {
                                     </Grid>
                                     <Grid xs={12} sm={3} >
                                         <Col>
-                                            <Text b>brokDev</Text><Copy>https://api.thegraph.com/subgraphs/name/broklab/captable_dev_10</Copy>
+                                            <Text b>brokDev</Text><Copy>https://api.thegraph.com/subgraphs/name/broklab/captable_dev_11</Copy>
                                             <Text b>brokStage</Text><Copy>https://api.thegraph.com/subgraphs/name/broklab/captable_stage_10</Copy>
                                         </Col>
                                     </Grid>
@@ -112,7 +112,7 @@ const SDKDocumentation: NextPage = () => {
                                     </Grid>
                                     <Grid xs={12} sm={3} >
                                         <Col>
-                                            <Link href='https://api.thegraph.com/subgraphs/name/broklab/captable_dev_10/graphql?query=%7B%0A++++++capTables%28first%3A5%29+%7B%0A++++++++++name%0A++++++++++id%0A++++++++++orgnr%0A++++++++++fagsystem%0A++++++++++symbol%0A++++++++++status%0A++++++++++partitions%0A++++++++++owner%0A++++++++++minter%0A++++++++++controllers%0A++++++++++totalSupply%0A++++++++++fagsystemDid%0A++++++++++tokenHolders+%7B%0A++++++++++++address%0A++++++++++++balances+%7B%0A++++++++++++++amount%0A++++++++++++++partition%0A++++++++++++%7D%0A++++++++++%7D%0A++++++++%7D%0A++++%7D' target={"_blank"}>CapTable playground</Link>
+                                            <Link href='https://api.thegraph.com/subgraphs/name/broklab/captable_dev_11/graphql?query=%7B%0A++++++capTables%28first%3A5%29+%7B%0A++++++++++name%0A++++++++++id%0A++++++++++orgnr%0A++++++++++fagsystem%0A++++++++++symbol%0A++++++++++status%0A++++++++++partitions%0A++++++++++owner%0A++++++++++minter%0A++++++++++controllers%0A++++++++++totalSupply%0A++++++++++fagsystemDid%0A++++++++++tokenHolders+%7B%0A++++++++++++address%0A++++++++++++balances+%7B%0A++++++++++++++amount%0A++++++++++++++partition%0A++++++++++++%7D%0A++++++++++%7D%0A++++++++%7D%0A++++%7D' target={"_blank"}>CapTable playground</Link>
                                             <Link href='https://thegraph.com/en/' target={"_blank"}>The Graph</Link>
                                         </Col>
                                     </Grid>
@@ -170,7 +170,7 @@ const SDKDocumentation: NextPage = () => {
     ethereumRpc: 'https://rinkeby.arbitrum.io/rpc',
     secret: 'test test test test test test test test test test test junk',
     theGraphUrl:
-      'https://api.thegraph.com/subgraphs/name/broklab/captable_dev_10',
+      'https://api.thegraph.com/subgraphs/name/broklab/captable_dev_11',
     env: 'brokDev',
   });
 `} />

@@ -1,6 +1,6 @@
 {
 	"name": "@brok/sdk",
-	"version": "0.16.0",
+	"version": "0.16.1",
 	"private": false,
 	"publishConfig": {
 		"access": "public"
@@ -36,7 +36,7 @@
 		"test:cap": "pnpm ava tests/captable.test.ts --serial --watch"
 	},
 	"dependencies": {
-		"@brok/captable": "^0.13.0",
+		"@brok/captable": "^0.14.0",
 		"@ceramicnetwork/3id-did-resolver": "2.1.5-rc.1",
 		"@ceramicnetwork/blockchain-utils-linking": "^1.5.5",
 		"@ceramicnetwork/common": "2.5.1-rc.0",
