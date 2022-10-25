@@ -119,8 +119,8 @@ The main enviorment variables that you need to familirize with:
 
 SDK will look for environment variable BROK_ENVIRONMENT to determine which contracts to choose. Set this envrioment in your runtime.
 - local brokLocal - Will use local blockchain
-- dev brokDev - Will use Arbitrum Rinkeby
-- stage brokStage - Will use Arbitrum Rinkeby
+- dev brokDev - Will use Arbitrum Goerli
+- stage brokStage - Will use Arbitrum Goerli
 - prod brokProd - Will use Arbitrum mainnet (not currently)
 
 To create an approved CapTable, the wallet for fagsystem must first be authorized by BRREG. Contact us.

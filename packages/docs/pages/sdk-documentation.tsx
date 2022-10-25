@@ -160,8 +160,8 @@ const SDKDocumentation: NextPage = () => {
                             <Text>You must also pick a BRØK enviroment. </Text>
                             <ul>
                                 <li><b>brokLocal</b> - Local ceramic, local graph, local blockchain</li>
-                                <li><b>brokDev</b> - Ceramic: Clay testnetwork, Graph: Hosted services on Arbitrum Rinkeby, Ethereum: Arbitrum Rinkeby</li>
-                                <li><b>brokStage</b> - Ceramic: Clay testnetwork, Graph: Hosted services on Arbitrum Rinkeby, Ethereum: Arbitrum Rinkeby</li>
+                                <li><b>brokDev</b> - Ceramic: Clay testnetwork, Graph: Hosted services on Arbitrum Goerli, Ethereum: Arbitrum Goerli</li>
+                                <li><b>brokStage</b> - Ceramic: Clay testnetwork, Graph: Hosted services on Arbitrum Goerli, Ethereum: Arbitrum Goerli</li>
                                 <li><b>brokProd</b> - Ceramic: Mainnetwork, Graph: Hosted services on Arbitrum Nitro, Ethereum: Arbitrum Nitro</li>
                             </ul>
                             <Code lang='typescript' code={`
