@@ -10,6 +10,7 @@ import { formatBN } from "../src/utils/Formatters";
 import NoSSR from "../src/utils/NoSSR";
 import { Footer } from '../src/ui/Footer';
 import { NavBarAvisenNo } from "../src/ui/NavBarAvisen";
+import { NavBar } from "../src/ui/NavBar";
 
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -61,7 +62,7 @@ const Search: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
         <link rel="shortcut icon" href="/favicon.ico" />
       </Head>
-      <NavBarAvisenNo></NavBarAvisenNo>
+      <NavBar></NavBar>
       <Container
         as="main"
         display="flex"

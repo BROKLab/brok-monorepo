@@ -118,7 +118,7 @@ const CapTable: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
         <link rel="shortcut icon" href="/favicon.ico" />
       </Head>
-      <NavBarAvisenNo></NavBarAvisenNo>
+      <NavBar></NavBar>
       <Container
         as="main"
         display="flex"
