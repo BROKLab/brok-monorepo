@@ -1,5 +1,11 @@
 # @brok/sdk
 
+## 0.19.0
+
+### Minor Changes
+
+- Wrong package json export
+
 ## 0.18.0
 
 ### Minor Changes
