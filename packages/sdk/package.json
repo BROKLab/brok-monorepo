@@ -13,13 +13,14 @@
 	],
 	"type": "module",
 	"main": "dist/index.js",
-	"module": "dist/index.min.mjs",
-	"unpkg": "dist/index.umd.min.js",
+	"module": "dist/index.js",
+	"unpkg": "dist/index.global.js",
 	"types": "dist/index.d.ts",
 	"files": [
 		"dist"
 	],
 	"scripts": {
+		"tsup": "",
 		"prepublishOnly": "pnpm build",
 		"clean": "rm -rf dist",
 		"build": "pnpm run clean && pnpm run lint && tsc --project tsconfig.json && rollup --config rollup.config.js && pnpm run build:stats",
@@ -71,25 +72,26 @@
 		"rollup-plugin-terser": "^7.0.2",
 		"tap": "^16.3.0",
 		"terser": "^5.14.2",
+		"tsup": "^6.5.0",
 		"typescript": "^4.7.4"
 	},
 	"peerDependencies": {
+		"@brok/captable": "^0.14.0",
 		"@ceramicnetwork/3id-did-resolver": "2.1.5-rc.1",
 		"@ceramicnetwork/blockchain-utils-linking": "^1.5.5",
-		"@ceramicnetwork/common": "2.5.0-rc.1",
-		"@ceramicnetwork/core": "2.8.0-rc.1",
-		"@ceramicnetwork/http-client": "2.3.2-rc.1",
-		"@ceramicnetwork/stream-tile": "2.4.1-rc.1",
-		"@ceramicnetwork/stream-tile-handler": "2.2.5-rc.1",
-		"@ceramicnetwork/streamid": "2.3.1-rc.0",
+		"@ceramicnetwork/common": "2.5.1-rc.0",
+		"@ceramicnetwork/core": "2.8.1-rc.0",
+		"@ceramicnetwork/http-client": "2.3.4-rc.0",
+		"@ceramicnetwork/stream-tile": "2.4.3-rc.0",
+		"@ceramicnetwork/stream-tile-handler": "2.2.7-rc.0",
+		"@ceramicnetwork/streamid": "2.3.3-rc.0",
 		"cross-fetch": "^3.1.5",
 		"debug": "^4.3.4",
 		"did-resolver": "^4.0.0",
 		"dids": "3.2.0",
 		"ethers": "^5.6.9",
 		"neverthrow": "^4.3.1",
-		"node-fetch": "^3.2.10",
-		"@opentelemetry/api": ">=1.0.0 <1.2.0"
+		"node-fetch": "^3.2.10"
 	},
 	"ava": {
 		"extensions": {
