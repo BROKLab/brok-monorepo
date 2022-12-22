@@ -1,5 +1,11 @@
 # @brok/sdk
 
+## 0.20.0
+
+### Minor Changes
+
+- Updated ceramic dep
+
 ## 0.19.0
 
 ### Minor Changes
