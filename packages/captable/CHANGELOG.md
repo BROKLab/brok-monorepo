@@ -1,5 +1,11 @@
 # @brok/captable
 
+## 0.17.0
+
+### Minor Changes
+
+- bump
+
 ## 0.14.0
 
 ### Minor Changes

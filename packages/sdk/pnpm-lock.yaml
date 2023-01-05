@@ -2,7 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@ava/typescript': ^3.0.1
-  '@brok/captable': ^0.14.0
+  '@brok/captable': ^0.17.0
   '@ceramicnetwork/3id-did-resolver': ^2.8.0
   '@ceramicnetwork/blockchain-utils-linking': ^2.7.0
   '@ceramicnetwork/common': ^2.15.0
