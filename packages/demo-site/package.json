@@ -1,6 +1,6 @@
 {
   "name": "@brok/demo-site",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -11,7 +11,7 @@
     "postinstall": "pnpm playwright install"
   },
   "dependencies": {
-    "@brok/sdk": "^0.21.0",
+    "@brok/sdk": "^0.22.0",
     "@ceramicnetwork/common": "2.5.1-rc.0",
     "@ceramicnetwork/core": "2.8.1-rc.0",
     "@ceramicnetwork/http-client": "2.3.4-rc.0",
