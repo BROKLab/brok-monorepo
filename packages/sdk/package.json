@@ -1,6 +1,6 @@
 {
 	"name": "@brok/sdk",
-	"version": "0.20.0",
+	"version": "0.21.0",
 	"private": false,
 	"publishConfig": {
 		"access": "public"
@@ -12,9 +12,11 @@
 		"captable"
 	],
 	"type": "module",
-	"main": "dist/index.js",
-	"module": "dist/index.mjs",
-	"unpkg": "dist/index.global.js",
+	"exports": {
+		"main": "./dist/index.js",
+		"module": "./dist/index.mjs",
+		"unpkg": "./dist/index.global.js"
+	},
 	"types": "dist/index.d.ts",
 	"files": [
 		"dist"
@@ -23,7 +25,8 @@
 		"tsup": "tsup",
 		"prepublishOnly": "pnpm build",
 		"clean": "rm -rf dist",
-		"build": "pnpm run clean && pnpm run lint && tsc --project tsconfig.json && rollup --config rollup.config.js && pnpm run build:stats",
+		"build": "pnpm run clean && pnpm run lint && tsup && pnpm run build:stats",
+		"build:old": "pnpm run clean && pnpm run lint && tsc --project tsconfig.json && rollup --config rollup.config.js && pnpm run build:stats",
 		"watch:rollup": "rollup --config rollup.config.js --watch",
 		"watch:ts": "pnpm tsc --watch",
 		"watch": "pnpm run-p watch:rollup watch:ts",

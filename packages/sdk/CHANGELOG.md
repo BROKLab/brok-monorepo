@@ -1,5 +1,11 @@
 # @brok/sdk
 
+## 0.21.0
+
+### Minor Changes
+
+- New build type
+
 ## 0.20.0
 
 ### Minor Changes
