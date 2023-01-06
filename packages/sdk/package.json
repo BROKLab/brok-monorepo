@@ -1,6 +1,6 @@
 {
 	"name": "@brok/sdk",
-	"version": "0.27.0",
+	"version": "1.0.0",
 	"private": false,
 	"publishConfig": {
 		"access": "public"
@@ -25,8 +25,8 @@
 		"tsup": "tsup",
 		"prepublishOnly": "pnpm build",
 		"clean": "rm -rf dist",
-		"build": "pnpm run clean && pnpm run lint && tsup && pnpm run build:stats",
-		"build:old": "pnpm run clean && pnpm run lint && tsc --project tsconfig.json && rollup --config rollup.config.js && pnpm run build:stats",
+		"build:new": "pnpm run clean && pnpm run lint && tsup && pnpm run build:stats",
+		"build": "pnpm run clean && pnpm run lint && tsc --project tsconfig.json && rollup --config rollup.config.js && pnpm run build:stats",
 		"watch:rollup": "rollup --config rollup.config.js --watch",
 		"watch:ts": "pnpm tsc --watch",
 		"watch": "pnpm run-p watch:rollup watch:ts",
@@ -40,7 +40,7 @@
 		"test:cap": "pnpm ava tests/captable.test.ts --serial --watch"
 	},
 	"dependencies": {
-		"@brok/captable": "^0.17.0",
+		"@brok/captable": "^0.18.0",
 		"@ceramicnetwork/3id-did-resolver": "^2.8.0",
 		"@ceramicnetwork/blockchain-utils-linking": "^2.7.0",
 		"@ceramicnetwork/common": "^2.15.0",
@@ -79,7 +79,7 @@
 		"typescript": "^4.7.4"
 	},
 	"peerDependencies": {
-		"@brok/captable": "^0.17.0",
+		"@brok/captable": "^0.18.0",
 		"@ceramicnetwork/3id-did-resolver": "^2.8.0",
 		"@ceramicnetwork/blockchain-utils-linking": "^2.7.0",
 		"@ceramicnetwork/common": "^2.15.0",

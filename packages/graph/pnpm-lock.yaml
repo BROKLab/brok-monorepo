@@ -1,7 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@brok/captable': ^0.17.0
+  '@brok/captable': ^0.18.0
   '@graphprotocol/graph-cli': ^0.33.0
   '@graphprotocol/graph-ts': ^0.27.0
   js-yaml: ^4.1.0

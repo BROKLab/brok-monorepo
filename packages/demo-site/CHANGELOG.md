@@ -1,5 +1,16 @@
 # @brok/demo-site
 
+## 0.3.0
+
+### Minor Changes
+
+- bump
+
+### Patch Changes
+
+- Updated dependencies
+  - @brok/sdk@1.0.0
+
 ## 0.2.0
 
 ### Minor Changes

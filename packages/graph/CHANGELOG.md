@@ -5,6 +5,13 @@
 ### Patch Changes
 
 - Updated dependencies
+  - @brok/captable@0.18.0
+
+## null
+
+### Patch Changes
+
+- Updated dependencies
   - @brok/captable@0.17.0
 
 ## null
