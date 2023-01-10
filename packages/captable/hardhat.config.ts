@@ -4,7 +4,6 @@ import * as dotenv from "dotenv";
 import "@nomiclabs/hardhat-ethers";
 import "@typechain/hardhat";
 import "@typechain/hardhat";
-import "hardhat-deploy";
 import "hardhat-gas-reporter";
 import "hardhat-contract-sizer";
 import "hardhat-erc1820";
@@ -12,6 +11,7 @@ import "solidity-coverage";
 import "hardhat-interact";
 import "hardhat-packager";
 import "@nomiclabs/hardhat-etherscan";
+import "@nomicfoundation/hardhat-chai-matchers";
 
 // task
 import "./tasks/index";
@@ -53,11 +53,6 @@ const config: HardhatUserConfig = {
 	packager: {
 		contracts: ["ERC1400"],
 		includeFactories: true,
-	},
-	namedAccounts: {
-		deployer: {
-			default: 0,
-		},
 	},
 	gasReporter: {
 		enabled: process.env.REPORT_GAS === "true",

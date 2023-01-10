@@ -10,23 +10,31 @@
   ],
   "scripts": {
     "prebuild": "mkdir tasksCopy || true && cp -r tasks/* tasksCopy && rm -rf tasks && mkdir tasks && touch tasks/index.ts",
-    "postbuild": "cp -r tasksCopy/* tasks && rm -rf tasksCopy"
+    "postbuild": "cp -r tasksCopy/* tasks && rm -rf tasksCopy",
+    "test": "pnpm hardhat test"
   },
   "keywords": [],
   "author": "Robertosnap",
   "license": "ISC",
   "dependencies": {
-    "hardhat": "^2.12.5",
-    "hardhat-deploy": "^0.11.22"
+    "chai": "^4.3.7",
+    "hardhat": "^2.12.5"
   },
   "devDependencies": {
+    "@ethersproject/abi": ">=5.4.7 <6.0.0",
+    "@ethersproject/bytes": "^5.0.0",
+    "@ethersproject/providers": ">=5.4.7 <6.0.0",
     "@nomicfoundation/hardhat-chai-matchers": "^1.0.5",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.7",
     "@nomiclabs/hardhat-ethers": "^2.2.1",
     "@nomiclabs/hardhat-etherscan": "^3.1.4",
     "@openzeppelin/contracts": "^4.2.0",
     "@typechain/ethers-v5": "^10.2.0",
     "@typechain/hardhat": "^6.1.5",
+    "@types/chai": "^4.3.4",
+    "@types/mocha": "^10.0.1",
     "@types/node": "^18.11.18",
+    "dids": "^2.4.3",
     "dotenv": "^16.0.3",
     "ethers": "^5.7.2",
     "hardhat-contract-sizer": "^2.6.1",
@@ -34,13 +42,13 @@
     "hardhat-gas-reporter": "^1.0.9",
     "hardhat-interact": "^0.2.3",
     "hardhat-packager": "^1.4.2",
+    "key-did-provider-ed25519": "^1.1.0",
+    "key-did-resolver": "^1.4.4",
+    "lodash": "4.x",
     "solidity-coverage": "^0.8.2",
     "ts-node": "^10.9.1",
     "typechain": "^8.1.1",
     "typescript": "^4.9.4",
-    "update-dotenv": "^1.1.1",
-    "dids": "^2.4.3",
-    "key-did-provider-ed25519": "^1.1.0",
-    "key-did-resolver": "^1.4.4"
+    "update-dotenv": "^1.1.1"
   }
 }
