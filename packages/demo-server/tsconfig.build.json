@@ -1,6 +1,0 @@
-{
-  "extends": "./tsconfig.json",
-  "outDir": "./dist/main",
-  "module": "commonjs",
-  "exclude": ["node_modules", "test", "dist", "**/*spec.ts"]
-}

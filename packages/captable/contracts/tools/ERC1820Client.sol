@@ -1,6 +1,4 @@
-// SPDX-License-Identifier: ISC
-
-
+// SPDX-License-Identifier: Apache-2.0
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/utils/introspection/IERC1820Registry.sol";

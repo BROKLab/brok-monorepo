@@ -128,3 +128,11 @@ To create an approved CapTable, the wallet for fagsystem must first be authorize
 - If the blockchain node (running inside the captable contracts terminal) is killed, the graph node will stop indexing. To fire it up again run `make graph-stop` then `make graph-start`.
 - Problems with Key DID provider secp256k1 so we are deriving ED25519 from secp256k1 private key.
 
+
+
+# Windows
+Before install replace the following scripts in packages/captable/package.json
+```
+"prebuild": "if not exist tasksCopy mkdir tasksCopy & copy /Y tasks\\* tasksCopy & rmdir /Q /S tasks & mkdir tasks & type nul > tasks\\index.ts",
+"postbuild": "xcopy /Y tasksCopy\\* tasks & rmdir /Q /S tasksCopy".
+```

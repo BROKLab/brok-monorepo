@@ -1,25 +1,5 @@
 {
-  "eslint.workingDirectories": [
-    "packages/captable",
-    "packages/demo-frontend",
-    "packages/demo-server",
-    "packages/sdk",
-    "packages/graph",
-    "packages/demo-site",
-    "packages/docs"
-  ],
-  "[prisma]": {
-    "editor.defaultFormatter": "Prisma.prisma"
-  },
-  "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "vscode.typescript-language-features"
-  },
-  "eslint.format.enable": true,
   "peacock.color": "#a5c311",
-  "[solidity]": {
-    "editor.defaultFormatter": "NomicFoundation.hardhat-solidity"
-  },
   "workbench.colorCustomizations": {
     "activityBar.activeBackground": "#c8eb1c",
     "activityBar.activeBorder": "#188832",
@@ -40,10 +20,10 @@
     "titleBar.inactiveForeground": "#15202b99",
     "commandCenter.border": "#15202b99"
   },
-  "[typescript]": {
-    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
   },
-  "[javascript]": {
-    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+  "[solidity]": {
+    "editor.defaultFormatter": "NomicFoundation.hardhat-solidity"
   },
 }
