@@ -11,9 +11,9 @@ contract VCRegistry is AccessControl {
         uint256 timestamp;
     }
 
-    mapping(address => Authentication) private authenticationOf;
-    mapping(address => address) private ownerOfContract; // Contracts with an owner are authenticated for transactions
-    mapping(address => string) private operatorNameOf;
+    mapping(address => Authentication) internal authenticationOf;
+    mapping(address => address) internal ownerOfContract; // Contracts with an owner are authenticated for transactions
+    mapping(address => string) internal operatorNameOf;
 
     event AuthenticatedPerson(address indexed authenticatedAddress);
 
@@ -80,10 +80,10 @@ contract VCRegistry is AccessControl {
         return false;
     }
 
-    function authenticateOperator(address _operatorAddress, string calldata _operatorName) external {
-        operatorNameOf[_operatorAddress] = _operatorName;
-        grantRole(OPERATOR_ROLE, _operatorAddress);
-    }
+    // function authenticateOperator(address _operatorAddress, string calldata _operatorName) external {
+    //     operatorNameOf[_operatorAddress] = _operatorName;
+    //     grantRole(OPERATOR_ROLE, _operatorAddress);
+    // }
 
     function revokeOperator(address operator) external {
         revokeRole(OPERATOR_ROLE, operator);

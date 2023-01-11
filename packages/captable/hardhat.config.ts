@@ -26,7 +26,10 @@ declare module "hardhat/types/runtime" {
 		};
 	}
 }
-// Initate empty deployments object because nothing is deployed when starting runtime.
+/* 
+1. We extend the Hardhat Runtime Environment (HRE) with a new property called deployed.
+2. This property is an object which will contain all the deployed contracts.
+3. We set it to an empty object because we have not deployed anything yet. */
 extendEnvironment((hre) => {
 	hre.deployed = {};
 });
