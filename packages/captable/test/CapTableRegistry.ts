@@ -78,5 +78,10 @@ describe("Cap Table Registry tets", function () {
 		await tx4.wait();
 
 		await expect(await capTableRegistry.getActiveCapTablesCount()).to.be.equal(2);
+
+		const tx5 = await capTableRegistry.addCapTable(ethers.Wallet.createRandom().address, "555");
+		await tx5.wait();
+
+		await expect(await capTableRegistry.getActiveCapTablesCount()).to.be.equal(3);
 	});
 });
