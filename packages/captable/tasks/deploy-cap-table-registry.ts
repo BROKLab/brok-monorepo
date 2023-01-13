@@ -12,18 +12,31 @@ task("deploy-cap-table-registry", "Deploy contract")
 			const [deployer] = await hre.ethers.getSigners();
 
 			/* Get contract dependencies */
-			const vcRegistryAddress = hre.deployed.VC_REGISTRY;
-			const did = await getDIDfromHardhatDeployer(hre);
+			let capTableRegistryAddress = hre.deployed.CAP_TABLE_REGISTRY;
+
 			/* Check contract dependencies */
-			// if (!vcRegistryAddress) {
-			// 	throw new Error("VCRegistry requires CB token to be deployed");
-			// }
-			const capTableRegistry = await new CapTableRegistry__factory(deployer).deploy(deployer.address, did.id);
-			hre.deployed.CAP_TABLE_REGISTRY = capTableRegistry.address;
-			console.log("CapTableRegistry deployed to:", capTableRegistry.address);
+			if (!capTableRegistryAddress) {
+				const capTableRegistry = await new CapTableRegistry__factory(deployer).deploy();
+				await capTableRegistry.deployed();
+				capTableRegistryAddress = capTableRegistry.address;
+				hre.deployed.CAP_TABLE_REGISTRY = capTableRegistryAddress;
+				console.log("CapTableRegistry deployed to:", capTableRegistry.address);
+			} else {
+				console.log("CapTableRegistry already deployed at:", capTableRegistryAddress);
+			}
+
+			if (taskArgs.dev) {
+				const did = await getDIDfromHardhatDeployer(hre);
+				const capTableRegistry = await new CapTableRegistry__factory(deployer).attach(capTableRegistryAddress);
+				const isOperator = await capTableRegistry.hasRole(hre.ethers.utils.id("OPERATOR_ROLE"), deployer.address);
+				if (!isOperator) {
+					const tx = await capTableRegistry.authenticateOperatorWithDID(deployer.address, "Deployer", did.id);
+				}
+			}
+
 			if (taskArgs.updateEnv) {
 				await updateDotenv({
-					[`CAP_TABLE_REGISTRY_${await hre.network.config.chainId}`]: capTableRegistry.address,
+					[`CAP_TABLE_REGISTRY_${hre.network.name}`]: capTableRegistryAddress,
 				});
 			}
 		} catch (error) {

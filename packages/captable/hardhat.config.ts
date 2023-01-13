@@ -9,11 +9,10 @@ import "hardhat-contract-sizer";
 import "hardhat-erc1820";
 import "solidity-coverage";
 import "hardhat-interact";
-import "hardhat-packager";
 import "@nomiclabs/hardhat-etherscan";
 import "@nomicfoundation/hardhat-chai-matchers";
 
-// task
+// task, files here required typechain types to be generated. So maybe comment this line to run a compile first.
 import "./tasks/index";
 dotenv.config();
 
@@ -21,8 +20,8 @@ declare module "hardhat/types/runtime" {
 	// This new field will be available in tasks' actions, scripts, and tests.
 	export interface HardhatRuntimeEnvironment {
 		deployed: {
-			VC_REGISTRY?: string;
 			CAP_TABLE_REGISTRY?: string;
+			SOME?: string;
 		};
 	}
 }
@@ -52,10 +51,6 @@ const config: HardhatUserConfig = {
 		alphaSort: true,
 		runOnCompile: true,
 		disambiguatePaths: false,
-	},
-	packager: {
-		contracts: ["ERC1400"],
-		includeFactories: true,
 	},
 	gasReporter: {
 		enabled: process.env.REPORT_GAS === "true",

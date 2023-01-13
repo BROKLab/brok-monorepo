@@ -20,7 +20,6 @@ contract CapTable is ERC1400 {
     ) ERC1400(name, orgnr, granularity, controllers, defaultPartitions) {
         emit NewCapTable(orgnr, msg.sender);
         _capTableRegistry = CapTableRegistry(capTableRegistry);
-        // _capTableRegistry.approve(this)
     }
 
     function setCapTableRegistry(address capTableRegistryAddress) external onlyOwner {
@@ -41,12 +40,12 @@ contract CapTable is ERC1400 {
     /* @dev Get the current fagsystem for the cap table
      */
     function getFagsystem() public view returns (address) {
-        return _capTableRegistry.getFagsystemForCapTable(address(this));
+        return _capTableRegistry.getOperatorForCapTable(address(this));
     }
 
     function getFagsystemDid() public view returns (string memory) {
         address fagsystem = getFagsystem();
-        return _capTableRegistry.getDidForFagsystem(fagsystem);
+        return _capTableRegistry.getOperatorDID(fagsystem);
     }
 
     function getOrgnr() public view returns (string memory) {

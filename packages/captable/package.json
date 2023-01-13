@@ -18,7 +18,8 @@
   "license": "ISC",
   "dependencies": {
     "chai": "^4.3.7",
-    "hardhat": "^2.12.5"
+    "hardhat": "^2.12.5",
+    "tsup": "^6.5.0"
   },
   "devDependencies": {
     "@ethersproject/abi": ">=5.4.7 <6.0.0",
@@ -41,7 +42,6 @@
     "hardhat-erc1820": "^0.1.0",
     "hardhat-gas-reporter": "^1.0.9",
     "hardhat-interact": "^0.2.3",
-    "hardhat-packager": "^1.4.2",
     "key-did-provider-ed25519": "^1.1.0",
     "key-did-resolver": "^1.4.4",
     "lodash": "4.x",

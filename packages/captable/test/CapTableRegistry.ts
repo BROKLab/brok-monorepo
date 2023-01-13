@@ -1,7 +1,7 @@
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import type { CapTableRegistry2, VCRegistry } from "../typechain-types/index";
+import type { CapTableRegistry } from "../typechain-types/index";
 
 // let norgesBank: SignerWithAddress;
 let operator1: SignerWithAddress;
@@ -12,7 +12,7 @@ let user2: SignerWithAddress;
 let contract1: SignerWithAddress;
 let contract2: SignerWithAddress;
 
-let capTableRegistry: CapTableRegistry2;
+let capTableRegistry: CapTableRegistry;
 
 beforeEach(async () => {
 	// eslint-disable-next-line no-unused-vars
@@ -25,8 +25,8 @@ beforeEach(async () => {
 	contract1 = allAccounts[5];
 	contract2 = allAccounts[6];
 
-	const CapTableRegistryFactory = await ethers.getContractFactory("CapTableRegistry2");
-	capTableRegistry = (await CapTableRegistryFactory.deploy()) as CapTableRegistry2;
+	const CapTableRegistryFactory = await ethers.getContractFactory("CapTableRegistry");
+	capTableRegistry = (await CapTableRegistryFactory.deploy()) as CapTableRegistry;
 	await capTableRegistry.deployed();
 
 	// Authenticate bank

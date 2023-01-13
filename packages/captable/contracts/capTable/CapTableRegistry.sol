@@ -1,173 +1,85 @@
-// SPDX-License-Identifier: ISC
-
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import '@openzeppelin/contracts/access/AccessControl.sol';
-import './../tools/ERC1820Client.sol';
-import 'hardhat/console.sol';
+import './VCRegistry.sol';
 
-contract CapTableRegistry is AccessControl, ERC1820Client {
+contract CapTableRegistry is VCRegistry {
     address[] internal _capTables;
-    mapping(address => uint256) internal _status; // 0:notUsed 1:qued 2:approved 3:declined 4:removed 5:migrated
+    uint256 internal _activeCapTables;
     mapping(address => string) internal _addressToId; // address => orgnr
     mapping(string => address) internal _idToAddress; // id = orgnr
-    mapping(string => address) internal _idToQuedAddress; // Hvem som helst kan queue, så derfor "tar" man ikke orgnr når man queuer, men nå som kun fagsystem gjør det går det fint.
-    uint256 internal _activeCapTables;
-    uint256 internal _quedCapTables;
+    mapping(address => uint256) internal _addressToStatus; // // 0:notCreated 1:notUsed 2:approved 3:notUsed 4:removed 5:notUsed
+    mapping(address => address) private _operatorOf; // address => operator
+    mapping(address => string) internal _addressToDID; // address => did
 
-    string internal constant ERC1400_INTERFACE_NAME = 'ERC1400Token';
+    event CapTableAdded(address indexed capTableAddress, string indexed id);
+    event CapTableRemoved(address indexed capTableAddress, string indexed id);
 
-    event capTableQued(address indexed capTableAddress, string id);
-    event capTableApproved(address indexed capTableAddress);
-    event capTableRemoved(address indexed capTableAddress);
-    event capTableDeclined(address indexed capTableAddress, bytes32 reason);
-    event capTableMigrate(address indexed from, address indexed to, string indexed id);
+    constructor() VCRegistry() {}
 
-    bytes32 public constant FAGSYSTEM = keccak256('FAGSYSTEM');
-    mapping(address => string) internal _fagsystemToDid;
-    mapping(address => address) internal _capTableAddressToFagsystem;
-
-    constructor(address fagsystemAdr, string memory fagsystemDid) {
-        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _whitelistFagsystem(fagsystemAdr, fagsystemDid);
+    function addCapTable(address adr, string calldata id) external onlyRole(OPERATOR_ROLE) {
+        require(_idToAddress[id] == address(0), 'id is allready in use');
+        bool emptyIdOnAddress = bytes(_addressToId[adr]).length == 0;
+        require(emptyIdOnAddress, 'address is allready in use');
+        unchecked {
+            _capTables.push(adr);
+            _idToAddress[id] = adr;
+            _addressToId[adr] = id;
+            _activeCapTables++;
+            _operatorOf[adr] = msg.sender;
+            _addressToStatus[adr] = 2;
+        }
+        emit CapTableAdded(adr, id);
     }
 
-    function whitelistFagsystem(address adr, string memory did) external onlyRole(DEFAULT_ADMIN_ROLE) {
-        _whitelistFagsystem(adr, did);
+    function removeCapTable(address adr) external onlyRole(OPERATOR_ROLE) {
+        string memory id = _addressToId[adr];
+        require(_idToAddress[id] != address(0), 'no address registered on id');
+        bool emptyIdOnAddress = bytes(id).length == 0;
+        require(!emptyIdOnAddress, 'no id registered on address');
+
+        unchecked {
+            _idToAddress[id] = address(0);
+            _addressToId[adr] = string('');
+            _activeCapTables--;
+            _operatorOf[adr] = address(0);
+            _addressToStatus[adr] = 4;
+        }
+        emit CapTableRemoved(adr, id);
     }
 
-    function _whitelistFagsystem(address adr, string memory did) internal {
-        _fagsystemToDid[adr] = did;
-        grantRole(FAGSYSTEM, adr);
+    function authenticateOperatorWithDID(address _operatorAddress, string calldata _operatorName, string calldata _did) external onlyRole(OPERATOR_ROLE) {
+        operatorNameOf[_operatorAddress] = _operatorName;
+        grantRole(OPERATOR_ROLE, _operatorAddress);
+        _addressToDID[_operatorAddress] = _did;
     }
 
-    function getFagsystemForCapTable(address adr) external view returns (address) {
-        address fagsystem = _capTableAddressToFagsystem[adr];
-        return hasRole(FAGSYSTEM, fagsystem) ? fagsystem : address(0);
+    function getOperatorDID(address adr) external view returns (string memory) {
+        return hasRole(OPERATOR_ROLE, adr) ? _addressToDID[adr] : string('');
     }
 
-    function getDidForFagsystem(address adr) external view returns (string memory) {
-        return hasRole(FAGSYSTEM, adr) ? _fagsystemToDid[adr] : string('');
+    function getOperatorForCapTable(address adr) external view returns (address) {
+        address operator = _operatorOf[adr];
+        return hasRole(OPERATOR_ROLE, operator) ? operator : address(0);
     }
 
-    function removeFagsystem(address adr) external onlyRole(DEFAULT_ADMIN_ROLE) {
-        revokeRole(FAGSYSTEM, adr);
-    }
-
-    function que(address adr, string calldata id) external {
-        _queCapTable(adr, id);
-    }
-
-    function approve(address adr) external onlyRole(FAGSYSTEM) {
-        _approveCapTable(adr);
-    }
-
-    function decline(address adr, bytes32 reason) external onlyRole(FAGSYSTEM) {
-        _declineCapTable(adr, reason);
-    }
-
-    function remove(address adr) external onlyRole(FAGSYSTEM) {
-        _removeCapTable(adr);
-    }
-
-    function getActiveCount() external view returns (uint256 activeCapTables) {
+    function getActiveCapTablesCount() external view returns (uint256 activeCapTables) {
         return _activeCapTables;
     }
 
-    function getQuedCount() external view returns (uint256 quedCapTables) {
-        return _quedCapTables;
-    }
-
-    function getList() external view returns (address[] memory capTableList) {
+    function getCapTableList() external view returns (address[] memory capTableList) {
         return _capTables;
     }
 
-    function getid(address adr) external view returns (string memory id) {
+    function getId(address adr) external view returns (string memory id) {
         return _addressToId[adr];
     }
 
     function getStatus(address adr) external view returns (uint256 status) {
-        return _status[adr];
+        return _addressToStatus[adr];
     }
 
-    function getAddress(string calldata orgnr) external view returns (address capTableAddress) {
-        return _idToAddress[orgnr];
-    }
-
-    function getMigrationAddress(string calldata id) external view returns (address) {
-        return _getMigrationAddress(id);
-    }
-
-    function migrateCaptable(string calldata id) external onlyRole(FAGSYSTEM) {
-        _migrateCapTable(id);
-    }
-
-    function _getMigrationAddress(string calldata id) internal view returns (address) {
-        address currentImplementation = interfaceAddr(_idToAddress[id], ERC1400_INTERFACE_NAME);
-        return currentImplementation;
-    }
-
-    function _queCapTable(address adr, string memory id) internal {
-        require(_status[adr] != 1, 'Qued capTables must be declined before reQue');
-        require(_status[adr] != 2, 'Cannot que active capTable');
-        _capTables.push(adr);
-        _status[adr] = 1;
-        _addressToId[adr] = id;
-        _idToQuedAddress[id] = adr;
-        unchecked {
-            _quedCapTables++;
-        }
-        emit capTableQued(adr, id);
-    }
-
-    function _approveCapTable(address adr) internal {
-        require(_status[adr] == 1, 'Only qued capTables can be approved');
-        _status[adr] = 2;
-        string memory id = _addressToId[adr];
-        require(_idToAddress[id] == address(0), 'id is allready in use');
-        _idToAddress[id] = adr;
-        _idToQuedAddress[id] = address(0);
-        unchecked {
-            _quedCapTables--;
-            _activeCapTables++;
-        }
-        _capTableAddressToFagsystem[adr] = msg.sender;
-        address(adr).call(abi.encodeWithSignature('updateFagsystem()'));
-        emit capTableApproved(adr);
-    }
-
-    function _declineCapTable(address adr, bytes32 reason) internal {
-        require(_status[adr] == 1, 'Only qued capTables can be declined');
-        _status[adr] = 3;
-        unchecked {
-            _quedCapTables--;
-        }
-        string memory id = _addressToId[adr];
-        _idToQuedAddress[id] = address(0);
-        emit capTableDeclined(adr, reason);
-    }
-
-    function _removeCapTable(address adr) internal {
-        require(_status[adr] == 2, 'Only approved capTables can be removed');
-        _status[adr] = 4;
-        string memory id = _addressToId[adr];
-        _idToAddress[id] = address(0);
-        unchecked {
-            _activeCapTables--;
-        }
-        emit capTableRemoved(adr);
-    }
-
-    function _migrateCapTable(string calldata id) internal {
-        address _address = _idToAddress[id];
-        address _migratedToAddress = _getMigrationAddress(id);
-        require(_status[_address] == 2, 'Only approved capTables can be removed');
-
-        require(_migratedToAddress != _address, 'Captable is not migrated in ERC1820');
-        require(_migratedToAddress != address(0), 'Captable is migrated to an empty address');
-        _status[_address] = 5;
-        _status[_address] = 2;
-        _idToAddress[id] = _migratedToAddress;
-        emit capTableMigrate(_address, _migratedToAddress, id);
+    function getAddress(string calldata id) external view returns (address capTableAddress) {
+        return _idToAddress[id];
     }
 }
