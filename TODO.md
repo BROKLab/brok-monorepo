@@ -1,0 +1,4 @@
+- [] When doing a transfer, takes long time before Ceramic is updated. Probably due to some cache.
+- [] Take signer in initSDK
+- [] Make sure multiple fagsystems are working in SDK.
+- [] Multiple performance enhacements in SDK.

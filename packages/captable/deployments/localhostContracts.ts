@@ -1,2 +1,1 @@
-
-				export const localhostContracts =  {"CAP_TABLE_REGISTRY":"0x854cD40b658C6604E2260Fc3FBc77d4805Aa9dd8"}	 as const;
+export const localhostContracts = {"CAP_TABLE_REGISTRY":"0xFa1f20A8f6341B3Aa44372B3Ae4EF6912c338a64"}	as const;

@@ -1,3 +1,3 @@
-export * from "./localhostContracts";
 
 export * from "./../typechain-types/index";
+export * from "./deploys";

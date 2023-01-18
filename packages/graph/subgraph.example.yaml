@@ -1,0 +1,72 @@
+specVersion: 0.0.2
+description: Captable for The Norwegian Business Registry.
+repository: https://github.com/BROKLab/captable-graph
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: CapTableRegistry
+    network: mainnet
+    source:
+      address: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512'
+      abi: CapTableRegistry
+      startBlock: 1
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/capTableRegistry.ts
+      entities:
+        - CapTableRegistry
+      abis:
+        - name: CapTableRegistry
+          file: ./abis/CapTableRegistry.json
+        - name: CapTable
+          file: ./abis/CapTable.json
+      eventHandlers:
+        - event: CapTableAdded(indexed address,indexed string)
+          handler: handleCapTableAdded
+        - event: CapTableRemoved(indexed address,indexed string)
+          handler: handleCapTableRemoved
+
+
+templates:
+  - name: CapTable
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: CapTable
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/captable.ts
+      entities:
+        - CapTable
+        - TokenBalance
+      abis:
+        - name: CapTable
+          file: ./abis/CapTable.json
+      eventHandlers:
+        - event: >-
+            TransferByPartition(indexed bytes32,address,indexed address,indexed
+            address,uint256,bytes,bytes)
+          handler: handleTransferByPartition
+        - event: >-
+            IssuedByPartition(indexed bytes32,indexed address,indexed
+            address,uint256,bytes,bytes)
+          handler: handleIssuedByPartition
+        - event: >-
+            RedeemedByPartition(indexed bytes32,indexed address,indexed
+            address,uint256,bytes)
+          handler: handleRedeemByPartition
+
+
+  # - AuthenticatedPerson(indexed address)
+  # - CapTableAdded(indexed address,indexed string)
+  # - CapTableRemoved(indexed address,indexed string)
+  # - ContractRevoked(indexed address,indexed address)
+  # - PersonAuthenticatedContract(indexed address,indexed address)
+  # - RoleAdminChanged(indexed bytes32,indexed bytes32,indexed bytes32)
+  # - RoleGranted(indexed bytes32,indexed address,indexed address)
+  # - RoleRevoked(indexed bytes32,indexed address,indexed address)

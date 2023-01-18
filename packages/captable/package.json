@@ -2,22 +2,28 @@
   "name": "@brok/captable",
   "version": "0.50.0",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js"
+  },
   "files": [
-    "artifacts",
-    "contracts",
-    "typechain-types"
+    "dist"
   ],
   "scripts": {
     "prebuild": "mkdir tasksCopy || true && cp -r tasks/* tasksCopy && rm -rf tasks && mkdir tasks && touch tasks/index.ts",
     "postbuild": "cp -r tasksCopy/* tasks && rm -rf tasksCopy",
-    "test": "pnpm hardhat test"
+    "test": "pnpm hardhat test",
+    "deploy": "pnpm hardhat deploy-all --dev --log",
+    "deploy:reset": "pnpm hardhat deploy-all --dev --reset --log",
+    "node": "pnpm hardhat node"
   },
   "keywords": [],
   "author": "Robertosnap",
   "license": "ISC",
   "dependencies": {
     "chai": "^4.3.7",
+    "debug": "^4.3.4",
     "hardhat": "^2.12.5",
     "tsup": "^6.5.0"
   },
@@ -33,9 +39,10 @@
     "@typechain/ethers-v5": "^10.2.0",
     "@typechain/hardhat": "^6.1.5",
     "@types/chai": "^4.3.4",
+    "@types/debug": "^4.1.7",
     "@types/mocha": "^10.0.1",
     "@types/node": "^18.11.18",
-    "dids": "^2.4.3",
+    "dids": "2.4.3",
     "dotenv": "^16.0.3",
     "ethers": "^5.7.2",
     "hardhat-contract-sizer": "^2.6.1",

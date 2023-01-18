@@ -24,6 +24,29 @@ export async function getDIDfromHardhatDeployer(hre: HardhatRuntimeEnvironment) 
 			const did = new DID({ provider, resolver: getResolver() });
 			await did.authenticate();
 			return did;
+		} else {
+			// Fix for on localhost, the mnemonic is not in the network config (remote), but in the hardhat config
+			if (
+				hre.userConfig.networks &&
+				"hardhat" in hre.userConfig.networks &&
+				hre.userConfig.networks.hardhat &&
+				"accounts" in hre.userConfig.networks.hardhat &&
+				hre.userConfig.networks.hardhat.accounts
+			) {
+				if (
+					typeof hre.userConfig.networks.hardhat.accounts !== "string" &&
+					"mnemonic" in hre.userConfig.networks.hardhat.accounts &&
+					hre.userConfig.networks.hardhat.accounts.mnemonic
+				) {
+					console.log("useing mnemonic from hardhat config");
+					const wallet = hre.ethers.Wallet.fromMnemonic(hre.userConfig.networks.hardhat.accounts.mnemonic);
+					const seed = Uint8Array.from(Buffer.from(wallet.privateKey.substring(2), "hex"));
+					const provider = new Ed25519Provider(seed);
+					const did = new DID({ provider, resolver: getResolver() });
+					await did.authenticate();
+					return did;
+				}
+			}
 		}
 		throw new Error(
 			"No mnemonic found in network config, could not calculate DID which is needed to deploy CapTableRegistry",

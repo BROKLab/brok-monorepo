@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "dev-backend",
+            "label": "dev-essentials",
             "runOptions": {
                 // "runOn": "folderOpen"
             },
@@ -28,22 +28,10 @@
             "problemMatcher": []
         },
         {
-            "label": "dev-demo-site",
-            "runOptions": {
-                // "runOn": "folderOpen"
-            },
-            "dependsOrder": "parallel",
-            "dependsOn": [
-                "demo-site",
-                "graph-captable"
-            ],
-            "problemMatcher": []
-        },
-        {
-            "label": "captable contracts",
+            "label": "local blockchain",
             "type": "shell",
             "isBackground": true,
-            "command": "pnpm --filter @brok/captable start:contracts",
+            "command": "pnpm --filter @brok/captable node",
             "presentation": {
                 "panel": "dedicated",
                 "group": "contracts"
@@ -60,21 +48,21 @@
                 "background": {
                     "activeOnStart": true,
                     "beginsPattern": "change detected",
-                    "endsPattern": "CapTableRegistry deployed"
+                    "endsPattern": "Account #19"
                 }
             }
         },
         {
-            "label": "captable lib",
+            "label": "captable contracts",
             "type": "shell",
             "isBackground": true,
-            "command": "pnpm --filter @brok/captable start:lib",
+            "command": "pnpm run --filter @brok/captable deploy --network localhost",
             "presentation": {
                 "panel": "dedicated",
                 "group": "contracts"
             },
             "dependsOn": [
-                "captable contracts"
+                "local blockchain"
             ],
             "problemMatcher": [
                 "$tsc-watch"
@@ -125,109 +113,6 @@
             ],
         },
         {
-            "label": "server-reddis",
-            "type": "shell",
-            "isBackground": true,
-            "command": "make redis-stop && make redis-start",
-            "presentation": {
-                "panel": "dedicated",
-                "group": "server"
-            },
-            // "dependsOn": [
-            //     "sdk"
-            // ],
-            "problemMatcher": {
-                "pattern": {
-                    "regexp": "^([^\\s].*)\\((\\d+|\\d+,\\d+|\\d+,\\d+,\\d+,\\d+)\\):\\s+(error|warning|info)\\s+(TS\\d+)\\s*:\\s*(.*)$",
-                    "file": 1,
-                    "location": 2,
-                    "severity": 3,
-                    "code": 4,
-                    "message": 5
-                },
-                "background": {
-                    "activeOnStart": true,
-                    "beginsPattern": "Swarm listening",
-                    "endsPattern": "Ready to accept connections"
-                }
-            }
-        },
-        {
-            "label": "server",
-            "type": "shell",
-            "isBackground": true,
-            "command": "pnpm -F @brok/demo-server init:db && DEBUG=brok* pnpm --filter @brok/demo-server start:dev",
-            "presentation": {
-                "panel": "dedicated",
-                "group": "server"
-            },
-            "dependsOn": [
-                "server-reddis",
-                "sdk"
-            ],
-            "problemMatcher": [
-                "$tsc-watch"
-            ],
-        },
-        {
-            "label": "frontend",
-            "type": "shell",
-            "isBackground": true,
-            "command": "pnpm --filter @brok/demo-frontend dev",
-            "presentation": {
-                "panel": "dedicated",
-                "clear": true
-            },
-            "dependsOn": [
-                "sdk"
-            ],
-            "problemMatcher": {
-                "owner": "typescript",
-                "pattern":    [
-                    {
-                      "regexp": ".",
-                      "file": 1,
-                      "location": 2,
-                      "message": 3
-                    }
-                  ],
-                "background": {
-                    "activeOnStart": true,
-                    "beginsPattern": "Compiling",
-                    "endsPattern": "compiled client and server successfully"
-                }
-            }
-        },
-        {
-            "label": "demo-site",
-            "type": "shell",
-            "isBackground": true,
-            "command": "pnpm --filter @brok/demo-site dev",
-            "presentation": {
-                "panel": "dedicated",
-                "clear": true
-            },
-            "dependsOn": [
-                "sdk"
-            ],
-            "problemMatcher": {
-                "owner": "typescript",
-                "pattern":    [
-                    {
-                      "regexp": ".",
-                      "file": 1,
-                      "location": 2,
-                      "message": 3
-                    }
-                  ],
-                "background": {
-                    "activeOnStart": true,
-                    "beginsPattern": "Compiling",
-                    "endsPattern": "compiled client and server successfully"
-                }
-            }
-        },
-        {
             "label": "graph-server",
             "type": "shell",
             "command": "docker compose -p symfoni_graph -f ops/docker/the-graph.yml down -v; rm -rf ops/docker/data; docker compose -p symfoni_graph -f ops/docker/the-graph.yml up",
@@ -267,14 +152,14 @@
                 "graph-server"
             ],
             "problemMatcher": {
-                "pattern":    [
+                "pattern": [
                     {
-                      "regexp": ".",
-                      "file": 1,
-                      "location": 2,
-                      "message": 3
+                        "regexp": ".",
+                        "file": 1,
+                        "location": 2,
+                        "message": 3
                     }
-                  ],
+                ],
                 "background": {
                     "activeOnStart": true,
                     "beginsPattern": "Apply migrations",
