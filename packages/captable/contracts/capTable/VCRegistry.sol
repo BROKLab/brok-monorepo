@@ -80,10 +80,10 @@ contract VCRegistry is AccessControl {
         return false;
     }
 
-    // function authenticateOperator(address _operatorAddress, string calldata _operatorName) external {
-    //     operatorNameOf[_operatorAddress] = _operatorName;
-    //     grantRole(OPERATOR_ROLE, _operatorAddress);
-    // }
+    function authenticateOperator(address _operatorAddress, string calldata _operatorName) external {
+        operatorNameOf[_operatorAddress] = _operatorName;
+        grantRole(OPERATOR_ROLE, _operatorAddress);
+    }
 
     function revokeOperator(address operator) external {
         revokeRole(OPERATOR_ROLE, operator);
