@@ -1,1 +1,0 @@
-export const localhostContracts = {"CAP_TABLE_REGISTRY":"0xFa1f20A8f6341B3Aa44372B3Ae4EF6912c338a64"}	as const;

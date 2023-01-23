@@ -50,3 +50,4 @@ Thumbs.db
 ops/docker/data
 .pnpm-debug.log
 .wallet*
+packages/captable/deployments/localhostContracts.ts

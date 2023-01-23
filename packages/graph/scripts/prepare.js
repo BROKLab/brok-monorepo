@@ -2,7 +2,6 @@ const brok = require('@brok/captable');
 const yaml = require('js-yaml');
 const fs = require('fs');
 
-console.log(brok.localhostContracts)
 const args = process.argv.slice(2);
 const env = args[0];
 const subgraphConfig = yaml.load(fs.readFileSync('subgraph.example.yaml', 'utf8'));
