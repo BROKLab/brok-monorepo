@@ -24,7 +24,7 @@
     "prepare": "pnpm prisma generate"
   },
   "dependencies": {
-    "@brok/sdk": "^0.10.0",
+    "@brok/sdk": "^0.20.0",
     "@nestjs/bull": "^0.5.3",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^1.2.0",
