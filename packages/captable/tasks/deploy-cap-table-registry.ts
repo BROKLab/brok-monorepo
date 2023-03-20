@@ -1,8 +1,9 @@
 import { task } from "hardhat/config";
 import { HardhatRuntimeEnvironment, TaskArguments } from "hardhat/types";
-import { CapTableRegistry__factory } from "../typechain-types";
+import { CapTableRegistry, CapTableRegistry__factory } from "../typechain-types";
 import { getDIDfromHardhatDeployer } from "./utils";
 import updateDotenv from "update-dotenv";
+import { TASK_PRE_DEPLOY_CHECK } from "./generate-deployments";
 
 task("deploy-cap-table-registry", "Deploy contract")
 	.addFlag("dev", "Deploy development state.")
@@ -12,33 +13,29 @@ task("deploy-cap-table-registry", "Deploy contract")
 			const [deployer] = await hre.ethers.getSigners();
 
 			/* Get contract dependencies */
-			let capTableRegistryAddress = hre.deployed.CAP_TABLE_REGISTRY;
+			let contractAddress = await hre.run(TASK_PRE_DEPLOY_CHECK, {
+				contract: "CAP_TABLE_REGISTRY",
+			});
 
-			/* Check contract dependencies */
-			if (!capTableRegistryAddress) {
-				const capTableRegistry = await new CapTableRegistry__factory(deployer).deploy();
-				await capTableRegistry.deployed();
-				capTableRegistryAddress = capTableRegistry.address;
-				hre.deployed.CAP_TABLE_REGISTRY = capTableRegistryAddress;
-				console.log("CapTableRegistry deployed to:", capTableRegistry.address);
-			} else {
-				console.log("CapTableRegistry already deployed at:", capTableRegistryAddress);
-			}
-
-			if (taskArgs.dev) {
-				const did = await getDIDfromHardhatDeployer(hre);
-				const capTableRegistry = await new CapTableRegistry__factory(deployer).attach(capTableRegistryAddress);
-				const isOperator = await capTableRegistry.hasRole(hre.ethers.utils.id("OPERATOR_ROLE"), deployer.address);
-				if (!isOperator) {
-					const tx = await capTableRegistry.authenticateOperatorWithDID(deployer.address, "Deployer", did.id);
+			const contract = (async () => {
+				if (!contractAddress) {
+					const capTableRegistry = await new CapTableRegistry__factory(deployer).deploy();
+					await capTableRegistry.deployed();
+					hre.deployed.CAP_TABLE_REGISTRY = capTableRegistry.address;
+					return capTableRegistry;
+				} else {
+					const capTableRegistry = await new CapTableRegistry__factory(deployer).attach(contractAddress);
+					return capTableRegistry;
 				}
-			}
+			})();
 
-			if (taskArgs.updateEnv) {
-				await updateDotenv({
-					[`CAP_TABLE_REGISTRY_${hre.network.name}`]: capTableRegistryAddress,
-				});
-			}
+			// if (taskArgs.dev) {
+			// 	const did = await getDIDfromHardhatDeployer(hre);
+			// 	const isOperator = await contract.hasRole(hre.ethers.utils.id("OPERATOR_ROLE"), deployer.address);
+			// 	if (!isOperator) {
+			// 		const tx = await contract.authenticateOperatorWithDID(deployer.address, "Deployer", did.id);
+			// 	}
+			// }
 		} catch (error) {
 			console.error(error);
 			throw error;

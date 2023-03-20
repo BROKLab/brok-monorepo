@@ -11,9 +11,18 @@ import "solidity-coverage";
 import "hardhat-interact";
 import "@nomiclabs/hardhat-etherscan";
 import "@nomicfoundation/hardhat-chai-matchers";
+import { readdirSync } from "fs";
 
-// task, files here required typechain types to be generated. So maybe comment this line to run a compile first.
-import "./tasks/index";
+// Runs every time hardhat is started, so we can import tasks only if typechain-types folder exists
+// If there's problems with finding typechain files, then the problem is probably here:
+try {
+	readdirSync("typechain-types");
+	// eslint-disable-next-line node/no-unsupported-features/es-syntax
+	import("./tasks/index");
+} catch (error) {
+	console.log("No typechain-types folder found, skipping import of tasks");
+}
+
 dotenv.config();
 
 declare module "hardhat/types/runtime" {
