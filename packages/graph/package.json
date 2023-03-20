@@ -9,9 +9,9 @@
     "deploy:local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 --version-label 0.0.1 brok/captable",
     "prepare:brokDev": "node scripts/prepare.js brokDev",
     "prepare:brokStage": "node scripts/prepare.js brokStage",
-    "prepare:brokLocal": "node scripts/prepare.js localhost",
+    "prepare:localhost": "node scripts/prepare.js localhost",
     "prepare:brokProd": "node scripts/prepare.js brokProd",
-    "deploy:brokLocal": "pnpm prepare:brokLocal && pnpm build && pnpm create:local && pnpm deploy:local",
+    "deploy:localhost": "pnpm prepare:localhost && pnpm build && pnpm create:local && pnpm deploy:local",
     "deploy:brokDev": "pnpm prepare:brokDev && graph deploy --product hosted-service broklab/captable_dev_12",
     "deploy:brokStage": "pnpm prepare:brokStage && graph deploy --product hosted-service  broklab/captable_stage_12",
     "deploy:brokProd": "pnpm prepare:brokProd && graph deploy --product hosted-service  broklab/captable_prod_12"

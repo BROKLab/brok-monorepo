@@ -30,7 +30,7 @@ declare module "hardhat/types/runtime" {
 	export interface HardhatRuntimeEnvironment {
 		deployed: {
 			CAP_TABLE_REGISTRY?: string;
-			SOME?: string;
+			VC_REGISTRY?: string;
 		};
 	}
 }
@@ -72,12 +72,6 @@ const config: HardhatUserConfig = {
 	networks: {
 		hardhat: {
 			// allowUnlimitedContractSize: true,
-			accounts: {
-				mnemonic: process.env.SEED_DEV,
-			},
-		},
-		brokLocal: {
-			url: "http://localhost:8545",
 			accounts: {
 				mnemonic: process.env.SEED_DEV,
 			},

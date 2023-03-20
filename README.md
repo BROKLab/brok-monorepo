@@ -118,7 +118,7 @@ The main enviorment variables that you need to familirize with:
 1. Then you should be able to generate the SDK for any chain.
 
 SDK will look for environment variable BROK_ENVIRONMENT to determine which contracts to choose. Set this envrioment in your runtime.
-- local brokLocal - Will use local blockchain
+- local localhost - Will use local blockchain
 - dev brokDev - Will use Arbitrum Goerli
 - stage brokStage - Will use Arbitrum Goerli
 - prod brokProd - Will use Arbitrum mainnet (not currently)

@@ -4,14 +4,13 @@ import { HardhatRuntimeEnvironment, RunSuperFunction, TaskArguments } from "hard
 import debug from "debug";
 import { TASK_CLEAN } from "hardhat/builtin-tasks/task-names";
 import { exec } from "child_process";
-import { ContractFactory } from "ethers";
 
 export const TASK_PRE_DEPLOY_CHECK = "pre-deploy-check";
 export const TASK_POST_DEPLOY_CHECK = "post-deploy-check";
 export const TASK_GENERATE_DEPLOYMENTS = "generate-deployments";
 export const TASK_GENERATE_NPM_PACKAGE = "generate-npm-package";
 
-const log = debug("dsp:tasks:generate-deployments");
+const log = debug("brok:tasks:generate-deployments");
 // constants for file paths
 const deploymentsFolder = "deployments";
 const contractsPostfix = "Contracts";
@@ -45,7 +44,7 @@ task(TASK_GENERATE_DEPLOYMENTS, "Write deployed contracts to typescript files")
 
 			// ensure we have files for each network
 			for (const networkName of Object.keys(hre.config.networks)) {
-				log("START generate deployments for network: ", networkName);
+				// log("START generate deployments for network: ", networkName);
 				if (networkName === "hardhat") continue;
 
 				// ensure file exists
@@ -61,6 +60,8 @@ task(TASK_GENERATE_DEPLOYMENTS, "Write deployed contracts to typescript files")
 				}
 				// write deploys to file
 				if (hre.network.name === networkName) {
+					log("Writing deployments for network: ", networkName);
+					log("Deployed contracts: ", hre.deployed);
 					if (Object.values(hre.deployed).length === 0) {
 						log("No contracts deployed, nothing to generate");
 						return;
@@ -71,7 +72,7 @@ task(TASK_GENERATE_DEPLOYMENTS, "Write deployed contracts to typescript files")
 
 					writeFileSync(`deployments/${networkName}${contractsPostfix}.ts`, enviromentsText);
 				}
-				log("END generate deployments for network: ", networkName);
+				// log("END generate deployments for network: ", networkName);
 			}
 
 			if (!indexFile.includes(`export * from "./../typechain-types/index";`)) {
@@ -138,7 +139,7 @@ task(TASK_GENERATE_NPM_PACKAGE, "Write deployment and typechain files to npm pac
 			log("Starting tsup build");
 
 			const tsup = new Promise((resolve, reject) => {
-				exec("tsup", (error, stdout, stderr) => {
+				exec("pnpm tsup", (error, stdout, stderr) => {
 					if (error) {
 						log(`tsup error: ${error}`);
 						return reject(error);

@@ -4,14 +4,13 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "dev-essentials",
+            "label": "deploy-all",
             "runOptions": {
                 // "runOn": "folderOpen"
             },
             "dependsOrder": "parallel",
             "dependsOn": [
-                "ceramic",
-                "graph-captable"
+                "contracts localhost"
             ],
             "problemMatcher": []
         },
@@ -31,7 +30,7 @@
             "label": "local blockchain",
             "type": "shell",
             "isBackground": true,
-            "command": "pnpm --filter @brok/captable node",
+            "command": "pnpm --filter @brok/captable hardhat node",
             "presentation": {
                 "panel": "dedicated",
                 "group": "contracts"
@@ -53,10 +52,10 @@
             }
         },
         {
-            "label": "captable contracts",
+            "label": "contracts localhost",
             "type": "shell",
             "isBackground": true,
-            "command": "pnpm run --filter @brok/captable deploy --network localhost",
+            "command": "pnpm --filter @brok/captable hardhat deploy-all --dev --log --network localhost",
             "presentation": {
                 "panel": "dedicated",
                 "group": "contracts"
@@ -69,45 +68,15 @@
             ],
         },
         {
-            "label": "ceramic",
+            "label": "contracts brokDev",
             "type": "shell",
             "isBackground": true,
-            "command": "pnpm ceramic daemon --debug --network inmemory",
+            "command": "pnpm --filter @brok/captable hardhat deploy-all --dev --log --network brokDev",
             "presentation": {
                 "panel": "dedicated",
-                "group": "ceramic"
+                "group": "contracts"
             },
-            "dependsOn": [
-                "captable lib"
-            ],
-            "problemMatcher": {
-                "pattern": {
-                    "regexp": "^([^\\s].*)\\((\\d+|\\d+,\\d+|\\d+,\\d+,\\d+,\\d+)\\):\\s+(error|warning|info)\\s+(TS\\d+)\\s*:\\s*(.*)$",
-                    "file": 1,
-                    "location": 2,
-                    "severity": 3,
-                    "code": 4,
-                    "message": 5
-                },
-                "background": {
-                    "activeOnStart": true,
-                    "beginsPattern": "Swarm listening",
-                    "endsPattern": "Ceramic API running on"
-                }
-            }
-        },
-        {
-            "label": "sdk",
-            "type": "shell",
-            "isBackground": true,
-            "command": "pnpm --filter @brok/sdk watch",
-            "presentation": {
-                "panel": "dedicated",
-                "group": "sdk"
-            },
-            "dependsOn": [
-                "ceramic"
-            ],
+            "dependsOn": [],
             "problemMatcher": [
                 "$tsc-watch"
             ],
@@ -142,7 +111,7 @@
             "label": "graph-captable",
             "type": "shell",
             "isBackground": true,
-            "command": "pnpm -F @brok/graph deploy:brokLocal",
+            "command": "pnpm -F @brok/graph deploy:localhost",
             "presentation": {
                 "panel": "dedicated",
                 "group": "graph",

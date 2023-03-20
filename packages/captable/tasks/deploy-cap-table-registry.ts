@@ -1,23 +1,29 @@
+import debug from "debug";
 import { task } from "hardhat/config";
 import { HardhatRuntimeEnvironment, TaskArguments } from "hardhat/types";
-import { CapTableRegistry, CapTableRegistry__factory } from "../typechain-types";
-import { getDIDfromHardhatDeployer } from "./utils";
-import updateDotenv from "update-dotenv";
+import { CapTableRegistry__factory } from "../typechain-types";
 import { TASK_PRE_DEPLOY_CHECK } from "./generate-deployments";
+export const TASK_DEPLOY_CAP_TABLE_REGISTRY = "deploy-cap-table-registry";
+const log = debug(`brok:task:${TASK_DEPLOY_CAP_TABLE_REGISTRY}`);
 
-task("deploy-cap-table-registry", "Deploy contract")
+task(TASK_DEPLOY_CAP_TABLE_REGISTRY, "Deploy contract")
 	.addFlag("dev", "Deploy development state.")
-	.addFlag("updateEnv", "Update .env file with deployed contract addresses.")
+	.addFlag("redeploy", "Redeploy the contract instance on network if finds deployment deployment")
 	.setAction(async (taskArgs: TaskArguments, hre: HardhatRuntimeEnvironment) => {
 		try {
 			const [deployer] = await hre.ethers.getSigners();
+			if (hre.hardhatArguments.verbose || taskArgs.log) {
+				log.enabled = true;
+			}
 
 			/* Get contract dependencies */
 			let contractAddress = await hre.run(TASK_PRE_DEPLOY_CHECK, {
 				contract: "CAP_TABLE_REGISTRY",
+				redeploy: taskArgs.redeploy,
 			});
 
-			const contract = (async () => {
+			const contract = await (async () => {
+				log(`CAP_TABLE_REGISTRY address: ${contractAddress}, will ${contractAddress ? "attach" : "deploy"}}`);
 				if (!contractAddress) {
 					const capTableRegistry = await new CapTableRegistry__factory(deployer).deploy();
 					await capTableRegistry.deployed();
@@ -28,6 +34,7 @@ task("deploy-cap-table-registry", "Deploy contract")
 					return capTableRegistry;
 				}
 			})();
+			log("CAP_TABLE_REGISTRY deployed at: ", contract.address);
 
 			// if (taskArgs.dev) {
 			// 	const did = await getDIDfromHardhatDeployer(hre);

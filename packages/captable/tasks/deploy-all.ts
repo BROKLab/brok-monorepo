@@ -2,10 +2,13 @@ import { exec } from "child_process";
 import { task } from "hardhat/config";
 import { HardhatRuntimeEnvironment, TaskArguments } from "hardhat/types";
 import debug from "debug";
-const log = debug("captable:deploy-all");
+import { TASK_GENERATE_DEPLOYMENTS, TASK_GENERATE_NPM_PACKAGE } from "./generate-deployments";
+import { TASK_DEPLOY_CAP_TABLE_REGISTRY } from "./deploy-cap-table-registry";
+import { TASK_DEPLOY_VC_REGISTRY } from "./deploy-vc-registry";
+const log = debug("brok:task:deploy-all");
 
 task("deploy-all", "Create a deployments folder")
-	.addFlag("reset", "Force redeply contracts, will set new contract instances in env and deployment")
+	.addFlag("redeploy", "Force redeploy contracts, will set new contract instances.")
 	.addFlag("dev", "Deploy development state.")
 	.addFlag("log", "Log execution")
 	.setAction(async (taskArgs: TaskArguments, hre: HardhatRuntimeEnvironment) => {
@@ -14,33 +17,24 @@ task("deploy-all", "Create a deployments folder")
 				log.enabled = true;
 			}
 			log("deploy-all network:", hre.network.name);
-			// if reset is false then we use addresses from env file. If its set, the sub-task will not deploy the contract. Just connect with it.
-			if (!taskArgs.reset && hre.network.name !== "localhost") {
-				hre.deployed.CAP_TABLE_REGISTRY = process.env[`CAP_TABLE_REGISTRY_${hre.network.name}`];
-			}
-			await hre.run("deploy-cap-table-registry", {
+
+			await hre.run(TASK_DEPLOY_CAP_TABLE_REGISTRY, {
 				dev: taskArgs.dev,
-				updateEnv: true,
+				log: hre.hardhatArguments.verbose || taskArgs.log,
+				redeploy: taskArgs.redeploy,
+			});
+			await hre.run(TASK_DEPLOY_VC_REGISTRY, {
+				dev: taskArgs.dev,
+				log: hre.hardhatArguments.verbose || taskArgs.log,
+				redeploy: taskArgs.redeploy,
+			});
+			await hre.run(TASK_GENERATE_DEPLOYMENTS, {
 				log: hre.hardhatArguments.verbose || taskArgs.log,
 			});
-			await hre.run("generate-deployments", {
-				log: hre.hardhatArguments.verbose || taskArgs.log,
+			await hre.run(TASK_GENERATE_NPM_PACKAGE, {
+				log: false,
 			});
-			log("Starting tsup build");
-			const tsup = new Promise((resolve, reject) => {
-				exec("pnpm tsup", (error, stdout, stderr) => {
-					if (error) {
-						log(`tsup error: ${error}`);
-						return reject(error);
-					}
-					log(stdout);
-					log(stderr);
-					resolve(true);
-				});
-			});
-			log("Waiting tsup build");
-			await tsup;
-			log("Finished tsup build");
+			log("deploy-all network:", hre.network.name, " done");
 		} catch (error) {
 			console.error(error);
 			throw error;

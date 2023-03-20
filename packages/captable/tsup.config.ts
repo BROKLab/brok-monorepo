@@ -4,9 +4,9 @@ export default defineConfig({
 	entry: ["deployments/index.ts"],
 	outDir: "dist",
 	splitting: false,
-	sourcemap: true,
+	sourcemap: false,
 	clean: true,
 	dts: true,
 	format: ["esm", "cjs"],
-	minify: true,
+	minify: false,
 });
