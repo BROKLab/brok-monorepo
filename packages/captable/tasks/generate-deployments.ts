@@ -55,7 +55,6 @@ task("generate-deployments", "Create a deployments folder")
 				log("END create deployments for network: ", networkName);
 			}
 
-			log;
 			if (!indexFile.includes(`export * from "./../typechain-types/index";`)) {
 				appendFileSync(indexFilePath, `\nexport * from "./../typechain-types/index";`);
 			}
