@@ -8,6 +8,7 @@ const log = debug(`brok:task:${TASK_DEPLOY_CAP_TABLE_REGISTRY}`);
 
 task(TASK_DEPLOY_CAP_TABLE_REGISTRY, "Deploy contract")
 	.addFlag("dev", "Deploy development state.")
+	.addFlag("log", "Log execution")
 	.addFlag("redeploy", "Redeploy the contract instance on network if finds deployment deployment")
 	.setAction(async (taskArgs: TaskArguments, hre: HardhatRuntimeEnvironment) => {
 		try {
@@ -34,7 +35,7 @@ task(TASK_DEPLOY_CAP_TABLE_REGISTRY, "Deploy contract")
 					return capTableRegistry;
 				}
 			})();
-			log("CAP_TABLE_REGISTRY deployed at: ", contract.address);
+			log("CAP_TABLE_REGISTRY=", contract.address);
 
 			// if (taskArgs.dev) {
 			// 	const did = await getDIDfromHardhatDeployer(hre);

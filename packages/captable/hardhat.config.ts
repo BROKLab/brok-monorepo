@@ -31,6 +31,9 @@ declare module "hardhat/types/runtime" {
 		deployed: {
 			CAP_TABLE_REGISTRY?: string;
 			VC_REGISTRY?: string;
+			ERC5564_MESSENGER?: string;
+			ERC5564_REGISTRY?: string;
+			SECP256K1_GENERATOR?: string;
 		};
 	}
 }
@@ -47,6 +50,15 @@ const config: HardhatUserConfig = {
 		compilers: [
 			{
 				version: "0.8.7",
+				settings: {
+					optimizer: {
+						enabled: true,
+						runs: 1,
+					},
+				},
+			},
+			{
+				version: "0.8.16",
 				settings: {
 					optimizer: {
 						enabled: true,

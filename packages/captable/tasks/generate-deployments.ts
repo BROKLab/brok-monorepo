@@ -6,7 +6,6 @@ import { TASK_CLEAN } from "hardhat/builtin-tasks/task-names";
 import { exec } from "child_process";
 
 export const TASK_PRE_DEPLOY_CHECK = "pre-deploy-check";
-export const TASK_POST_DEPLOY_CHECK = "post-deploy-check";
 export const TASK_GENERATE_DEPLOYMENTS = "generate-deployments";
 export const TASK_GENERATE_NPM_PACKAGE = "generate-npm-package";
 
@@ -174,7 +173,7 @@ function checkTaskArgsForDeployedContractArgument(
 	const contract =
 		"contract" in taskArgs && typeof taskArgs.contract === "string" && (taskArgs.contract as keyof typeof hre.deployed);
 	if (!contract) {
-		throw new Error(`Contract name not provided to task ${TASK_POST_DEPLOY_CHECK}`);
+		throw new Error("Contract name not provided to task");
 	}
 	// TODO - Implement runtime type check for contract name
 	return contract;
