@@ -1,32 +1,17 @@
-import { GetStaticProps, InferGetStaticPropsType } from "next";
-import { createSwaggerSpec } from "next-swagger-doc";
-import dynamic from "next/dynamic";
-import "swagger-ui-react/swagger-ui.css";
+import Head from "next/head";
+import Body from "next/";
+import Image from "next/image";
 
-const SwaggerUI = dynamic<{
-	spec: object;
-}>(import("swagger-ui-react"), { ssr: false });
-
-function ApiDoc({ spec }: InferGetStaticPropsType<typeof getStaticProps>) {
-	return <SwaggerUI spec={spec} />;
+export default function Page() {
+	return (
+		<div>
+			<Head>
+				<title>BRØK API - Docs</title>
+				<meta name="description" content="API documentation for BRØK" />
+				<link rel="icon" href="/favicon.ico" />
+			</Head>
+			<h1>TODO</h1>
+			<p>SWAGGER DOC</p>
+		</div>
+	);
 }
-
-export const getStaticProps: GetStaticProps = async () => {
-	const spec = createSwaggerSpec({
-		definition: {
-			openapi: "3.0.0",
-			info: {
-				title: "Next Swagger API Example",
-				version: "1.0",
-			},
-		},
-	});
-
-	return {
-		props: {
-			spec,
-		},
-	};
-};
-
-export default ApiDoc;

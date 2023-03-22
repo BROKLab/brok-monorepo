@@ -10,7 +10,8 @@
             },
             "dependsOrder": "parallel",
             "dependsOn": [
-                "contracts localhost"
+                "contracts localhost",
+                "contracts brokDev"
             ],
             "problemMatcher": []
         },

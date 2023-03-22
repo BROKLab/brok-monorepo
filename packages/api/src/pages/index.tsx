@@ -1,6 +1,14 @@
 import Head from "next/head";
-import Image from "next/image";
 
 export default function Home() {
-	return <h1>Hello</h1>;
+	return (
+		<div>
+			<Head>
+				<title>BRØK</title>
+				<meta name="description" content="API documentation for BRØK" />
+				<link rel="icon" href="/favicon.ico" />
+			</Head>
+			<h1>TODO</h1>
+		</div>
+	);
 }

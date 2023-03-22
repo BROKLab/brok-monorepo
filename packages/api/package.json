@@ -6,17 +6,27 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "playwright test --project headless",
+    "test:ci": "playwright test --project headless --reporter=html"
   },
   "dependencies": {
+    "@brok/captable": "workspace:^0.50.0",
     "@types/node": "^18.11.18",
     "@types/react": "18.0.28",
     "@types/react-dom": "18.0.11",
+    "debug": "^4.3.4",
+    "ethers": "^5.7.2",
     "next": "13.2.4",
     "next-swagger-doc": "^0.3.6",
+    "noble-secp256k1": "^1.2.14",
     "openapi-types": "^12.1.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "typescript": "^4.9.4"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.31.2",
+    "@types/debug": "^4.1.7"
   }
 }

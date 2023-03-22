@@ -1,0 +1,274 @@
+openapi: '3.0.2'
+info:
+  title: BRØK Enterprise System API
+  description: API for Enterprise Systems to interact with Ethereum smart contracts, theGraph and ownerNames module
+  version: '0.1'
+tags:
+  - name: captable
+    description: Everything about captables
+    externalDocs:
+      description: theGraph
+      url: http://swagger.io
+  - name: shareholder
+  - name: transfer
+    description: Transfer shares between owners
+
+paths:
+  /captable:
+    post:
+      summary: Create new captable
+      tags:
+        - captable
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orgnr:
+                  type: number
+                  example: 123456789
+                shares:
+                  type: object
+                  $ref: '#/components/schemas/Shares'
+              required:
+                - orgnr
+                - shares
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Captable'
+  /captable/ethereum/{ethAddress}:
+    get:
+      summary: Get captable from Ethereum address
+      description: Takes captable Ethereum address and returns captable information
+      tags:
+        - captable
+      parameters: 
+        - name: 'ethAddress'
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "0x2229058EfC09f7901da816056a53eFbcc421b2e1"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Captable'
+  /captable/orgnr/{orgnr}:
+    get:
+      summary: Get captable from organization number
+      description: Takes captable organization number and returns captable information
+      tags:
+        - captable
+      parameters: 
+        - name: 'orgnr'
+          in: path
+          required: true
+          schema:
+            type: number
+            format: int16
+            example: 123456789
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Captable'
+  /shareholder:
+    post:
+      tags:
+        - shareholder
+      summary: Create new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sosialSecurityNumber:
+                  type: number
+                  format: int16
+                  example: 08113726696
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+                schema:
+                  $ref: '#/components/schemas/Shareholder'
+                example:
+                  name: Øyvind Hatland
+                  yearBorn: 1987
+                  zipCode: 8906
+                  city: Brønnøysund
+                  countryCode: "NO"
+                  viewKey: "0xb977651ac2f276c3a057003f9a6a245ef04c7147"
+  /shareholder/{ethAddress}:
+    get:
+      tags:
+        - shareholder
+      summary: Get owner info
+      responses:
+        '200':
+          description: OK
+  # /shareholder/viewkey:
+  #   post:
+  #     tags:
+  #       - shareholder
+  #     summary: Create viewkey for user
+  #     responses:
+  #       '200':
+  #         description: OK
+  /shareholder/viewkey/{viewkey}:
+    get:
+      tags:
+        - shareholder
+      summary: Get all ethAddress
+      description: Takes user viewkey and returns all captables owned by the user
+      responses:
+        '200':
+          description: OK
+  /transfer:
+    post:
+      tags:
+        - transfer
+      summary: Get all ethAddress
+      description: Takes user viewkey and returns all captables owned by the user
+      responses:
+        '200':
+          description: OK
+
+# ENV viewKey
+  
+  /stealth/{viewKey}:
+    get:
+      tags:
+        - viewkey
+      summary: takes viewkey and returns stealth address
+      responses:
+        '200':
+          description: OK
+
+
+components:
+  schemas:
+    Captable:
+      type: object
+      properties:
+        ethereumAddress:
+          type: string
+        name:
+          type: string
+        orgnr:
+          type: number
+          format: int32
+        shares:
+          type: object
+          $ref: '#/components/schemas/Shares'
+      example:
+        ethereumAddress: "0x2229058EfC09f7901da816056a53eFbcc421b2e1"
+        name: Hissig Tiger AS
+        orgnr: 123456789
+        shares:
+          totalShares: 1000
+          partitions:
+          - partition: a
+            totalSharesInPartition: 500
+            description: Aksje med stemmerett og utbytte
+          shareholders:
+          - walletEthereumAddress: "0xb977651ac2f276c3a057003f9a6a245ef04c7147"
+            shares:
+              - partition: a
+                amount: 500
+          
+
+    Shares:
+      type: object
+      properties:
+        totalShares:
+          type: number
+          format: int64
+          example: 500
+        partitions:
+          type: array
+          items:
+            type: object
+            properties:
+              partition:
+                type: string
+              totalSharesInPartition:
+                type: number
+                format: int64
+              description:
+                type: string
+        shareholders:
+          type: array
+          items:
+            $ref: '#/components/schemas/Shareholder'
+      example:
+        totalShares: 1000
+        partitions:
+        - partition: a
+          totalSharesInPartition: 500
+          description: Aksje med stemmerett og utbytte
+        shareholders:
+        - walletEthereumAddress: "0xb977651ac2f276c3a057003f9a6a245ef04c7147"
+          shares:
+            - partition: a
+              amount: 500
+
+    Shareholder:
+      type: object
+      properties:
+        walletEthereumAddress:
+          type: string
+        shares:
+          type: array
+          items:
+            type: object
+            properties:
+              partition:
+                type: string
+              amount:
+                type: number
+                format: int64
+      example:
+        walletEthereumAddress: "0xb977651ac2f276c3a057003f9a6a245ef04c7147"
+        shares:
+        - partition: a
+          amount: 500
+    
+    ShareholderFull:
+      type: object
+      properties:
+        name:
+          type: string
+        yearBorn:
+          type: number
+          format: int16
+        zipCode:
+          type: number
+          format: int16
+        city:
+          type: string
+        countryCode:
+          type: string
+        viewKey:
+          type: string
+      example:
+        name: Øyvind Hatland
+        yearBorn: 1987
+        zipCode: 8906
+        city: Brønnøysund
+        countryCode: "NO"
+        viewKey: "0xb977651ac2f276c3a057003f9a6a245ef04c7147"
