@@ -6,6 +6,7 @@ import { TASK_CLEAN } from "hardhat/builtin-tasks/task-names";
 import { exec } from "child_process";
 
 export const TASK_PRE_DEPLOY_CHECK = "pre-deploy-check";
+export const TASK_GET_CONTRACT_ADDRESS = "get-contract-address";
 export const TASK_GENERATE_DEPLOYMENTS = "generate-deployments";
 export const TASK_GENERATE_NPM_PACKAGE = "generate-npm-package";
 
@@ -86,6 +87,36 @@ task(TASK_GENERATE_DEPLOYMENTS, "Write deployed contracts to typescript files")
 			throw error;
 		}
 	});
+
+subtask(TASK_GET_CONTRACT_ADDRESS, "Sets hardhat runtime deployed addresses from persisted addresses")
+	.addParam("contract", "Contract name")
+	.setAction(
+		async (taskArgs: TaskArguments, hre: HardhatRuntimeEnvironment, runSuper: RunSuperFunction<TaskArguments>) => {
+			const contract = checkTaskArgsForDeployedContractArgument(taskArgs, hre);
+			console.log(hre.network.name);
+			try {
+				const deploymentFile = await import(`../deployments/${hre.network.name}${contractsPostfix}.ts`);
+				if (`${hre.network.name}${contractsPostfix}` in deploymentFile) {
+					if (contract in deploymentFile[`${hre.network.name}${contractsPostfix}`]) {
+						log(
+							"Used file for contract: ",
+							contract,
+							" on network: ",
+							hre.network.name,
+							" with address: ",
+							deploymentFile[`${hre.network.name}${contractsPostfix}`][contract],
+							"",
+						);
+						hre.deployed[contract] = deploymentFile[`${hre.network.name}${contractsPostfix}`][contract];
+					}
+				}
+			} catch (error) {
+				log(error);
+				log("No file for contract: ", contract, " on network: ", hre.network.name, " found");
+			}
+			return hre.deployed[contract];
+		},
+	);
 
 subtask(TASK_PRE_DEPLOY_CHECK, "Sets hardhat runtime deployed addresses from env variables")
 	.addFlag("redeploy", "Redeploy deployment")

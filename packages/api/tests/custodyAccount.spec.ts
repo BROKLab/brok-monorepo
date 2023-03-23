@@ -7,7 +7,6 @@ import { ethers } from "ethers";
 // });
 
 test("/api/custodyAccont should return an address", async ({ request, baseURL }) => {
-	// send VP to server
 	const res = await request.post(`${baseURL}/api/custodyAccount`, {
 		headers: {
 			"Content-Type": "application/json",
@@ -18,4 +17,5 @@ test("/api/custodyAccont should return an address", async ({ request, baseURL })
 	expect("address" in json).toBe(true);
 	expect(json.address).toContain("0x");
 	expect(ethers.utils.isAddress(json.address)).toBe(true);
+	// TODO Make test that checks received address is useable .e.g. can send to it
 });

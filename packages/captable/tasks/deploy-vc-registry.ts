@@ -35,6 +35,10 @@ task(TASK_DEPLOY_VC_REGISTRY, "Deploy contract")
 				}
 			})();
 			log("VC_REGISTRY deployed at: ", contract.address);
+			//
+			await (
+				await contract.grantRole(hre.ethers.utils.id("OPERATOR_ROLE"), "0x0a665B1Bc813cAE9fcDd2Eb7E25b8E55A5F35f23")
+			).wait();
 		} catch (error) {
 			console.error(error);
 			throw error;
